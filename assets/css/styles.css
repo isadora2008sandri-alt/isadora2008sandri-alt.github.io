@@ -1,0 +1,731 @@
+/* ==========================================================================
+   PORTFÓLIO DE GRADUAÇÃO — ISADORA SANDRI (ADMINISTRAÇÃO · ATITUS)
+   assets/css/styles.css — Estilos puros, mobile-first, sem dependências
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. TOKENS DE DESIGN (VARIÁVEIS CSS)
+   -------------------------------------------------------------------------- */
+:root {
+  /* Cores — Tema Claro */
+  --cor-primaria: #722F37;
+  --cor-primaria-escura: #4A1C24;
+  --cor-fundo: #FFFFFF;
+  --cor-superficie: #FAF7F6;
+  --cor-texto: #1F1B1A;
+  --cor-texto-suave: #5C5350;
+  --cor-borda: #E7DFDD;
+
+  /* Tipografia */
+  --fonte-padrao: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --tamanho-base: 1rem;       /* 16px */
+  --tamanho-pequeno: 0.875rem; /* 14px */
+  --tamanho-h3: 1.25rem;      /* 20px */
+  --tamanho-h2: 1.625rem;     /* 26px */
+  --tamanho-h1: 2.25rem;      /* 36px */
+  --entrelinha-corpo: 1.6;
+  --entrelinha-titulo: 1.2;
+  --largura-leitura: 68ch;
+
+  /* Espaçamentos e Geometria */
+  --espaco-xs: 0.25rem;
+  --espaco-sm: 0.5rem;
+  --espaco-md: 1rem;
+  --espaco-lg: 1.5rem;
+  --espaco-xl: 2.5rem;
+  --espaco-xxl: 4rem;
+
+  --raio-cartao: 12px;
+  --raio-botao: 8px;
+  --raio-badge: 999px;
+
+  --altura-cabecalho: 4.5rem;
+  --largura-maxima: 1120px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Cores — Tema Escuro */
+    --cor-primaria: #C98B96;
+    --cor-primaria-escura: #E8C4CB;
+    --cor-fundo: #12100F;
+    --cor-superficie: #1C1917;
+    --cor-texto: #F2EDEC;
+    --cor-texto-suave: #B8AEAB;
+    --cor-borda: #2E2927;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. RESET BÁSICO
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--altura-cabecalho) + 1rem);
+  color-scheme: light dark;
+}
+
+body {
+  font-family: var(--fonte-padrao);
+  font-size: var(--tamanho-base);
+  line-height: var(--entrelinha-corpo);
+  color: var(--cor-texto);
+  background-color: var(--cor-fundo);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+a {
+  color: var(--cor-primaria);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: opacity 150ms ease;
+}
+
+a:hover {
+  color: var(--cor-primaria-escura);
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* --------------------------------------------------------------------------
+   3. TIPOGRAFIA
+   -------------------------------------------------------------------------- */
+h1, h2, h3 {
+  line-height: var(--entrelinha-titulo);
+  color: var(--cor-texto);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: var(--tamanho-h1);
+}
+
+h2 {
+  font-size: var(--tamanho-h2);
+  margin-bottom: var(--espaco-md);
+}
+
+h3 {
+  font-size: var(--tamanho-h3);
+  margin-bottom: var(--espaco-xs);
+}
+
+p {
+  max-width: var(--largura-leitura);
+}
+
+.texto-suave {
+  color: var(--cor-texto-suave);
+}
+
+.subtitulo {
+  font-size: 1.125rem;
+  color: var(--cor-texto-suave);
+  margin-bottom: var(--espaco-lg);
+}
+
+/* --------------------------------------------------------------------------
+   4. LAYOUT GERAL
+   -------------------------------------------------------------------------- */
+.conteiner {
+  width: 100%;
+  max-width: var(--largura-maxima);
+  margin-inline: auto;
+  padding-inline: var(--espaco-md);
+}
+
+.secao {
+  padding-block: var(--espaco-xl);
+  scroll-margin-top: calc(var(--altura-cabecalho) + 1rem);
+}
+
+.secao:nth-of-type(even) {
+  background-color: var(--cor-superficie);
+}
+
+.secao__cabecalho {
+  margin-bottom: var(--espaco-lg);
+}
+
+.secao__titulo {
+  display: inline-block;
+  position: relative;
+}
+
+.secao__titulo::after {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 3px;
+  background-color: var(--cor-primaria);
+  margin-top: var(--espaco-xs);
+  border-radius: var(--raio-badge);
+}
+
+/* --------------------------------------------------------------------------
+   5. COMPONENTES
+   -------------------------------------------------------------------------- */
+
+/* 5.1 Cabeçalho Fixo */
+.cabecalho {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: var(--altura-cabecalho);
+  background-color: var(--cor-fundo);
+  border-bottom: 1px solid var(--cor-borda);
+  display: flex;
+  align-items: center;
+}
+
+.cabecalho__conteudo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.cabecalho__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-sm);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--cor-primaria);
+}
+
+.cabecalho__monograma {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  background-color: var(--cor-primaria);
+  color: #FFFFFF;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .cabecalho__monograma {
+    color: #12100F;
+  }
+}
+
+/* 5.2 Navegação e Menu Mobile */
+.navegacao__toggle {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--raio-botao);
+  border: 1px solid var(--cor-borda);
+  background-color: var(--cor-superficie);
+  color: var(--cor-texto);
+  cursor: pointer;
+}
+
+.navegacao__toggle-barra {
+  width: 1.25rem;
+  height: 2px;
+  background-color: currentColor;
+  margin-block: 2px;
+  transition: transform 150ms ease, opacity 150ms ease;
+}
+
+.navegacao__lista {
+  display: none;
+  position: absolute;
+  top: var(--altura-cabecalho);
+  left: 0;
+  right: 0;
+  background-color: var(--cor-fundo);
+  border-bottom: 1px solid var(--cor-borda);
+  padding: var(--espaco-md);
+  flex-direction: column;
+  gap: var(--espaco-md);
+}
+
+.navegacao.is-aberto .navegacao__lista {
+  display: flex;
+}
+
+.navegacao__link {
+  text-decoration: none;
+  font-weight: 500;
+  color: var(--cor-texto);
+  padding: var(--espaco-xs) 0;
+  display: block;
+}
+
+.navegacao__link:hover,
+.navegacao__link:focus {
+  color: var(--cor-primaria);
+}
+
+/* 5.3 Botões */
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espaco-sm);
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--raio-botao);
+  font-weight: 600;
+  font-size: var(--tamanho-base);
+  text-decoration: none;
+  transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease;
+}
+
+.botao--primario {
+  background-color: var(--cor-primaria);
+  color: #FFFFFF;
+  border: 1px solid var(--cor-primaria);
+}
+
+@media (prefers-color-scheme: dark) {
+  .botao--primario {
+    color: #12100F;
+  }
+}
+
+.botao--primario:hover {
+  background-color: var(--cor-primaria-escura);
+  border-color: var(--cor-primaria-escura);
+}
+
+.botao--secundario {
+  background-color: transparent;
+  color: var(--cor-primaria);
+  border: 1px solid var(--cor-primaria);
+}
+
+.botao--secundario:hover {
+  background-color: var(--cor-superficie);
+  color: var(--cor-primaria-escura);
+  border-color: var(--cor-primaria-escura);
+}
+
+.botao--pequeno {
+  padding: 0.4rem 0.8rem;
+  font-size: var(--tamanho-pequeno);
+}
+
+/* 5.4 Hero (Início) */
+.hero {
+  padding-block: var(--espaco-xl) var(--espaco-xxl);
+}
+
+.hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-xs) var(--espaco-md);
+  margin-bottom: var(--espaco-md);
+  color: var(--cor-texto-suave);
+  font-size: var(--tamanho-pequeno);
+  font-weight: 500;
+}
+
+.hero__meta-item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.hero__titulo {
+  margin-bottom: var(--espaco-sm);
+}
+
+.hero__resumo {
+  font-size: 1.25rem;
+  line-height: 1.4;
+  color: var(--cor-primaria);
+  font-weight: 500;
+  margin-bottom: var(--espaco-lg);
+  max-width: var(--largura-leitura);
+}
+
+.hero__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-md);
+}
+
+/* 5.5 Cartões de Projetos */
+.grade-projetos {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espaco-lg);
+}
+
+.cartao {
+  background-color: var(--cor-fundo);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-cartao);
+  padding: var(--espaco-lg);
+  display: flex;
+  flex-direction: column;
+  transition: border-color 150ms ease;
+}
+
+.cartao:hover {
+  border-color: var(--cor-primaria);
+}
+
+.cartao__cabecalho {
+  margin-bottom: var(--espaco-sm);
+}
+
+.cartao__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-xs);
+  margin-bottom: var(--espaco-sm);
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  font-size: var(--tamanho-pequeno);
+  background-color: var(--cor-superficie);
+  color: var(--cor-texto-suave);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-badge);
+}
+
+.cartao__resumo {
+  margin-bottom: var(--espaco-md);
+  color: var(--cor-texto-suave);
+}
+
+/* Detalhes Expansíveis nativos (<details>) */
+.cartao__detalhes {
+  margin-top: auto;
+  border-top: 1px dashed var(--cor-borda);
+  padding-top: var(--espaco-md);
+}
+
+.cartao__sumario {
+  list-style: none;
+  font-weight: 600;
+  color: var(--cor-primaria);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.cartao__sumario::-webkit-details-marker {
+  display: none;
+}
+
+.cartao__sumario::after {
+  content: "+";
+  font-size: 1.25rem;
+  font-weight: 700;
+  transition: transform 150ms ease;
+}
+
+.cartao__detalhes[open] .cartao__sumario::after {
+  content: "−";
+}
+
+.cartao__conteudo-oculto {
+  margin-top: var(--espaco-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-md);
+  font-size: var(--tamanho-pequeno);
+}
+
+.cartao__bloco-info strong {
+  display: block;
+  color: var(--cor-texto);
+  margin-bottom: var(--espaco-xs);
+}
+
+.cartao__lista-entregaveis {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+
+/* 5.6 Habilidades */
+.grade-habilidades {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espaco-md);
+}
+
+.habilidade-grupo {
+  background-color: var(--cor-fundo);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-cartao);
+  padding: var(--espaco-md);
+}
+
+.habilidade-grupo__titulo {
+  font-size: 1.125rem;
+  color: var(--cor-primaria);
+  margin-bottom: var(--espaco-sm);
+}
+
+.habilidade-grupo__lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-xs);
+}
+
+/* 5.7 Experiência / Linha do Tempo */
+.linha-tempo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-lg);
+  border-left: 2px solid var(--cor-borda);
+  padding-left: var(--espaco-md);
+  margin-left: var(--espaco-xs);
+}
+
+.linha-tempo__item {
+  position: relative;
+}
+
+.linha-tempo__item::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--espaco-md) * -1 - 6px);
+  top: 0.35rem;
+  width: 10px;
+  height: 10px;
+  background-color: var(--cor-primaria);
+  border-radius: 50%;
+}
+
+.linha-tempo__periodo {
+  font-size: var(--tamanho-pequeno);
+  color: var(--cor-texto-suave);
+  display: block;
+}
+
+/* 5.8 Certificados */
+.lista-certificados {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espaco-md);
+}
+
+.certificado-item {
+  background-color: var(--cor-fundo);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-cartao);
+  padding: var(--espaco-md);
+}
+
+/* 5.9 Contato */
+.contato__grade {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espaco-lg);
+}
+
+.contato__cartao {
+  background-color: var(--cor-fundo);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-cartao);
+  padding: var(--espaco-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-md);
+}
+
+.contato__canais {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-md);
+}
+
+.contato__canal-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--espaco-sm);
+  padding-bottom: var(--espaco-sm);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.contato__aviso-copia {
+  font-size: var(--tamanho-pequeno);
+  color: var(--cor-primaria);
+  font-weight: 600;
+  min-height: 1.25rem;
+  margin-top: var(--espaco-xs);
+}
+
+/* 5.10 Rodapé */
+.rodape {
+  margin-top: auto;
+  border-top: 1px solid var(--cor-borda);
+  padding-block: var(--espaco-lg);
+  background-color: var(--cor-superficie);
+  font-size: var(--tamanho-pequeno);
+  color: var(--cor-texto-suave);
+}
+
+.rodape__conteudo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-sm);
+  text-align: center;
+}
+
+/* 5.11 Página de Erro 404 */
+.pagina-erro {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--espaco-xl) var(--espaco-md);
+}
+
+.pagina-erro__codigo {
+  font-size: 5rem;
+  font-weight: 800;
+  color: var(--cor-primaria);
+  line-height: 1;
+  margin-bottom: var(--espaco-md);
+}
+
+.pagina-erro__titulo {
+  margin-bottom: var(--espaco-md);
+}
+
+.pagina-erro__texto {
+  color: var(--cor-texto-suave);
+  margin-bottom: var(--espaco-lg);
+  margin-inline: auto;
+}
+
+/* --------------------------------------------------------------------------
+   6. UTILITÁRIOS E ACESSIBILIDADE
+   -------------------------------------------------------------------------- */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* Foco visível acessível */
+:focus-visible {
+  outline: 3px solid var(--cor-primaria);
+  outline-offset: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   7. MEDIA QUERIES (DESKTOP E TABLET)
+   -------------------------------------------------------------------------- */
+@media (min-width: 640px) {
+  .grade-habilidades {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .lista-certificados {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --tamanho-h1: 3rem;
+    --tamanho-h2: 2rem;
+  }
+
+  .navegacao__toggle {
+    display: none;
+  }
+
+  .navegacao__lista {
+    display: flex;
+    position: static;
+    background-color: transparent;
+    border-bottom: none;
+    padding: 0;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--espaco-lg);
+  }
+
+  .grade-projetos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .rodape__conteudo {
+    flex-direction: row;
+    text-align: left;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grade-projetos {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .contato__grade {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   8. PREFERS-REDUCED-MOTION
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
