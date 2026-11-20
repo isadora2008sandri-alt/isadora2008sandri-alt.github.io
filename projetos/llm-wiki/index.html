@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LLM-Wiki · Administração e Ciências Contábeis (Isadora Sandri)</title>
+<meta name="author" content="Isadora Sandri" />
+<meta name="description" content="Base de conhecimento enciclopédica e interativa de Administração e Ciências Contábeis com artigos aprofundados, calculadoras e tutor IA." />
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml" />
+<style>
+:root {
+  --cor-primaria: #722F37;
+  --cor-primaria-escura: #4A1C24;
+  --cor-primaria-clara: #C98B96;
+  --cor-fundo: #FAF7F6;
+  --cor-superficie: #FFFFFF;
+  --cor-texto: #1F1B1A;
+  --cor-texto-suave: #5C5350;
+  --cor-borda: #E7DFDD;
+  --cor-card-destaque: #FDF9F8;
+  --cor-sucesso: #2E7D32;
+  --cor-codigo: #2A2423;
+  --cor-codigo-txt: #F5EFEB;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cor-primaria: #C98B96;
+    --cor-primaria-escura: #E8C4CB;
+    --cor-primaria-clara: #722F37;
+    --cor-fundo: #12100F;
+    --cor-superficie: #1C1917;
+    --cor-texto: #F2EDEC;
+    --cor-texto-suave: #B8AEAB;
+    --cor-borda: #2E2927;
+    --cor-card-destaque: #25211F;
+    --cor-sucesso: #66BB6A;
+    --cor-codigo: #0D0B0A;
+    --cor-codigo-txt: #F2EDEC;
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+}
+
+/* Barra Superior */
+.topbar {
+  background: var(--cor-superficie);
+  border-bottom: 1px solid var(--cor-borda);
+  padding: 12px 24px;
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+}
+.topbar__marca {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 15px; font-weight: 700; color: var(--cor-primaria);
+  text-decoration: none;
+}
+.topbar__nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.btn-nav {
+  padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600;
+  text-decoration: none; border: 1px solid var(--cor-borda);
+  background: var(--cor-superficie); color: var(--cor-texto);
+  cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-nav:hover { background: var(--cor-primaria); color: #fff; border-color: var(--cor-primaria); }
+
+/* Layout com Sidebar e Área Principal */
+.wiki-layout {
+  flex: 1; display: grid; grid-template-columns: 320px 1fr;
+  max-width: 1560px; width: 100%; margin: 0 auto;
+}
+@media (max-width: 900px) {
+  .wiki-layout { grid-template-columns: 1fr; }
+}
+
+/* Sidebar de Navegação */
+.wiki-sidebar {
+  background: var(--cor-superficie);
+  border-right: 1px solid var(--cor-borda);
+  padding: 20px;
+  height: calc(100vh - 60px);
+  position: sticky; top: 60px;
+  overflow-y: auto;
+  display: flex; flex-direction: column; gap: 16px;
+}
+@media (max-width: 900px) {
+  .wiki-sidebar { height: auto; position: relative; top: 0; border-right: none; border-bottom: 1px solid var(--cor-borda); }
+}
+
+.busca-caixa { position: relative; }
+.busca-caixa input {
+  width: 100%; padding: 10px 14px 10px 36px;
+  border: 1px solid var(--cor-borda); border-radius: 8px;
+  background: var(--cor-fundo); color: var(--cor-texto);
+  font-size: 13.5px; font-family: inherit;
+}
+.busca-caixa__icone {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--cor-texto-suave); font-size: 14px;
+}
+
+.arvore-modulos { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.modulo-item__tit {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--cor-primaria); margin-bottom: 6px;
+}
+.sublista-artigos { list-style: none; display: flex; flex-direction: column; gap: 2px; padding-left: 6px; }
+.artigo-link {
+  display: block; padding: 6px 10px; border-radius: 6px;
+  font-size: 13.5px; color: var(--cor-texto-suave);
+  text-decoration: none; transition: all 0.15s;
+}
+.artigo-link:hover, .artigo-link.ativo {
+  background: var(--cor-card-destaque);
+  color: var(--cor-primaria); font-weight: 600;
+  border-left: 3px solid var(--cor-primaria);
+}
+
+/* Conteúdo Principal */
+.wiki-conteudo {
+  padding: 32px 48px;
+  max-width: 1040px;
+}
+@media (max-width: 600px) { .wiki-conteudo { padding: 20px 16px; } }
+
+/* Hero do Artigo */
+.artigo-hero {
+  margin-bottom: 32px; padding-bottom: 20px;
+  border-bottom: 1px solid var(--cor-borda);
+}
+.artigo-hero__trilha {
+  font-size: 13px; color: var(--cor-primaria); font-weight: 600;
+  margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+}
+.artigo-hero__tit {
+  font-size: 32px; font-weight: 800; color: var(--cor-texto);
+  letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 10px;
+}
+.artigo-hero__desc {
+  font-size: 17px; color: var(--cor-texto-suave); line-height: 1.5; font-weight: 300;
+}
+
+/* Tipografia do Artigo */
+.artigo-corpo h2 {
+  font-size: 22px; font-weight: 700; color: var(--cor-texto);
+  margin: 32px 0 14px 0; border-bottom: 2px solid var(--cor-borda); padding-bottom: 6px;
+}
+.artigo-corpo h3 {
+  font-size: 17px; font-weight: 700; color: var(--cor-primaria);
+  margin: 22px 0 8px 0;
+}
+.artigo-corpo p { margin-bottom: 16px; font-size: 15.5px; }
+.artigo-corpo ul, .artigo-corpo ol { margin: 0 0 16px 24px; font-size: 15px; }
+.artigo-corpo li { margin-bottom: 6px; }
+
+/* Destaques e Callouts */
+.bloco-conceito {
+  background: var(--cor-card-destaque);
+  border-left: 4px solid var(--cor-primaria);
+  border-radius: 0 8px 8px 0;
+  padding: 16px 20px; margin: 20px 0; font-size: 15px;
+}
+.bloco-formula {
+  background: var(--cor-codigo); color: var(--cor-codigo-txt);
+  padding: 16px 20px; border-radius: 8px; font-family: Consolas, monospace;
+  font-size: 14.5px; margin: 18px 0; line-height: 1.5;
+}
+
+/* Tabelas */
+.tabela-conceito {
+  width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px;
+}
+.tabela-conceito th {
+  background: var(--cor-card-destaque); border-bottom: 2px solid var(--cor-borda);
+  padding: 10px 12px; text-align: left; font-weight: 700; color: var(--cor-primaria);
+}
+.tabela-conceito td {
+  padding: 10px 12px; border-bottom: 1px solid var(--cor-borda);
+}
+
+/* Abas de Ferramentas / Seções Especiais */
+.wiki-abas {
+  display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--cor-borda);
+  padding-bottom: 8px; flex-wrap: wrap;
+}
+.wiki-aba-btn {
+  padding: 8px 16px; border-radius: 6px; border: 1px solid var(--cor-borda);
+  background: var(--cor-superficie); color: var(--cor-texto-suave); font-weight: 600;
+  cursor: pointer; font-size: 13.5px; transition: all 0.2s;
+}
+.wiki-aba-btn:hover, .wiki-aba-btn.ativa {
+  background: var(--cor-primaria); color: #fff; border-color: var(--cor-primaria);
+}
+
+/* Calculadoras Interativas */
+.calculadora-card {
+  background: var(--cor-superficie); border: 1px solid var(--cor-borda);
+  border-radius: 12px; padding: 24px; margin-bottom: 24px;
+}
+.calc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 16px 0; }
+.calc-campo label { display: block; font-size: 12px; font-weight: 700; color: var(--cor-texto-suave); margin-bottom: 4px; }
+.calc-campo input {
+  width: 100%; padding: 8px 12px; border: 1px solid var(--cor-borda);
+  border-radius: 6px; font-size: 14px; font-family: inherit;
+  background: var(--cor-fundo); color: var(--cor-texto);
+}
+.calc-resultado {
+  background: var(--cor-card-destaque); border: 1px solid var(--cor-borda);
+  border-radius: 8px; padding: 16px; margin-top: 14px; font-size: 15px;
+}
+.calc-resultado strong { color: var(--cor-primaria); font-size: 20px; }
+
+/* Chat Tutor IA Embutido */
+.tutor-ia-card {
+  background: var(--cor-superficie); border: 1px solid var(--cor-borda);
+  border-radius: 12px; padding: 24px; display: flex; flex-direction: column; gap: 16px;
+}
+.tutor-chat {
+  height: 380px; overflow-y: auto; background: var(--cor-fundo);
+  border: 1px solid var(--cor-borda); border-radius: 8px; padding: 16px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.tutor-msg { padding: 10px 14px; border-radius: 8px; font-size: 14px; max-width: 85%; }
+.tutor-msg--ia { align-self: flex-start; background: var(--cor-superficie); border: 1px solid var(--cor-borda); }
+.tutor-msg--user { align-self: flex-end; background: var(--cor-primaria); color: #fff; }
+
+.tutor-form { display: flex; gap: 8px; }
+.tutor-form input {
+  flex: 1; padding: 10px 14px; border: 1px solid var(--cor-borda);
+  border-radius: 6px; font-size: 14px; background: var(--cor-superficie);
+  color: var(--cor-texto); font-family: inherit;
+}
+.tutor-form button {
+  padding: 10px 18px; background: var(--cor-primaria); color: #fff;
+  border: none; border-radius: 6px; font-weight: 700; cursor: pointer;
+}
+
+/* Quiz Interativo */
+.quiz-card {
+  background: var(--cor-superficie); border: 1px solid var(--cor-borda);
+  border-radius: 12px; padding: 24px; margin-top: 24px;
+}
+.quiz-opcao {
+  display: block; padding: 10px 14px; margin: 8px 0; border: 1px solid var(--cor-borda);
+  border-radius: 6px; cursor: pointer; transition: all 0.2s; font-size: 14px;
+}
+.quiz-opcao:hover { background: var(--cor-card-destaque); border-color: var(--cor-primaria); }
+.quiz-opcao.correta { background: rgba(46, 125, 50, 0.15); border-color: var(--cor-sucesso); font-weight: 700; }
+.quiz-opcao.errada { background: rgba(180, 40, 40, 0.15); border-color: #d32f2f; }
+</style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <a href="../../index.html#projetos" class="topbar__marca">
+      <span>← Voltar ao Portfólio</span>
+      <strong>LLM-Wiki · Administração & Ciências Contábeis</strong>
+    </a>
+    <nav class="topbar__nav">
+      <button type="button" class="btn-nav" id="btn-modo-leitura">📚 Modo Artigos</button>
+      <button type="button" class="btn-nav" id="btn-modo-calculadoras">🧮 Calculadoras</button>
+      <button type="button" class="btn-nav" id="btn-modo-tutor">🤖 Tutor IA & Quiz</button>
+      <a href="../pizzaria-do-vitto/dashboard.html" class="btn-nav">⚡ Ver Dashboard do Vitto</a>
+    </nav>
+  </header>
+
+  <div class="wiki-layout">
+    
+    <!-- Sidebar -->
+    <aside class="wiki-sidebar" aria-label="Navegação de artigos da Wiki">
+      <div class="busca-caixa">
+        <span class="busca-caixa__icone">🔍</span>
+        <input type="text" id="campo-busca" placeholder="Buscar termo, autor ou sigla..." autocomplete="off" />
+      </div>
+
+      <ul class="arvore-modulos" id="arvore-modulos">
+        
+        <!-- Módulo 1: Teoria Geral da Administração -->
+        <li class="modulo-item">
+          <div class="modulo-item__tit">Teoria Geral da Adm (TGA)</div>
+          <ul class="sublista-artigos">
+            <li><a href="#tga-taylor" class="artigo-link ativo" data-id="tga-taylor">Adm Científica (Taylor)</a></li>
+            <li><a href="#tga-fayol" class="artigo-link" data-id="tga-fayol">Teoria Clássica (Fayol)</a></li>
+            <li><a href="#tga-weber" class="artigo-link" data-id="tga-weber">Teoria Burocrática (Weber)</a></li>
+            <li><a href="#tga-mayo" class="artigo-link" data-id="tga-mayo">Relações Humanas (Mayo)</a></li>
+            <li><a href="#tga-sistemas" class="artigo-link" data-id="tga-sistemas">Teoria dos Sistemas & Contingência</a></li>
+          </ul>
+        </li>
+
+        <!-- Módulo 2: Gestão Estratégica -->
+        <li class="modulo-item">
+          <div class="modulo-item__tit">Gestão Estratégica</div>
+          <ul class="sublista-artigos">
+            <li><a href="#estrat-swot" class="artigo-link" data-id="estrat-swot">Matriz SWOT / FOFA</a></li>
+            <li><a href="#estrat-porter" class="artigo-link" data-id="estrat-porter">5 Forças & Estratégias de Porter</a></li>
+            <li><a href="#estrat-bcg" class="artigo-link" data-id="estrat-bcg">Matriz BCG & Matriz Ansoff</a></li>
+            <li><a href="#estrat-bsc" class="artigo-link" data-id="estrat-bsc">Balanced Scorecard (BSC) & OKRs</a></li>
+          </ul>
+        </li>
+
+        <!-- Módulo 3: Processos e Qualidade -->
+        <li class="modulo-item">
+          <div class="modulo-item__tit">Processos & Qualidade (Lean)</div>
+          <ul class="sublista-artigos">
+            <li><a href="#proc-pdca" class="artigo-link" data-id="proc-pdca">Ciclo PDCA & MASP</a></li>
+            <li><a href="#proc-ferramentas" class="artigo-link" data-id="proc-ferramentas">7 Ferramentas da Qualidade</a></li>
+            <li><a href="#proc-lean" class="artigo-link" data-id="proc-lean">Lean Manufacturing, 5S & Kanban</a></li>
+            <li><a href="#proc-bpmn" class="artigo-link" data-id="proc-bpmn">Mapeamento de Processos (BPMN)</a></li>
+          </ul>
+        </li>
+
+        <!-- Módulo 4: Marketing e Comercial -->
+        <li class="modulo-item">
+          <div class="modulo-item__tit">Marketing & Pessoas</div>
+          <ul class="sublista-artigos">
+            <li><a href="#mkt-composto" class="artigo-link" data-id="mkt-composto">Composto de Marketing (4 Ps & 7 Ps)</a></li>
+            <li><a href="#mkt-metricas" class="artigo-link" data-id="mkt-metricas">Métricas: CAC, LTV, Churn & NPS</a></li>
+            <li><a href="#rh-competencias" class="artigo-link" data-id="rh-competencias">Gestão por Competências (CHA)</a></li>
+            <li><a href="#rh-motivacao" class="artigo-link" data-id="rh-motivacao">Teorias Motivacionais (Maslow & Herzberg)</a></li>
+          </ul>
+        </li>
+
+        <!-- Módulo 5: Contabilidade Geral -->
+        <li class="modulo-item">
+          <div class="modulo-item__tit">Contabilidade Geral & Societária</div>
+          <ul class="sublista-artigos">
+            <li><a href="#cont-fundamentos" class="artigo-link" data-id="cont-fundamentos">Princípios & Partidas Dobradas</a></li>
+            <li><a href="#cont-bp" class="artigo-link" data-id="cont-bp">Balanço Patrimonial (BP Estruturado)</a></li>
+            <li><a href="#cont-dre" class="artigo-link" data-id="cont-dre">DRE Passo a Passo (Receita a Lucro)</a></li>
+            <li><a href="#cont-dfc" class="artigo-link" data-id="cont-dfc">DFC (Fluxo de Caixa Direto e Indireto)</a></li>
+          </ul>
+        </li>
+
+        <!-- Módulo 6: Custos e Controladoria -->
+        <li class="modulo-item">
+          <div class="modulo-item__tit">Custos, Índices & Finanças</div>
+          <ul class="sublista-artigos">
+            <li><a href="#custo-metodos" class="artigo-link" data-id="custo-metodos">Custeio por Absorção vs Variável</a></li>
+            <li><a href="#custo-ponto-equilibrio" class="artigo-link" data-id="custo-ponto-equilibrio">Ponto de Equilíbrio (PE Contábil/Econ)</a></li>
+            <li><a href="#fin-liquidez" class="artigo-link" data-id="fin-liquidez">Índices de Liquidez & Rentabilidade (ROE)</a></li>
+            <li><a href="#fin-ciclos" class="artigo-link" data-id="fin-ciclos">Ciclo Operacional & Financeiro (Caixa)</a></li>
+            <li><a href="#fin-capital-giro" class="artigo-link" data-id="fin-capital-giro">Capital de Giro (NCG) & VPL/TIR</a></li>
+          </ul>
+        </li>
+
+      </ul>
+    </aside>
+
+    <!-- Área de Conteúdo -->
+    <main class="wiki-conteudo" id="area-conteudo">
+      
+      <!-- Visão 1: Leitor de Artigo Ativo -->
+      <section id="secao-artigo">
+        <header class="artigo-hero">
+          <div class="artigo-hero__trilha" id="artigo-trilha">TGA · Teoria Geral da Administração</div>
+          <h1 class="artigo-hero__tit" id="artigo-titulo">Administração Científica de Frederick Taylor</h1>
+          <p class="artigo-hero__desc" id="artigo-descricao">Fundamentos da organização racional do trabalho (ORT), tempos e movimentos, padronização e homo economicus.</p>
+        </header>
+
+        <article class="artigo-corpo" id="artigo-corpo-texto">
+          <!-- Conteúdo gerado dinamicamente via JS com rich text completo -->
+        </article>
+      </section>
+
+      <!-- Visão 2: Calculadoras Interativas (Alternável) -->
+      <section id="secao-calculadoras" style="display: none;">
+        <header class="artigo-hero">
+          <div class="artigo-hero__trilha">Ferramentas Práticas · Finanças e Custos</div>
+          <h1 class="artigo-hero__tit">Calculadoras Contábeis e Financeiras</h1>
+          <p class="artigo-hero__desc">Simule indicadores cruciais de gestão empresarial em tempo real com fórmulas auditadas.</p>
+        </header>
+
+        <!-- Calculadora 1: Ponto de Equilíbrio -->
+        <div class="calculadora-card">
+          <h3>1. Calculadora de Ponto de Equilíbrio (Break-Even Point)</h3>
+          <p style="font-size: 13.5px; color: var(--cor-texto-suave);">Determina a quantidade de unidades ou faturamento mínimo para cobrir todos os custos fixos sem prejuízo.</p>
+          <div class="calc-grid">
+            <div class="calc-campo">
+              <label for="pe-custo-fixo">Custos e Despesas Fixas (R$/mês)</label>
+              <input type="number" id="pe-custo-fixo" value="25000" step="500" />
+            </div>
+            <div class="calc-campo">
+              <label for="pe-preco-venda">Preço de Venda Unitário (R$)</label>
+              <input type="number" id="pe-preco-venda" value="80" step="1" />
+            </div>
+            <div class="calc-campo">
+              <label for="pe-custo-var">Custo/Despesa Variável Unitário (R$)</label>
+              <input type="number" id="pe-custo-var" value="35" step="1" />
+            </div>
+          </div>
+          <div class="calc-resultado" id="res-pe">
+            Margem de Contribuição: <strong>R$ 45,00</strong> (56,25%)<br />
+            Ponto de Equilíbrio Contábil (PEC): <strong>556 unidades/mês</strong> (Faturamento de R$ 44.444,44)
+          </div>
+        </div>
+
+        <!-- Calculadora 2: Índices de Liquidez -->
+        <div class="calculadora-card">
+          <h3>2. Calculadora de Índices de Liquidez (Solvência)</h3>
+          <p style="font-size: 13.5px; color: var(--cor-texto-suave);">Mede a capacidade financeira da empresa de honrar suas obrigações de curto e longo prazo.</p>
+          <div class="calc-grid">
+            <div class="calc-campo">
+              <label for="liq-ac">Ativo Circulante (R$)</label>
+              <input type="number" id="liq-ac" value="150000" step="1000" />
+            </div>
+            <div class="calc-campo">
+              <label for="liq-estoques">Estoques (R$)</label>
+              <input type="number" id="liq-estoques" value="45000" step="1000" />
+            </div>
+            <div class="calc-campo">
+              <label for="liq-pc">Passivo Circulante (R$)</label>
+              <input type="number" id="liq-pc" value="100000" step="1000" />
+            </div>
+          </div>
+          <div class="calc-resultado" id="res-liq">
+            Liquidez Corrente: <strong>1,50</strong> (Para cada R$ 1,00 de dívida, há R$ 1,50 disponível)<br />
+            Liquidez Seca (sem estoques): <strong>1,05</strong> (Solvência imediata saudável)
+          </div>
+        </div>
+
+        <!-- Calculadora 3: Ciclo de Conversão de Caixa -->
+        <div class="calculadora-card">
+          <h3>3. Ciclo Operacional e Ciclo Financeiro (Ciclo de Caixa)</h3>
+          <p style="font-size: 13.5px; color: var(--cor-texto-suave);">Calcula o intervalo de tempo entre o desembolso aos fornecedores e o recebimento das vendas.</p>
+          <div class="calc-grid">
+            <div class="calc-campo">
+              <label for="ciclo-pme">Prazo Médio de Estoque - PME (dias)</label>
+              <input type="number" id="ciclo-pme" value="38" />
+            </div>
+            <div class="calc-campo">
+              <label for="ciclo-pmrv">Prazo Médio Recebimento - PMRV (dias)</label>
+              <input type="number" id="ciclo-pmrv" value="45" />
+            </div>
+            <div class="calc-campo">
+              <label for="ciclo-pmpf">Prazo Médio Fornecedores - PMPF (dias)</label>
+              <input type="number" id="ciclo-pmpf" value="30" />
+            </div>
+          </div>
+          <div class="calc-resultado" id="res-ciclo">
+            Ciclo Operacional: <strong>83 dias</strong> (PME + PMRV)<br />
+            Ciclo Financeiro (Caixa): <strong>53 dias</strong> (Período em que a empresa necessita de capital de giro)
+          </div>
+        </div>
+      </section>
+
+      <!-- Visão 3: Tutor IA & Quizzes Universitários -->
+      <section id="secao-tutor" style="display: none;">
+        <header class="artigo-hero">
+          <div class="artigo-hero__trilha">Inteligência Artificial & Aprendizado Contínuo</div>
+          <h1 class="artigo-hero__tit">Tutor IA de Estudos & Gerador de Simulados</h1>
+          <p class="artigo-hero__desc">Tire dúvidas de qualquer matéria da faculdade de Administração e Contabilidade ou teste seus conhecimentos para provas e Enade.</p>
+        </header>
+
+        <div class="tutor-ia-card">
+          <h3>Conversar com o Tutor IA de Administração e Contabilidade</h3>
+          <div class="tutor-chat" id="tutor-mensagens">
+            <div class="tutor-msg tutor-msg--ia">
+              Olá, Isadora! Sou seu <strong>Tutor Acadêmico de IA</strong>. Estou preparado para explicar teorias clássicas e contemporâneas, resolver dúvidas de lançamentos contábeis (débito/crédito), calcular indicadores ou simular questões de prova. O que você gostaria de revisar hoje?
+            </div>
+          </div>
+          <form class="tutor-form" id="form-tutor">
+            <input type="text" id="campo-tutor" placeholder="Ex.: O que é Custeio por Absorção? Ou como calculo o ROE?" autocomplete="off" />
+            <button type="submit">Perguntar</button>
+          </form>
+        </div>
+
+        <!-- Quiz Interativo -->
+        <div class="quiz-card" id="card-quiz">
+          <h3>Simulado Rápido de Fixação</h3>
+          <p style="font-size: 13px; color: var(--cor-texto-suave); margin-bottom: 12px;" id="quiz-disciplina">Disciplina: Teoria Geral da Administração</p>
+          <div id="quiz-enunciado" style="font-weight: 600; font-size: 15px; margin-bottom: 14px;">Carregando questão...</div>
+          <div id="quiz-opcoes"></div>
+          <div id="quiz-feedback" style="margin-top: 14px; font-size: 14px; display: none;"></div>
+          <button type="button" id="btn-prox-questao" class="btn-nav" style="margin-top: 14px; display: none;">Próxima Questão →</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    "use strict";
+
+    (function() {
+      // 1. Base Enciclopédica Completa de Artigos
+      const bancoArtigos = {
+        'tga-taylor': {
+          trilha: 'TGA · Teoria Geral da Administração',
+          titulo: 'Administração Científica de Frederick Winslow Taylor',
+          descricao: 'Origens da gestão científica, Organização Racional do Trabalho (ORT), tempos e movimentos e a visão de homo economicus.',
+          corpo: `
+            <h2>1. Contexto Histórico e Problema Central</h2>
+            <p>No início do século XX, com a consolidação da Revolução Industrial nos Estados Unidos, a produção fabril enfrentava desorganização, vadiagem sistemática dos operários e desperdício maciço de insumos. Frederick Taylor (1856–1915) propôs substituir o empirismo e a improvisação pela <strong>ciência aplicada aos métodos de produção</strong>.</p>
+            
+            <div class="bloco-conceito">
+              <strong>Premissa Antropológica:</strong> O operário era visto como <em>Homo Economicus</em> — motivado unicamente por incentivos financeiros e salariais. Daí a introdução de planos de remuneração por peça produzida.
+            </div>
+
+            <h2>2. Os Quatro Princípios Fundamentais de Taylor</h2>
+            <ol>
+              <li><strong>Princípio do Planejamento:</strong> Substituir o método empírico do trabalhador por métodos rigorosamente testados e padronizados pela gerência.</li>
+              <li><strong>Princípio do Preparo e Seleção Científica:</strong> Selecionar cientificamente o operário de acordo com suas aptidões físicas e treiná-lo na tarefa específica.</li>
+              <li><strong>Princípio do Controle:</strong> Monitorar o trabalho para assegurar que a execução siga exatamente os padrões estabelecidos de tempo e movimento.</li>
+              <li><strong>Princípio da Execução:</strong> Distribuir distintamente as atribuições: a gerência pensa, planeja e supervisiona; o operário apenas executa.</li>
+            </ol>
+
+            <h2>3. A Organização Racional do Trabalho (ORT)</h2>
+            <p>A ORT fundamenta-se em nove elementos operacionais:</p>
+            <ul>
+              <li><strong>Estudo de tempos e movimentos:</strong> Eliminação de movimentos inúteis com auxílio de cronômetro (estudos continuados por Frank e Lillian Gilbreth).</li>
+              <li><strong>Fadiga humana:</strong> Redução do cansaço para maximizar a produtividade ao longo do turno de trabalho.</li>
+              <li><strong>Divisão do trabalho e especialização do operário:</strong> Cada trabalhador executa uma única tarefa elementar repetitiva.</li>
+              <li><strong>Padronização de máquinas e ferramentas:</strong> Instrumentos uniformes para eliminar variações de produção.</li>
+            </ul>
+
+            <h2>4. Críticas e Limitações para Exames</h2>
+            <p>Em concursos e avaliações universitárias, costuma-se pontuar o caráter <em>mecanicista</em> da teoria (o homem tratado como engrenagem da máquina), o superdimensionamento do incentivo monetário e a falta de atenção às relações interpessoais e grupos informais.</p>
+          `
+        },
+        'tga-fayol': {
+          trilha: 'TGA · Teoria Geral da Administração',
+          titulo: 'Teoria Clássica da Administração de Henri Fayol',
+          descricao: 'A visão anatômica e estrutural da organização, as 6 funções da empresa e os 14 princípios universais de gestão.',
+          corpo: `
+            <h2>1. A Abordagem de Cima para Baixo (Top-Down)</h2>
+            <p>Enquanto Taylor focava na oficina fabril (do chão de fábrica para a gerência), Henri Fayol (1841–1925), na França, estruturou a administração a partir da <strong>direção geral</strong>. Para Fayol, administrar é um ato distinto das funções operacionais da empresa.</p>
+
+            <h2>2. As Seis Funções Básicas da Empresa</h2>
+            <table class="tabela-conceito">
+              <thead>
+                <tr><th>Função</th><th>Atividade Abrangida</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Técnica</strong></td><td>Produção de bens ou serviços.</td></tr>
+                <tr><td><strong>Comercial</strong></td><td>Compra, venda, permuta e negociação no mercado.</td></tr>
+                <tr><td><strong>Financeira</strong></td><td>Captação e boa gerência dos recursos de capital.</td></tr>
+                <tr><td><strong>Segurança</strong></td><td>Proteção física dos bens e das pessoas.</td></tr>
+                <tr><td><strong>Contábil</strong></td><td>Inventários, balanços, custos, registros e estatísticas.</td></tr>
+                <tr><td><strong>Administrativa</strong></td><td>Coordena e harmoniza todas as outras 5 funções (a principal).</td></tr>
+              </tbody>
+            </table>
+
+            <h2>3. As Funções da Administração (PODC / POCCC)</h2>
+            <p>Fayol definiu as funções administrativas clássicas no acrônimo original <strong>POCCC</strong> (hoje modernizado para <strong>PODC</strong>):</p>
+            <ul>
+              <li><strong>Planejar:</strong> Visualizar o futuro e traçar o programa de ação.</li>
+              <li><strong>Organizar:</strong> Constituir a estrutura dual da empresa (material e social).</li>
+              <li><strong>Dirigir (Comandar):</strong> Conduzir o pessoal e orientar os esforços da equipe.</li>
+              <li><strong>Controlar:</strong> Verificar se tudo ocorre de acordo com as regras estabelecidas e as ordens dadas.</li>
+            </ul>
+
+            <h2>4. Os 14 Princípios Gerais da Administração</h2>
+            <p>Princípios de aplicação universal, destacando-se: <em>Divisão do trabalho, Autoridade e Responsabilidade, Disciplina, Unidade de Comando (um subordinado deve receber ordens de apenas um único superior), Unidade de Direção, Subordinação do interesse particular ao geral, Remuneração justa, Centralização, Cadeia Escalar (Hierarquia), Ordem, Equidade, Estabilidade do pessoal, Iniciativa e Espírito de Equipe.</em></p>
+          `
+        },
+        'tga-weber': {
+          trilha: 'TGA · Teoria Burocrática',
+          titulo: 'Teoria da Burocracia de Max Weber',
+          descricao: 'Racionalidade instrumental, legalidade das normas, meritocracia, impessoalidade e as disfunções burocráticas.',
+          corpo: `
+            <h2>1. Conceito Sociológico de Burocracia</h2>
+            <p>Max Weber (1864–1920) desenvolveu a burocracia como um <strong>tipo ideal de organização eficiente</strong>, baseada na mais estrita racionalidade e previsibilidade, contrapondo-se ao nepotismo e favoritismo feudal.</p>
+
+            <h2>2. Os Três Tipos de Dominação Legítima</h2>
+            <ul>
+              <li><strong>Dominação Tradicional:</strong> Baseada nos costumes ancestrais e na santidade das tradições (ex.: patriarcado, monarquia absolutista).</li>
+              <li><strong>Dominação Carismática:</strong> Baseada na devoção afetiva e admiração por traços excepcionais do líder (ex.: líderes religiosos, revolucionários). É instável.</li>
+              <li><strong>Dominação Legal, Racional ou Burocrática:</strong> Baseada na aceitação de leis, normas impessoais e procedimentos formalmente instituídos (ex.: Estado moderno e empresas multinacionais).</li>
+            </ul>
+
+            <h2>3. Características da Burocracia Weberiana</h2>
+            <div class="bloco-conceito">
+              • <strong>Caráter legal das normas:</strong> Tudo é previamente registrado e regulamentado por escrito.<br>
+              • <strong>Impessoalidade:</strong> Direitos e deveres são atribuídos aos cargos, e não às pessoas físicas.<br>
+              • <strong>Hierarquia funcional:</strong> Linha de autoridade explícita e subordinada.<br>
+              • <strong>Meritocracia e competência técnica:</strong> Escolha e promoção por provas e títulos técnicos, nunca por apadrinhamento.<br>
+              • <strong>Profissionalização do gestor:</strong> O administrador não é dono dos meios de produção, mas um funcionário assalariado especializado.
+            </div>
+
+            <h2>4. As Disfunções da Burocracia (Merton)</h2>
+            <p>Robert Merton identificou que o excesso de regras produz desvios: o apego excessivo às rotinas faz com que <em>o cumprimento da regra se torne um fim em si mesmo</em>, gerando lentidão, rigidez decisória e resistência à mudança.</p>
+          `
+        },
+        'tga-mayo': {
+          trilha: 'TGA · Teoria Humanística',
+          titulo: 'Teoria das Relações Humanas e os Estudos de Hawthorne',
+          descricao: 'O experimento de Elton Mayo na Western Electric, a descoberta da organização informal e do Homem Social.',
+          corpo: `
+            <h2>1. O Experimento de Hawthorne (1927–1932)</h2>
+            <p>Coordenado por Elton Mayo na fábrica de Hawthorne da Western Electric (Chicago), o experimento começou investigando a influência da iluminação no rendimento operário e acabou descobrindo o <strong>fator psicológico e social</strong> no trabalho.</p>
+
+            <h2>2. Principais Conclusões de Elton Mayo</h2>
+            <ul>
+              <li><strong>Nível de produção como resultado da integração social:</strong> A capacidade física de produzir é limitada pela norma social imposta pelo grupo informal.</li>
+              <li><strong>O Homem Social:</strong> O trabalhador não busca apenas dinheiro, mas aprovação, respeito e reconhecimento do seu grupo de pares.</li>
+              <li><strong>Grupos Informais:</strong> Redes de afinidade, amizade e lideranças naturais que operam paralelamente ao organograma formal da empresa.</li>
+              <li><strong>Importância do conteúdo do cargo:</strong> Trabalhos hiper-especializados e monótonos geram desmotivação e afetam a moral do grupo.</li>
+            </ul>
+          `
+        },
+        'tga-sistemas': {
+          trilha: 'TGA · Abordagem Sistêmica e Contingencial',
+          titulo: 'Teoria Geral dos Sistemas e Abordagem Contingencial',
+          descricao: 'Empresa como sistema aberto, entropia, homeostase, sinergia e o postulado: "nada é absoluto, tudo é relativo".',
+          corpo: `
+            <h2>1. Teoria de Sistemas (Ludwig von Bertalanffy)</h2>
+            <p>A organização é compreendida como um <strong>sistema aberto</strong> composto por subsistemas interdependentes que interagem ativamente com o macroambiente externo (sociedade, governo, clientes e concorrência).</p>
+            <div class="bloco-conceito">
+              <strong>Conceitos Vitais:</strong><br>
+              • <em>Entropia Negativa:</em> Capacidade do sistema aberto de importar energia e informação do ambiente para evitar sua desintegração.<br>
+              • <em>Homeostase:</em> Equilíbrio dinâmico interno diante das oscilações externas.<br>
+              • <em>Equifinalidade:</em> Um sistema pode alcançar o mesmo estado final por caminhos e condições iniciais distintas.
+            </div>
+
+            <h2>2. Teoria Contingencial (Lawrence e Lorsch)</h2>
+            <p>Surgida a partir de pesquisas empíricas nos anos 1960 (Joan Woodward, Burns e Stalker, Chandler), concluiu que <strong>não existe uma única maneira ótima de organizar</strong> (<em>there is no best way</em>). A estrutura ótima depende (é contingente) das variáveis ambientais e da tecnologia empregada.</p>
+          `
+        },
+        'estrat-swot': {
+          trilha: 'Gestão Estratégica · Diagnóstico',
+          titulo: 'Matriz SWOT / FOFA e Matriz de Confronto',
+          descricao: 'Análise de Forças, Oportunidades, Fraquezas e Ameaças com cruzamento estratégico para tomada de decisão.',
+          corpo: `
+            <h2>1. Estrutura Canônica da Matriz</h2>
+            <table class="tabela-conceito">
+              <thead>
+                <tr><th>Âmbito</th><th>Fatores Positivos</th><th>Fatores Negativos</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Ambiente Interno</strong> (Controlável)</td><td><strong>Forças (Strengths):</strong> Vantagens competitivas exclusivas, tecnologia patenteada, equipe capacitada.</td><td><strong>Fraquezas (Weaknesses):</strong> Gargalos operacionais, caixa restrito, marca desconhecida.</td></tr>
+                <tr><td><strong>Ambiente Externo</strong> (Incontrolável)</td><td><strong>Oportunidades (Opportunities):</strong> Novos nichos, queda de taxa de juros, incentivos fiscais.</td><td><strong>Ameaças (Threats):</strong> Novos concorrentes, inflação de insumos, mudanças regulatórias.</td></tr>
+              </tbody>
+            </table>
+
+            <h2>2. Estratégias Cruzadas (Matriz TOWS)</h2>
+            <ul>
+              <li><strong>Estratégia Ofensiva (Forças × Oportunidades):</strong> Utilizar as forças internas para capturar as oportunidades do mercado.</li>
+              <li><strong>Estratégia de Confronto (Forças × Ameaças):</strong> Usar diferenciais competitivos para neutralizar riscos externos.</li>
+              <li><strong>Estratégia de Reforço (Fraquezas × Oportunidades):</strong> Minimizar limitações internas para aproveitar uma brecha de mercado.</li>
+              <li><strong>Estratégia Defensiva (Fraquezas × Ameaças):</strong> Mitigar perdas e sobreviver a tempestades regulatórias ou de concorrência.</li>
+            </ul>
+          `
+        },
+        'estrat-porter': {
+          trilha: 'Gestão Estratégica · Vantagem Competitiva',
+          titulo: 'As 5 Forças Competitivas e Estratégias Genéricas de Porter',
+          descricao: 'Análise da atratividade estrutural da indústria e as 3 vias de posicionamento sustentável.',
+          corpo: `
+            <h2>1. As 5 Forças de Michael Porter</h2>
+            <p>Porter comprovou que a rentabilidade média de um setor é determinada pelo jogo de cinco forças dinâmicas:</p>
+            <ol>
+              <li><strong>Rivalidade entre Concorrentes Estabelecidos:</strong> Disputa por preços, campanhas de publicidade e lançamentos frequentes.</li>
+              <li><strong>Poder de Barganha dos Fornecedores:</strong> Alto quando há poucos fornecedores ou insumos insubstituíveis.</li>
+              <li><strong>Poder de Barganha dos Clientes:</strong> Alto quando os compradores são concentrados ou o produto é comoditizado.</li>
+              <li><strong>Ameaça de Novos Entrantes:</strong> Condicionada pela existência de barreiras à entrada (economias de escala, investimentos de capital).</li>
+              <li><strong>Ameaça de Produtos ou Serviços Substitutos:</strong> Soluções alternativas que satisfazem a mesma necessidade do cliente.</li>
+            </ol>
+
+            <h2>2. As Três Estratégias Genéricas</h2>
+            <div class="bloco-conceito">
+              • <strong>Liderança em Custo Total:</strong> Produção em escala maciça com estrutura enxuta (ex.: Ryanair, Walmart).<br>
+              • <strong>Diferenciação:</strong> Criar um produto percebido como único na indústria, justificando preço premium (ex.: Apple, Ferrari).<br>
+              • <strong>Foco / Enfoque:</strong> Dedicação exclusiva a um nicho geográfico ou de consumidores específico.
+            </div>
+          `
+        },
+        'estrat-bcg': {
+          trilha: 'Gestão Estratégica · Portfólio',
+          titulo: 'Matriz BCG e Matriz de Crescimento de Ansoff',
+          descricao: 'Gestão de fluxo de caixa em portfólios multiprodutos e vetores de expansão de negócios.',
+          corpo: `
+            <h2>1. A Matriz BCG (Boston Consulting Group)</h2>
+            <p>Cruza <em>Taxa de Crescimento de Mercado</em> (eixo vertical) com <em>Participação Relativa de Mercado</em> (eixo horizontal):</p>
+            <ul>
+              <li>⭐ <strong>Estrelas (Crescimento Alto / Participação Alta):</strong> Grandes geradores de receita, mas que demandam fortes reinvestimentos contínuos.</li>
+              <li>🐄 <strong>Vacas Leiteiras (Crescimento Baixo / Participação Alta):</strong> Alta rentabilidade e baixa necessidade de reinvestimento. Financiam os novos projetos.</li>
+              <li>❓ <strong>Pontos de Interrogação (Crescimento Alto / Participação Baixa):</strong> Incertezas operacionais; exigem capital para se tornarem estrelas.</li>
+              <li>🐕 <strong>Abacaxis / Cães (Crescimento Baixo / Participação Baixa):</strong> Produtos estagnados que consomem tempo gerencial; candidatos a desinvestimento.</li>
+            </ul>
+
+            <h2>2. A Matriz Ansoff (Vetores de Expansão)</h2>
+            <p>Estratégias de crescimento a partir da combinação de produtos e mercados atuais e novos: <em>Penetração de Mercado</em> (atual/atual), <em>Desenvolvimento de Mercado</em> (atual/novo), <em>Desenvolvimento de Produto</em> (novo/atual) e <em>Diversificação</em> (novo/novo).</p>
+          `
+        },
+        'estrat-bsc': {
+          trilha: 'Gestão Estratégica · Execução e Métricas',
+          titulo: 'Balanced Scorecard (BSC) e Metodologia OKRs',
+          descricao: 'Alinhamento estratégico nas 4 perspectivas e metodologia ágil de definição de metas trimestrais.',
+          corpo: `
+            <h2>1. As Quatro Perspectivas do BSC (Kaplan & Norton)</h2>
+            <p>O Balanced Scorecard transcende os relatórios contábeis tradicionais, balanceando indicadores financeiros históricos com direcionadores futuros:</p>
+            <ul>
+              <li><strong>Perspectiva Financeira:</strong> Como somos vistos pelos acionistas? (Metas de ROI, EBITDA, Margem Líquida).</li>
+              <li><strong>Perspectiva dos Clientes:</strong> Como agregamos valor ao público-alvo? (NPS, Satisfação, Market Share).</li>
+              <li><strong>Perspectiva dos Processos Internos:</strong> Em quais processos devemos ser excelentes? (Produtividade, Tempo de Ciclo, Qualidade).</li>
+              <li><strong>Perspectiva de Aprendizado e Crescimento:</strong> Como manter a capacidade de inovar e melhorar? (Capacitação, Clima Organizacional, TI).</li>
+            </ul>
+
+            <h2>2. OKRs (Objectives and Key Results)</h2>
+            <p>Metodologia criada na Intel (Andy Grove) e disseminada pelo Google. Combina <strong>Objetivos</strong> inspiracionais qualitativos ("Onde queremos chegar?") com 2 a 5 <strong>Resultados-Chave (KRs)</strong> estritamente mensuráveis e numéricos ("Como mediremos o progresso?").</p>
+          `
+        },
+        'proc-pdca': {
+          trilha: 'Processos e Qualidade · Melhoria Contínua',
+          titulo: 'Ciclo PDCA (Deming) e Metodologia MASP',
+          descricao: 'Planejamento, Execução, Verificação e Ação corretiva sistemática para estabilização de padrões.',
+          corpo: `
+            <h2>1. As Quatro Etapas do Ciclo PDCA</h2>
+            <ol>
+              <li><strong>Plan (Planejar):</strong> Identificar o problema, analisar as causas fundamentais e definir um plano de ação (com metas e 5W2H).</li>
+              <li><strong>Do (Executar):</strong> Treinar a equipe operacional e implementar as ações exatamente conforme o planejado.</li>
+              <li><strong>Check (Verificar):</strong> Mensurar os resultados alcançados e compará-los diretamente com a meta estipulada.</li>
+              <li><strong>Act (Agir / Padronizar):</strong> Se o resultado foi atingido, padronizar o novo método; se falhou, reexaminar o ciclo.</li>
+            </ol>
+          `
+        },
+        'proc-ferramentas': {
+          trilha: 'Processos e Qualidade · Ferramentas Analíticas',
+          titulo: 'As 7 Ferramentas Estatísticas da Qualidade',
+          descricao: 'Diagrama de Ishikawa (6M), Diagrama de Pareto, Folha de Verificação, Histograma, Cartas de Controle e Dispersão.',
+          corpo: `
+            <h2>1. Diagrama de Ishikawa (Espinha de Peixe / Causa e Efeito)</h2>
+            <p>Mapeia as causas-raiz de um efeito indesejado organizado nos famosos 6Ms fabris: <em>Método, Máquina, Medida, Meio Ambiente, Mão de Obra e Matéria-Prima</em>.</p>
+
+            <h2>2. Princípio e Diagrama de Pareto (80/20)</h2>
+            <p>Demonstra que aproximadamente 80% das consequências decorrem de apenas 20% das causas críticas. Permite priorizar esforços onde o ganho é máximo.</p>
+          `
+        },
+        'proc-lean': {
+          trilha: 'Processos e Qualidade · Metodologias Enxutas',
+          titulo: 'Lean Manufacturing, Sistema 5S e Gestão Visual Kanban',
+          descricao: 'Eliminação radical de desperdícios (Muda), fluxo puxado, Just-in-Time e disciplina operacional.',
+          corpo: `
+            <h2>1. Os Oito Desperdícios do Lean</h2>
+            <p>Superprodução, Espera, Transporte desnecessário, Excesso de processamento, Estoque parado, Movimentação inútil, Defeitos/Refugo e Desperdício de talento intelectual humano.</p>
+
+            <h2>2. O Programa 5S</h2>
+            <ul>
+              <li><strong>Seiri (Senso de Utilização):</strong> Separar o necessário do desnecessário e descartar o inútil.</li>
+              <li><strong>Seiton (Senso de Organização):</strong> Um lugar para cada coisa e cada coisa em seu lugar.</li>
+              <li><strong>Seiso (Senso de Limpeza):</strong> Manter o ambiente limpo e inspecionar fontes de sujeira.</li>
+              <li><strong>Seiketsu (Senso de Padronização/Saúde):</strong> Manter regras visuais de higiene e segurança.</li>
+              <li><strong>Shitsuke (Senso de Autodisciplina):</strong> Cumprir os padrões estabelecidos com rigor ético.</li>
+            </ul>
+          `
+        },
+        'proc-bpmn': {
+          trilha: 'Processos e Qualidade · Modelagem de Negócios',
+          titulo: 'Mapeamento de Processos de Negócio (BPMN)',
+          descricao: 'Modelagem de estados AS-IS e TO-BE, piscinas (pools), raias (lanes), eventos e gateways de decisão.',
+          corpo: `
+            <h2>1. Modelagem AS-IS vs TO-BE</h2>
+            <p>O diagnóstico <strong>AS-IS</strong> retrata o fluxo de trabalho exatamente como ele ocorre hoje (com todas as suas ineficiências e retrabalhos). O desenho <strong>TO-BE</strong> projeta o fluxo otimizado futuro após automações e eliminação de burocracias.</p>
+          `
+        },
+        'mkt-composto': {
+          trilha: 'Marketing · Estratégia Comercial',
+          titulo: 'Composto de Marketing (Os 4 Ps e 7 Ps em Serviços)',
+          descricao: 'Produto, Preço, Praça, Promoção e a expansão para Pessoas, Processos e Provas Físicas.',
+          corpo: `
+            <h2>1. Os 4 Ps Clássicos (Kotler & McCarthy)</h2>
+            <ul>
+              <li><strong>Produto:</strong> Atributos tangíveis, qualidade, design, embalagem, marca e ciclo de vida.</li>
+              <li><strong>Preço:</strong> Política de descontos, prazos de pagamento, ancoragem e sensibilidade da demanda.</li>
+              <li><strong>Praça (Distribuição):</strong> Canais de venda, logística, armazenagem e cobertura geográfica.</li>
+              <li><strong>Promoção (Comunicação):</strong> Publicidade, relações públicas, força de vendas e redes sociais.</li>
+            </ul>
+
+            <h2>2. A Extensão para 7 Ps em Serviços</h2>
+            <p>Devido à intangibilidade e inseparabilidade dos serviços, adicionam-se: <em>Pessoas</em> (atendimento e cultura), <em>Processos</em> (metodologia de entrega) e <em>Provas Físicas</em> (ambiente, infraestrutura e apresentação).</p>
+          `
+        },
+        'mkt-metricas': {
+          trilha: 'Marketing & Gestão Comercial · Métricas Modernas',
+          titulo: 'Métricas de Negócios: CAC, LTV, Churn Rate e NPS',
+          descricao: 'Fórmulas essenciais de aquisição, retenção, ciclo de vida e satisfação do cliente.',
+          corpo: `
+            <h2>1. Custo de Aquisição de Clientes (CAC)</h2>
+            <div class="bloco-formula">
+              CAC = (Investimentos Totais em Marketing + Custos de Vendas) ÷ Novos Clientes Conquistados
+            </div>
+
+            <h2>2. Lifetime Value (LTV)</h2>
+            <div class="bloco-formula">
+              LTV = Tíquete Médio × Frequência Média de Compras Anual × Tempo Médio de Retenção (em anos)
+            </div>
+            <p><strong>Régua de ouro do mercado:</strong> A relação saudável deve ser <strong>LTV ≥ 3 × CAC</strong>.</p>
+
+            <h2>3. Churn Rate (Taxa de Cancelamento de Clientes)</h2>
+            <div class="bloco-formula">
+              Churn (%) = (Clientes Perdidos no Período ÷ Clientes no Início do Período) × 100
+            </div>
+          `
+        },
+        'rh-competencias': {
+          trilha: 'Gestão de Pessoas · Modelo de Competências',
+          titulo: 'Gestão por Competências e o Modelo CHA',
+          descricao: 'Conhecimentos, Habilidades e Atitudes aplicados ao recrutamento, treinamento e avaliação.',
+          corpo: `
+            <h2>1. A Tríade do CHA</h2>
+            <ul>
+              <li><strong>C - Conhecimento (Saber):</strong> O arcabouço técnico, teórico e informacional do indivíduo.</li>
+              <li><strong>H - Habilidade (Saber Fazer):</strong> A capacidade prática de aplicar o conhecimento para resolver problemas.</li>
+              <li><strong>A - Atitude (Querer Fazer):</strong> A postura proativa, valores éticos, inteligência emocional e compromisso.</li>
+            </ul>
+          `
+        },
+        'rh-motivacao': {
+          trilha: 'Gestão de Pessoas · Comportamento Organizacional',
+          titulo: 'Teorias Motivacionais de Maslow e Herzberg',
+          descricao: 'A hierarquia das necessidades humanas e a distinção entre fatores higiênicos e fatores motivacionais.',
+          corpo: `
+            <h2>1. A Pirâmide de Maslow</h2>
+            <p>Estruturada em 5 níveis hierárquicos: Necessidades Fisiológicas (base), Segurança, Sociais / Afeto, Estima e Auto-realização (topo). Uma necessidade superior só passa a motivar quando as inferiores estiverem substancialmente satisfeitas.</p>
+
+            <h2>2. Teoria dos Dois Fatores de Herzberg</h2>
+            <div class="bloco-conceito">
+              • <strong>Fatores Higiênicos (Extrínsecos):</strong> Salário, benefícios, condições físicas de trabalho e políticas da empresa. Se ausentes, geram <em>insatisfação</em>; se presentes, geram apenas <em>neutralidade</em> (não motivam por si sós).<br>
+              • <strong>Fatores Motivacionais (Intrínsecos):</strong> Conteúdo do trabalho, autonomia, desafios profissionais e reconhecimento. São os verdadeiros geradores de <em>engajamento e satisfação plena</em>.
+            </div>
+          `
+        },
+        'cont-fundamentos': {
+          trilha: 'Ciências Contábeis · Fundamentos',
+          titulo: 'Princípios Contábeis e Método das Partidas Dobradas',
+          descricao: 'Equação fundamental do patrimônio, regras universais de débito e crédito e regime de competência.',
+          corpo: `
+            <h2>1. A Equação Fundamental do Patrimônio</h2>
+            <div class="bloco-formula">
+              ATIVO (Bens + Direitos) = PASSIVO EXIGÍVEL (Obrigações) + PATRIMÔNIO LÍQUIDO (Capital Próprio)
+            </div>
+
+            <h2>2. O Mecanismo das Partidas Dobradas (Frei Luca Pacioli, 1494)</h2>
+            <p>Regra de ouro irrevogável da contabilidade: <strong>Não há devedor sem que haja credor</strong>. Todo débito em uma conta exige um crédito correspondente de igual valor em outra conta.</p>
+            <table class="tabela-conceito">
+              <thead><tr><th>Natureza da Conta</th><th>Aumenta com:</th><th>Diminui com:</th><th>Saldo Normal</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Ativo</strong> (Aplicações de Recursos)</td><td>DÉBITO</td><td>CRÉDITO</td><td>Devedor</td></tr>
+                <tr><td><strong>Passivo</strong> (Origens de Terceiros)</td><td>CRÉDITO</td><td>DÉBITO</td><td>Credor</td></tr>
+                <tr><td><strong>Patrimônio Líquido</strong> (Origens Próprias)</td><td>CRÉDITO</td><td>DÉBITO</td><td>Credor</td></tr>
+                <tr><td><strong>Despesas / Custos</strong></td><td>DÉBITO</td><td>CRÉDITO</td><td>Devedor</td></tr>
+                <tr><td><strong>Receitas</strong></td><td>CRÉDITO</td><td>DÉBITO</td><td>Credor</td></tr>
+              </tbody>
+            </table>
+
+            <h2>3. Regime de Competência vs Regime de Caixa</h2>
+            <p>Pelo <strong>Regime de Competência</strong> (adotado pelas normas internacionais CPC/IFRS e exigido por lei), as receitas e despesas são reconhecidas no período em que ocorrem seus fatos geradores, <em>independentemente de seu efetivo recebimento ou pagamento financeiro</em>.</p>
+          `
+        },
+        'cont-bp': {
+          trilha: 'Ciências Contábeis · Demonstrações Obrigatórias',
+          titulo: 'Balanço Patrimonial Estruturado (CPC 26 / Lei 6.404)',
+          descricao: 'Estrutura detalhada do Ativo Circulante, Não Circulante, Passivo e Patrimônio Líquido.',
+          corpo: `
+            <h2>1. Visão Anatômica do Balanço</h2>
+            <p>O Balanço Patrimonial é a fotografia estática da saúde patrimonial e financeira da entidade no encerramento de um exercício contábil.</p>
+            <div class="bloco-conceito">
+              <strong>LADO ESQUERDO — ATIVO (Aplicações de Recursos):</strong><br>
+              • <em>Ativo Circulante:</em> Realizável em até 12 meses (Caixa, Bancos, Contas a Receber, Estoques, Despesas Antecipadas).<br>
+              • <em>Ativo Não Circulante:</em> Realizável a Longo Prazo (> 12 meses), Investimentos, Imobilizado (máquinas, edifícios, deduzidos da Depreciação Acumulada) e Intangível (marcas, softwares, ágio por expectativa de rentabilidade/goodwill).
+            </div>
+            <div class="bloco-conceito">
+              <strong>LADO DIREITO — PASSIVO E PL (Origens dos Recursos):</strong><br>
+              • <em>Passivo Circulante:</em> Dívidas e exigibilidades de curto prazo (Fornecedores, Salários a pagar, Tributos, Empréstimos bancários de curto prazo).<br>
+              • <em>Passivo Não Circulante:</em> Financiamentos de longo prazo e debêntures.<br>
+              • <em>Patrimônio Líquido:</em> Capital Social subscrito e integralizado, Reservas de Capital, Reservas de Lucros (Legal, Estatutária, Retenção) e Ajustes de Avaliação Patrimonial.
+            </div>
+          `
+        },
+        'cont-dre': {
+          trilha: 'Ciências Contábeis · Demonstração de Resultados',
+          titulo: 'Estrutura Canônica da DRE (Da Receita ao Lucro Líquido)',
+          descricao: 'Roteiro linear de deduções fiscais, apuração de Lucro Bruto, EBITDA, LAJIR e Lucro Líquido.',
+          corpo: `
+            <h2>1. O Roteiro Sequencial da DRE</h2>
+            <div class="bloco-formula">
+              (+) RECEITA OPERACIONAL BRUTA
+              (-) Deduções (Devoluções, Abatimentos, Descontos Incondicionais)
+              (-) Tributos sobre Vendas (ICMS, PIS, COFINS, ISS)
+              (=) RECEITA OPERACIONAL LÍQUIDA
+              (-) Custo das Mercadorias Vendidas (CMV) / CPV / CSP
+              (=) LUCRO BRUTO
+              (-) Despesas com Vendas / Comerciais
+              (-) Despesas Gerais e Administrativas
+              (+) Outras Receitas Operacionais / (-) Outras Despesas
+              (=) EBITDA / LAJIDA (Lucro antes de Juros, Impostos, Depreciação e Amortização)
+              (-) Depreciação e Amortização do período
+              (=) LAJIR / EBIT (Lucro Operacional)
+              (+/-) Resultado Financeiro Líquido (Receitas Financeiras - Despesas Financeiras)
+              (=) LAIR (Lucro antes do Imposto de Renda)
+              (-) Provisão para IRPJ e CSLL
+              (=) LUCRO (OU PREJUÍZO) LÍQUIDO DO EXERCÍCIO
+            </div>
+          `
+        },
+        'cont-dfc': {
+          trilha: 'Ciências Contábeis · Fluxo de Caixa',
+          titulo: 'Demonstração dos Fluxos de Caixa (DFC - CPC 03)',
+          descricao: 'Atividades operacionais, de investimento e de financiamento; método direto versus método indireto.',
+          corpo: `
+            <h2>1. As Três Dimensões da DFC</h2>
+            <ul>
+              <li><strong>Atividades Operacionais (FCO):</strong> Entradas e saídas de caixa decorrentes da atividade-fim do negócio (recebimento de clientes, pagamento de fornecedores e salários).</li>
+              <li><strong>Atividades de Investimento (FCI):</strong> Aquisição ou alienação de bens do Ativo Não Circulante (compra de máquinas, venda de imóveis).</li>
+              <li><strong>Atividades de Financiamento (FCF):</strong> Captação de empréstimos, integralização de capital pelos sócios ou distribuição de dividendos.</li>
+            </ul>
+          `
+        },
+        'custo-metodos': {
+          trilha: 'Contabilidade de Custos · Custeio',
+          titulo: 'Custeio por Absorção vs Custeio Variável (Direto)',
+          descricao: 'Diferenças legais e gerenciais: por que o Custeio por Absorção é obrigatório para balanço e o Variável para decisão.',
+          corpo: `
+            <h2>1. Comparativo Fundamental entre Métodos</h2>
+            <table class="tabela-conceito">
+              <thead><tr><th>Critério</th><th>Custeio por Absorção</th><th>Custeio Variável / Direto</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Tratamento do Custo Fixo</strong></td><td>Incorporado ao valor unitário dos produtos em estoque via rateio.</td><td>Lançado integralmente como despesa do período na DRE.</td></tr>
+                <tr><td><strong>Finalidade Principal</strong></td><td>Fiscal e societária (CPC 16 / IFRS / Balanço Obrigatório).</td><td>Gerencial e tomada de decisão estratégica de preços.</td></tr>
+                <tr><td><strong>Impacto nos Estoques</strong></td><td>Estoque armazena custos fixos para o exercício seguinte.</td><td>Estoque carrega apenas custos puramente variáveis.</td></tr>
+              </tbody>
+            </table>
+          `
+        },
+        'custo-ponto-equilibrio': {
+          trilha: 'Contabilidade de Custos · Análise de Lucratividade',
+          titulo: 'Ponto de Equilíbrio: Contábil, Financeiro e Econômico',
+          descricao: 'Fórmulas e aplicações para identificar o volume de vendas que zera o resultado ou garante o retorno exigido.',
+          corpo: `
+            <h2>1. Margem de Contribuição (MC)</h2>
+            <div class="bloco-formula">
+              MC Unitária = Preço de Venda Unitário - (Custos Variáveis + Despesas Variáveis Unitárias)
+            </div>
+
+            <h2>2. As Três Modalidades de Ponto de Equilíbrio</h2>
+            <ul>
+              <li><strong>Ponto de Equilíbrio Contábil (PEC):</strong> Cobre todos os custos e despesas fixas contábeis.<br>
+              <code>PEC = Custos e Despesas Fixas Totais ÷ MC Unitária</code></li>
+              <li><strong>Ponto de Equilíbrio Financeiro (PEF):</strong> Desconsidera os gastos fixos que não afetam o caixa (como depreciação e amortização).<br>
+              <code>PEF = (Custos Fixos - Gastos Não Desembolsáveis) ÷ MC Unitária</code></li>
+              <li><strong>Ponto de Equilíbrio Econômico (PEE):</strong> Inclui a remuneração mínima do capital investido (custo de oportunidade dos acionistas).<br>
+              <code>PEE = (Custos Fixos + Lucro Mínimo Exigido) ÷ MC Unitária</code></li>
+            </ul>
+          `
+        },
+        'fin-liquidez': {
+          trilha: 'Finanças Corporativas · Indicadores de Solvência e Rentabilidade',
+          titulo: 'Índices de Liquidez e Análise Dupont (ROE e ROA)',
+          descricao: 'Avaliação da liquidez corrente, seca e geral e decomposição do Retorno sobre o Patrimônio Líquido.',
+          corpo: `
+            <h2>1. Fórmulas de Liquidez</h2>
+            <div class="bloco-formula">
+              • Liquidez Corrente = Ativo Circulante ÷ Passivo Circulante
+              • Liquidez Seca = (Ativo Circulante - Estoques) ÷ Passivo Circulante
+              • Liquidez Geral = (Ativo Circulante + RLP) ÷ (Passivo Circulante + Passivo Não Circulante)
+            </div>
+
+            <h2>2. Decomposição DuPont do ROE</h2>
+            <div class="bloco-formula">
+              ROE = Margem Líquida × Giro do Ativo × Alavancagem Financeira
+              ROE = (Lucro Líquido / Receita) × (Receita / Ativo Total) × (Ativo Total / Patrimônio Líquido)
+            </div>
+            <p>Essa fórmula revela se o retorno dos sócios decorre de margem alta, eficiência operacional no giro dos bens ou endividamento inteligente.</p>
+          `
+        },
+        'fin-ciclos': {
+          trilha: 'Finanças Corporativas · Gestão do Caixa',
+          titulo: 'Ciclos Operacional e Financeiro (Ciclo de Caixa)',
+          descricao: 'Prazo médio de estocagem (PME), de recebimento (PMRV) e pagamento (PMPF) e o impacto no capital de giro.',
+          corpo: `
+            <h2>1. Fórmulas dos Ciclos</h2>
+            <div class="bloco-formula">
+              • Ciclo Operacional = PME + PMRV
+              • Ciclo Financeiro (Ciclo de Conversão de Caixa) = Ciclo Operacional - PMPF
+              • Ciclo Financeiro = PME + PMRV - PMPF
+            </div>
+            <p>Quanto menor o ciclo financeiro, menor o volume de dinheiro próprio que a empresa precisa imobilizar para financiar suas vendas.</p>
+          `
+        },
+        'fin-capital-giro': {
+          trilha: 'Finanças Corporativas · Decisões de Investimento',
+          titulo: 'Necessidade de Capital de Giro (NCG) e VPL / TIR',
+          descricao: 'Capital de giro operacional, modelo de Fleuriet e métodos de avaliação de projetos de investimento.',
+          corpo: `
+            <h2>1. Necessidade de Capital de Giro (NCG)</h2>
+            <div class="bloco-formula">
+              NCG = Ativo Circulante Operacional (Clientes + Estoques) - Passivo Circulante Operacional (Fornecedores + Salários/Impostos)
+            </div>
+
+            <h2>2. Métodos de Engenharia Econômica</h2>
+            <ul>
+              <li><strong>VPL (Valor Presente Líquido):</strong> Traz todos os fluxos de caixa futuros a valor presente descontados pela Taxa Mínima de Atratividade (TMA). Se VPL > 0, o projeto gera riqueza.</li>
+              <li><strong>TIR (Taxa Interna de Retorno):</strong> A taxa de desconto que iguala o VPL a zero. Se TIR > TMA, o investimento é viável.</li>
+              <li><strong>Payback Descontado:</strong> Tempo necessário para recuperar o investimento inicial corrigido no tempo.</li>
+            </ul>
+          `
+        }
+      };
+
+      // 2. Banco de Questões de Simulado
+      const bancoQuestoes = [
+        {
+          disciplina: 'Teoria Geral da Administração (TGA)',
+          enunciado: 'Qual princípio da Administração Científica de Taylor preconiza substituir o arbítrio e improvisação empírica dos operários por métodos cientificamente estabelecidos e cronometrados?',
+          opcoes: [
+            'Princípio do Planejamento',
+            'Princípio da Exceção',
+            'Princípio da Homeostase',
+            'Princípio da Unidade de Direção'
+          ],
+          correta: 0,
+          explicacao: 'O Princípio do Planejamento estabelece a substituição do critério individual e empírico do operário por métodos testados e padronizados pela gerência.'
+        },
+        {
+          disciplina: 'Ciências Contábeis · Princípios e Escrituração',
+          enunciado: 'De acordo com o método das partidas dobradas e a estrutura patrimonial contábil, qual o efeito de uma compra de mercadorias para estoque a prazo no valor de R$ 10.000,00?',
+          opcoes: [
+            'Débito no Ativo Circulante (Estoques) e Crédito no Passivo Circulante (Fornecedores)',
+            'Crédito no Ativo Circulante (Estoques) e Débito no Passivo Circulante (Fornecedores)',
+            'Débito em Despesas de Vendas e Crédito em Caixa',
+            'Débito em Fornecedores e Crédito em Patrimônio Líquido'
+          ],
+          correta: 0,
+          explicacao: 'Como o Ativo aumenta com débitos e o Passivo aumenta com créditos, debita-se a conta de Ativo (Estoques) e credita-se a conta de Passivo (Fornecedores a Pagar).'
+        },
+        {
+          disciplina: 'Contabilidade de Custos & Gerencial',
+          enunciado: 'Uma indústria possui R$ 60.000,00 de custos fixos mensais. Fabrica um produto cujo preço de venda é R$ 50,00 e os custos e despesas variáveis somam R$ 20,00 por unidade. Qual o Ponto de Equilíbrio Contábil (PEC)?',
+          opcoes: [
+            '2.000 unidades/mês',
+            '1.200 unidades/mês',
+            '3.000 unidades/mês',
+            '1.500 unidades/mês'
+          ],
+          correta: 0,
+          explicacao: 'Margem de Contribuição unitária = R$ 50 - R$ 20 = R$ 30. PEC = R$ 60.000 ÷ R$ 30 = 2.000 unidades/mês.'
+        },
+        {
+          disciplina: 'Gestão Estratégica',
+          enunciado: 'Na Matriz BCG, um produto que possui alta participação relativa em um mercado com alta taxa de crescimento é classificado como:',
+          opcoes: [
+            'Estrela',
+            'Vaca Leiteira',
+            'Ponto de Interrogação',
+            'Cão / Abacaxi'
+          ],
+          correta: 0,
+          explicacao: 'Produtos Estrelas lideram mercados em alta expansão, gerando alto volume financeiro mas exigindo reinvestimentos contínuos.'
+        }
+      ];
+
+      let questaoAtualIdx = 0;
+
+      // 3. Renderização de Artigos
+      function carregarArtigo(id) {
+        const artigo = bancoArtigos[id];
+        if (!artigo) return;
+
+        document.getElementById('artigo-trilha').textContent = artigo.trilha;
+        document.getElementById('artigo-titulo').textContent = artigo.titulo;
+        document.getElementById('artigo-descricao').textContent = artigo.descricao;
+        document.getElementById('artigo-corpo-texto').innerHTML = artigo.corpo;
+
+        // Atualiza seleção na sidebar
+        document.querySelectorAll('.artigo-link').forEach(link => {
+          link.classList.toggle('ativo', link.dataset.id === id);
+        });
+
+        // Alterna para o modo leitor
+        mostrarSecao('secao-artigo');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function mostrarSecao(secaoId) {
+        document.getElementById('secao-artigo').style.display = secaoId === 'secao-artigo' ? 'block' : 'none';
+        document.getElementById('secao-calculadoras').style.display = secaoId === 'secao-calculadoras' ? 'block' : 'none';
+        document.getElementById('secao-tutor').style.display = secaoId === 'secao-tutor' ? 'block' : 'none';
+      }
+
+      // 4. Busca Dinâmica na Sidebar
+      document.getElementById('campo-busca').addEventListener('input', (e) => {
+        const termo = e.target.value.toLowerCase().trim();
+        const links = document.querySelectorAll('.artigo-link');
+        const modulos = document.querySelectorAll('.modulo-item');
+
+        links.forEach(link => {
+          const id = link.dataset.id;
+          const art = bancoArtigos[id];
+          const textoCompleto = (art.titulo + ' ' + art.descricao + ' ' + art.trilha).toLowerCase();
+          const visivel = textoCompleto.includes(termo);
+          link.parentElement.style.display = visivel ? 'block' : 'none';
+        });
+
+        modulos.forEach(mod => {
+          const itensVisiveis = mod.querySelectorAll('.sublista-artigos li:not([style*="display: none"])');
+          mod.style.display = itensVisiveis.length > 0 ? 'block' : 'none';
+        });
+      });
+
+      // 5. Calculadoras Interativas
+      function recalcularPE() {
+        const cf = parseFloat(document.getElementById('pe-custo-fixo').value) || 0;
+        const pv = parseFloat(document.getElementById('pe-preco-venda').value) || 0;
+        const cv = parseFloat(document.getElementById('pe-custo-var').value) || 0;
+
+        const mc = pv - cv;
+        if (mc <= 0) {
+          document.getElementById('res-pe').innerHTML = '<span style="color:red">Atenção: Margem de contribuição nula ou negativa! O preço não cobre os custos variáveis.</span>';
+          return;
+        }
+
+        const mcPct = (mc / pv) * 100;
+        const pecUnidades = Math.ceil(cf / mc);
+        const pecFaturamento = pecUnidades * pv;
+
+        document.getElementById('res-pe').innerHTML = `
+          Margem de Contribuição: <strong>R$ ${mc.toFixed(2)}</strong> (${mcPct.toFixed(2)}%)<br />
+          Ponto de Equilíbrio Contábil (PEC): <strong>${pecUnidades.toLocaleString('pt-BR')} unidades/mês</strong> (Faturamento de R$ ${pecFaturamento.toLocaleString('pt-BR', { minimumFractionDigits: 2 })})
+        `;
+      }
+
+      function recalcularLiquidez() {
+        const ac = parseFloat(document.getElementById('liq-ac').value) || 0;
+        const est = parseFloat(document.getElementById('liq-estoques').value) || 0;
+        const pc = parseFloat(document.getElementById('liq-pc').value) || 0;
+
+        if (pc <= 0) {
+          document.getElementById('res-liq').textContent = 'Passivo Circulante deve ser maior que zero.';
+          return;
+        }
+
+        const lc = ac / pc;
+        const ls = (ac - est) / pc;
+
+        document.getElementById('res-liq').innerHTML = `
+          Liquidez Corrente: <strong>${lc.toFixed(2)}</strong> (Para cada R$ 1,00 de dívida, há R$ ${lc.toFixed(2)} em haveres circulantes)<br />
+          Liquidez Seca: <strong>${ls.toFixed(2)}</strong> (Sem depender da realização dos estoques)
+        `;
+      }
+
+      function recalcularCiclos() {
+        const pme = parseFloat(document.getElementById('ciclo-pme').value) || 0;
+        const pmrv = parseFloat(document.getElementById('ciclo-pmrv').value) || 0;
+        const pmpf = parseFloat(document.getElementById('ciclo-pmpf').value) || 0;
+
+        const co = pme + pmrv;
+        const cf = co - pmpf;
+
+        document.getElementById('res-ciclo').innerHTML = `
+          Ciclo Operacional: <strong>${co} dias</strong> (Estocagem + Prazo de Cobrança aos Clientes)<br />
+          Ciclo Financeiro (Caixa): <strong>${cf} dias</strong> (Período em que a operação necessita de capital de giro líquido)
+        `;
+      }
+
+      // Eventos das calculadoras
+      ['pe-custo-fixo', 'pe-preco-venda', 'pe-custo-var'].forEach(id => {
+        document.getElementById(id).addEventListener('input', recalcularPE);
+      });
+      ['liq-ac', 'liq-estoques', 'liq-pc'].forEach(id => {
+        document.getElementById(id).addEventListener('input', recalcularLiquidez);
+      });
+      ['ciclo-pme', 'ciclo-pmrv', 'ciclo-pmpf'].forEach(id => {
+        document.getElementById(id).addEventListener('input', recalcularCiclos);
+      });
+
+      // 6. Tutor IA & Quiz
+      const respostasTutor = [
+        {
+          palavras: ['roe', 'dupont', 'rentabilidade'],
+          resposta: "O <strong>ROE (Return on Equity)</strong> mede o rendimento do capital próprio dos sócios: <code>ROE = Lucro Líquido ÷ Patrimônio Líquido</code>. Pela <em>Fórmula DuPont</em>, ele se decompõe em: Margem Líquida × Giro do Ativo × Alavancagem Financeira."
+        },
+        {
+          palavras: ['absorcao', 'absorção', 'variavel', 'variável', 'custeio'],
+          resposta: "No <strong>Custeio por Absorção</strong>, todos os custos (fixos e variáveis) integram o estoque dos produtos e só viram despesa quando a mercadoria é vendida. No <strong>Custeio Variável</strong>, os custos fixos são lançados diretamente no resultado do período como despesa do mês."
+        },
+        {
+          palavras: ['dre', 'estrutura', 'ebitda'],
+          resposta: "A sequência da DRE inicia na <strong>Receita Bruta</strong> (-) Impostos sobre Venda = <strong>Receita Líquida</strong> (-) Custos dos Produtos = <strong>Lucro Bruto</strong> (-) Despesas Operacionais = <strong>EBITDA / LAJIDA</strong> (-) Depreciação = <strong>LAJIR</strong> (+/-) Resultado Financeiro (-) Imposto de Renda = <strong>Lucro Líquido</strong>."
+        },
+        {
+          palavras: ['taylor', 'fayol', 'diferenca', 'diferença'],
+          resposta: "<strong>Taylor</strong> focou na fábrica, no nível operacional (baixo para cima), padronizando tempos e movimentos. <strong>Fayol</strong> focou na alta administração da empresa (cima para baixo), estruturando as funções gerenciais (PODC) e a hierarquia."
+        }
+      ];
+
+      function responderTutor(msg) {
+        const txt = msg.toLowerCase();
+        let resp = null;
+        for (const item of respostasTutor) {
+          if (item.palavras.some(p => txt.includes(p))) {
+            resp = item.resposta;
+            break;
+          }
+        }
+        if (!resp) {
+          resp = `Excelente pergunta acadêmica! Esse tema conecta-se diretamente com os fundamentos de gestão e contabilidade. Você pode consultar nosso artigo detalhado na sidebar ou testar seus conhecimentos em nosso simulador interativo de questões logo abaixo!`;
+        }
+
+        const chat = document.getElementById('tutor-mensagens');
+        const box = document.createElement('div');
+        box.className = 'tutor-msg tutor-msg--ia';
+        box.innerHTML = resp;
+        chat.appendChild(box);
+        chat.scrollTop = chat.scrollHeight;
+      }
+
+      document.getElementById('form-tutor').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const input = document.getElementById('campo-tutor');
+        const val = input.value.trim();
+        if (!val) return;
+        input.value = '';
+
+        const chat = document.getElementById('tutor-mensagens');
+        const msgUser = document.createElement('div');
+        msgUser.className = 'tutor-msg tutor-msg--user';
+        msgUser.textContent = val;
+        chat.appendChild(msgUser);
+        chat.scrollTop = chat.scrollHeight;
+
+        setTimeout(() => responderTutor(val), 350);
+      });
+
+      // Lógica do Quiz
+      function carregarQuestaoQuiz(idx) {
+        const q = bancoQuestoes[idx];
+        document.getElementById('quiz-disciplina').textContent = `Disciplina: ${q.disciplina}`;
+        document.getElementById('quiz-enunciado').textContent = `${idx + 1}. ${q.enunciado}`;
+        
+        const divOpcoes = document.getElementById('quiz-opcoes');
+        divOpcoes.innerHTML = '';
+        const feedback = document.getElementById('quiz-feedback');
+        feedback.style.display = 'none';
+        document.getElementById('btn-prox-questao').style.display = 'none';
+
+        q.opcoes.forEach((op, i) => {
+          const btn = document.createElement('div');
+          btn.className = 'quiz-opcao';
+          btn.textContent = op;
+          btn.addEventListener('click', () => {
+            // Desabilita outros cliques
+            divOpcoes.querySelectorAll('.quiz-opcao').forEach(b => b.style.pointerEvents = 'none');
+            if (i === q.correta) {
+              btn.classList.add('correta');
+              feedback.innerHTML = `<span style="color: var(--cor-sucesso); font-weight: 700;">Correto!</span> ${q.explicacao}`;
+            } else {
+              btn.classList.add('errada');
+              divOpcoes.children[q.correta].classList.add('correta');
+              feedback.innerHTML = `<span style="color: #d32f2f; font-weight: 700;">Incorreto.</span> ${q.explicacao}`;
+            }
+            feedback.style.display = 'block';
+            document.getElementById('btn-prox-questao').style.display = 'inline-flex';
+          });
+          divOpcoes.appendChild(btn);
+        });
+      }
+
+      document.getElementById('btn-prox-questao').addEventListener('click', () => {
+        questaoAtualIdx = (questaoAtualIdx + 1) % bancoQuestoes.length;
+        carregarQuestaoQuiz(questaoAtualIdx);
+      });
+
+      // Navegação Superior
+      document.getElementById('btn-modo-leitura').addEventListener('click', () => mostrarSecao('secao-artigo'));
+      document.getElementById('btn-modo-calculadoras').addEventListener('click', () => mostrarSecao('secao-calculadoras'));
+      document.getElementById('btn-modo-tutor').addEventListener('click', () => mostrarSecao('secao-tutor'));
+
+      document.querySelectorAll('.artigo-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          carregarArtigo(link.dataset.id);
+        });
+      });
+
+      // Inicialização
+      carregarArtigo('tga-taylor');
+      carregarQuestaoQuiz(0);
+    })();
+  </script>
+</body>
+</html>

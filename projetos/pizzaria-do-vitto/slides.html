@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Apresentação em Slides — Pizzaria do Vitto (Isadora Sandri)</title>
+<meta name="author" content="Isadora Sandri" />
+<meta name="description" content="Apresentação executiva em 12 slides: o que 19 meses de vendas mostram sobre cardápio, preço e operação." />
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml" />
+<style>
+:root {
+  --cor-primaria: #722F37;
+  --cor-primaria-escura: #4A1C24;
+  --cor-fundo: #0F0D0C;
+  --cor-palco: #171413;
+  --cor-slide: #1F1B1A;
+  --cor-slide-borda: #332B29;
+  --cor-texto: #F5F0EE;
+  --cor-texto-suave: #B3A8A5;
+  --cor-destaque: #E5A3AD;
+  --cor-sucesso: #4E8752;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Barra Superior */
+.cabecalho-deck {
+  height: 54px;
+  background: var(--cor-palco);
+  border-bottom: 1px solid var(--cor-slide-borda);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 100;
+}
+.cabecalho-deck__titulo {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cor-destaque);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cabecalho-deck__titulo a {
+  color: var(--cor-texto-suave);
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.2s;
+}
+.cabecalho-deck__titulo a:hover { color: var(--cor-texto); }
+
+.deck-controles {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-deck {
+  background: var(--cor-slide);
+  border: 1px solid var(--cor-slide-borda);
+  color: var(--cor-texto);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+.btn-deck:hover {
+  background: var(--cor-primaria);
+  border-color: var(--cor-primaria);
+}
+.btn-deck.ativo {
+  background: var(--cor-primaria);
+  border-color: var(--cor-destaque);
+}
+
+/* Palco Central do Slide */
+.palco {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+}
+
+.slide {
+  width: 100%;
+  max-width: 1100px;
+  aspect-ratio: 16 / 9;
+  background: var(--cor-slide);
+  border: 1px solid var(--cor-slide-borda);
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  display: none;
+  flex-direction: column;
+  padding: 44px 56px;
+  position: relative;
+  overflow-y: auto;
+  animation: fadeIn 0.25s ease-out;
+}
+.slide.ativo { display: flex; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.slide__tag {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--cor-destaque);
+  margin-bottom: 12px;
+}
+.slide__titulo {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+  margin-bottom: 24px;
+}
+.slide__corpo {
+  flex: 1;
+  display: flex;
+  gap: 36px;
+  align-items: center;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--cor-texto-suave);
+}
+.slide__col-texto { flex: 1.2; }
+.slide__col-midia {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.slide__col-midia img {
+  max-width: 100%;
+  max-height: 380px;
+  border-radius: 8px;
+  border: 1px solid var(--cor-slide-borda);
+  background: #fff;
+}
+
+.slide p { margin-bottom: 16px; }
+.slide p strong { color: #FFFFFF; }
+.slide ul { list-style: square; padding-left: 24px; margin-bottom: 16px; }
+.slide li { margin-bottom: 8px; }
+
+/* Destaque numérico */
+.kpi-destaque {
+  font-size: 52px;
+  font-weight: 900;
+  color: var(--cor-destaque);
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.kpi-legenda {
+  font-size: 15px;
+  color: var(--cor-texto-suave);
+  margin-bottom: 20px;
+}
+
+/* Tabelas nos slides */
+.tabela-slide {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  margin: 16px 0;
+}
+.tabela-slide th {
+  text-align: left;
+  border-bottom: 2px solid var(--cor-slide-borda);
+  padding: 8px 10px;
+  color: var(--cor-destaque);
+  font-weight: 700;
+}
+.tabela-slide td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--cor-slide-borda);
+  color: var(--cor-texto);
+}
+
+/* Gaveta de Notas de Orador */
+.gaveta-notas {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  max-height: 180px;
+  background: rgba(18, 15, 14, 0.96);
+  border-top: 2px solid var(--cor-primaria);
+  padding: 16px 28px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #FFE3E7;
+  overflow-y: auto;
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.6);
+  display: none;
+  z-index: 50;
+}
+.gaveta-notas.aberta { display: block; }
+.gaveta-notas strong { color: #FFFFFF; text-transform: uppercase; font-size: 12px; letter-spacing: 0.1em; }
+
+/* Barra Inferior de Navegação */
+.rodape-deck {
+  height: 52px;
+  background: var(--cor-palco);
+  border-top: 1px solid var(--cor-slide-borda);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+}
+.progresso-barra {
+  position: absolute;
+  top: 54px; left: 0;
+  height: 3px;
+  background: var(--cor-destaque);
+  transition: width 0.25s ease;
+  z-index: 101;
+}
+.contador-slides {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--cor-texto-suave);
+}
+
+/* Modal de Grade (Overview) */
+.grade-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 8, 7, 0.95);
+  z-index: 200;
+  padding: 40px;
+  overflow-y: auto;
+  display: none;
+}
+.grade-modal.aberta { display: block; }
+.grade-modal__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.grade-card {
+  aspect-ratio: 16 / 9;
+  background: var(--cor-slide);
+  border: 1px solid var(--cor-slide-borda);
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s;
+}
+.grade-card:hover, .grade-card.atual {
+  border-color: var(--cor-destaque);
+  transform: translateY(-3px);
+  background: #2A2322;
+}
+.grade-card__num { font-size: 11px; font-weight: 700; color: var(--cor-destaque); }
+.grade-card__tit { font-size: 13px; font-weight: 700; color: #fff; line-height: 1.3; }
+
+@media (max-width: 800px) {
+  .slide { aspect-ratio: auto; min-height: 80vh; padding: 24px 20px; }
+  .slide__titulo { font-size: 24px; }
+  .slide__corpo { flex-direction: column; gap: 20px; font-size: 15px; }
+  .kpi-destaque { font-size: 38px; }
+}
+</style>
+</head>
+<body>
+
+  <!-- Barra Superior -->
+  <header class="cabecalho-deck">
+    <div class="cabecalho-deck__titulo">
+      <a href="../../index.html#projetos">← Voltar ao Portfólio</a>
+      <span>|</span>
+      <span>Pizzaria do Vitto · Apresentação Executiva</span>
+    </div>
+    <div class="deck-controles">
+      <a href="relatorio.html" class="btn-deck">📄 Relatório</a>
+      <a href="dashboard.html" class="btn-deck">⚡ Dashboard & IA</a>
+      <button type="button" id="btn-notas" class="btn-deck" title="Notas de Orador (Tecla N)">🎙️ Notas (N)</button>
+      <button type="button" id="btn-grade" class="btn-deck" title="Visão Geral em Grade (Tecla G)">🔲 Grade (G)</button>
+      <button type="button" id="btn-tela-cheia" class="btn-deck" title="Tela Cheia (Tecla F)">⛶ Tela Cheia (F)</button>
+    </div>
+  </header>
+
+  <!-- Linha de Progresso -->
+  <div class="progresso-barra" id="barra-progresso" style="width: 8.33%;"></div>
+
+  <!-- Palco Central -->
+  <main class="palco">
+    
+    <!-- SLIDE 1 -->
+    <article class="slide ativo" data-slide="1" data-fala="Não é um relatório de números soltos; é uma leitura executiva para decidir cardápio e operação na segunda-feira.">
+      <div class="slide__tag">Slide 01 · A Pergunta Central</div>
+      <h1 class="slide__titulo">"O que 19 meses de vendas dizem sobre cardápio e operação?"</h1>
+      <div class="slide__corpo">
+        <div class="slide__col-texto">
+          <p>Análise estatística completa e estruturada de uma operação real de pizzaria:</p>
+          <ul>
+            <li><strong>48.620</strong> itens comercializados</li>
+            <li><strong>21.350</strong> pedidos emitidos</li>
+            <li><strong>R$ 4,09 milhões</strong> faturados</li>
+            <li>Período: <strong>janeiro/2025 a agosto/2026</strong></li>
+          </ul>
+          <p><strong>Duas decisões práticas fundamentais:</strong></p>
+          <ol style="padding-left: 20px;">
+            <li>O que manter, promover ou ajustar no cardápio de sabores?</li>
+            <li>Quando dimensionar e reforçar a equipe de atendimento e o forno?</li>
+          </ol>
+        </div>
+        <div class="slide__col-midia">
+          <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--cor-slide-borda); border-radius: 12px; padding: 32px; text-align: center; width: 100%;">
+            <div class="kpi-destaque">19 Meses</div>
+            <div class="kpi-legenda">Base de Dados Primária Completa</div>
+            <div style="font-size: 14px; color: var(--cor-destaque);">Metodologia Estatística Aplicada à Gestão</div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- SLIDE 2 -->
+    <article class="slide" data-slide="2" data-fala="Os limites estão declarados desde o início. Nenhuma conclusão ultrapassa os fatos que a base primária suporta.">
+      <div class="slide__tag">Slide 02 · Transparência & Rigor</div>
+      <h2 class="slide__titulo">O que a base permite e o que NÃO permite concluir</h2>
+      <div class="slide__corpo">
+        <div class="slide__col-texto">
+          <div style="background: rgba(78, 135, 82, 0.1); border-left: 4px solid var(--cor-sucesso); padding: 14px 18px; border-radius: 0 8px 8px 0; margin-bottom: 20px;">
+            <strong style="color: #A3D9A5;">A base PERMITE com alto rigor:</strong>
+            <p style="margin: 6px 0 0; font-size: 15px;">Perfil de mix de sabores e categorias, progressão de preços por tamanho, concentração por dia e horário, evolução mensal, coocorrência de pedidos e curva de tíquete.</p>
+          </div>
+          <div style="background: rgba(140, 47, 31, 0.15); border-left: 4px solid var(--cor-destaque); padding: 14px 18px; border-radius: 0 8px 8px 0;">
+            <strong style="color: var(--cor-destaque);">A base NÃO permite (limites metodológicos):</strong>
+            <p style="margin: 6px 0 0; font-size: 15px;">Lucro líquido ou margem contábil (ausência de dados de custos de ingredientes), fidelização individual (clientes não identificados), canal de venda (sem delivery vs salão) e previsão irrestrita.</p>
+          </div>
+        </div>
+        <div class="slide__col-midia">
+          <img src="img/05-receita-por-categoria.png" alt="Mix de Receita por Categoria" />
+        </div>
+      </div>
+    </article>
+
+    <!-- SLIDE 3 -->
+    <article class="slide" data-slide="3" data-fala="Não existe 'dia de reforçar a equipe'. A média diária é muito parecida de segunda a domingo. A operação precisa ser constante.">
+      <div class="slide__tag">Slide 03 · Padrão Semanal</div>
+      <h2 class="slide__titulo">A demanda ao longo da semana é praticamente plana</h2>
+      <div class="slide__corpo">
+        <div class="slide__col-texto">
+          <div class="kpi-destaque">5,7%</div>
+          <div class="kpi-legenda">é a diferença máxima de média entre o sábado e a quarta-feira</div>
+          <ul>
+            <li>Variação média: <strong>57,9 a 61,2 pedidos</strong> por dia com venda.</li>
+            <li>Receita média diária oscila suavemente entre <strong>R$ 11,1 mil e R$ 11,8 mil</strong>.</li>
+            <li>Diferença pequena, 100% compatível com flutuação aleatória usual.</li>
+          </ul>
+          <p><strong>Impacto prático:</strong> A rotina da operação não justifica contratações concentradas em dias específicos da semana.</p>
+        </div>
+        <div class="slide__col-midia">
+          <img src="img/06-pedidos-por-dia-semana.png" alt="Média de pedidos por dia da semana" />
+        </div>
+      </div>
+    </article>
+
+    <!-- SLIDE 4 -->
+    <article class="slide" data-slide="4" data-fala="O gargalo provável é hora, não dia. As duas janelas concentram quase dois terços do negócio.">
+      <div class="slide__tag">Slide 04 · Concentração Horária</div>
+      <h2 class="slide__titulo">O horário concentra 62,5% do faturamento</h2>
+      <div class="slide__corpo">
+        <div class="slide__col-texto">
+          <div class="kpi-destaque">4 Horas do Dia</div>
+          <div class="kpi-legenda">concentram 60,7% dos pedidos e 62,5% da receita total</div>
+          <ul>
+            <li><strong>Janela do Almoço:</strong> 11h às 13h</li>
+            <li><strong>Janela do Jantar:</strong> 17h às 19h</li>
+            <li><strong>Pico Absoluto:</strong> 12h (responde por 11,8% dos pedidos)</li>
+            <li>74,1% dos pedidos acontecem antes das 19h.</li>
+          </ul>
+          <p><strong>Ação imediata:</strong> Concentrar o preparo prévio (mise en place) e a equipe máxima exatamente nessas 4 horas.</p>
+        </div>
+        <div class="slide__col-midia">
+          <img src="img/06-pedidos-por-hora.png" alt="Distribuição horária dos pedidos" />
+        </div>
+      </div>
+    </article>
+
+    <!-- SLIDE 5 -->
+    <article class="slide" data-slide="5" data-fala="Cada degrau de tamanho vale R$ 21,25 fixos. Fazer o upsell de M para G rende muito mais do que tentar empurrar itens pequenos.">
+      <div class="slide__tag">Slide 05 · A Força do Tamanho G</div>
+      <h2 class="slide__titulo">O tamanho G sustenta 45,9% da receita</h2>
+      <div class="slide__corpo">
+        <div class="slide__col-texto">
+          <table class="tabela-slide">
+            <thead>
+              <tr>
+                <th>Tamanho</th>
+                <th>% Receita</th>
+                <th>% Volume</th>
+                <th>Preço Mediano</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>P</td><td>21,8%</td><td>29,1%</td><td>R$ 60,00</td></tr>
+              <tr><td>M</td><td>30,5%</td><td>31,5%</td><td>R$ 81,25</td></tr>
+              <tr><td><strong>G</strong></td><td><strong>45,9%</strong></td><td><strong>38,2%</strong></td><td><strong>R$ 102,50</strong></td></tr>
+              <tr><td>GG</td><td>1,8%</td><td>1,2%</td><td>R$ 127,50</td></tr>
+            </tbody>
+          </table>
+          <p><strong>O degrau mágico:</strong> Cada salto de tamanho adiciona exatamente <strong>R$ 21,25</strong> à pizza. Subir o cliente de M para G é a alavanca mais eficiente de receita da casa.</p>
+        </div>
+        <div class="slide__col-midia">
+          <img src="img/05-preco-por-tamanho.png" alt="Distribuição de Preço por Tamanho" />
+        </div>
+      </div>
+    </article>
+
+    <!-- SLIDE 6 -->
+    <article class="slide" data-slide="6" data-fala="Cortar sabor por volume seria um grande equívoco. O menor sabor tem quase quinhentos pedidos e não sabemos o custo de insumos.">
+      <div class="slide__tag">Slide 06 · Análise do Cardápio</div>
+      <h2 class="slide__titulo">Cardápio equilibrado: sem candidato a corte</h2>
+      <div class="slide__corpo">
+        <div class="slide__col-texto">
+          <div class="kpi-destaque">22 Sabores</div>
+          <div class="kpi-legenda">necessários para somar 80% do faturamento total</div>
+          <ul>
+            <li>Líder de faturamento: <strong>Frango Tailandesa (5,3%)</strong></li>
+            <li>Último colocado: <strong>The Brie Carre (1,4%) com 480 pedidos</strong></li>
+            <li>Volume ≠ Receita: A pizza <em>Especial da Casa</em> é 1ª em unidades, mas é 4ª em faturamento.</li>
+          </ul>
+          <p><strong>Conclusão:</strong> Todos os 32 sabores possuem público cativo. Cortar itens sem analisar a margem por insumo destruiria receita.</p>
+        </div>
+        <div class="slide__col-midia">
+          <img src="img/04-mix-sabores-receita.png" alt="Curva de receita por sabor" />
+        </div>
+      </div>
+    </article>
+
+    <!-- SLIDE 7 -->
+    <article class="slide" data-slide="7" data-fala="Com o preço de tabela congelado há dezenove meses, a empresa perdeu poder aquisitivo para a inflação do setor.">
+      <div class="slide__tag">Slide 07 · Política de Preços</div>
+      <h2 class="slide__titulo">Preço de tabela congelado há 19 meses</h2>
+      <div class="slide__corpo">
+        <div class="slide__col-texto">
+          <div class="kpi-destaque">0 Reajustes</div>
+          <div class="kpi-legenda">de tabela nos 19 meses observados (jan/2025 a ago/2026)</div>
+          <ul>
+            <li>Preço médio por pizza: <strong>R$ 82,49 (2025) → R$ 82,40 (2026)</strong></li>
+            <li>Zero ganho tarifário enquanto os insumos do setor sofreram inflação acumulada.</li>
+            <li>Crescer com preço fixo exige vender mais volume — ou realizar reajuste cirúrgico.</li>
+          </ul>
+          <p><strong>Oportunidade:</strong> Testar reajuste de 2% a 3% apenas nos tamanhos G e GG.</p>
+        </div>
+        <div class="slide__col-midia">
+          <img src="img/07-preco-mensal.png" alt="Evolução do preço médio mensal" />
+        </div>
+      </div>
+    </article>
+
+    <!-- SLIDE 8 -->
+    <article class="slide" data-slide="8" data-fala="A queda bruta de 2026 engana. Corrigida a cobertura de dias na planilha, o faturamento diário caiu apenas 0,7%.">
+      <div class="slide__tag">Slide 08 · Diagnóstico de 2026</div>
+      <h2 class="slide__titulo">2026 caiu por cobertura de dados, não por demanda</h2>
+      <div class="slide__corpo">
+        <div class="slide__col-texto">
+          <table class="tabela-slide">
+            <thead>
+              <tr>
+                <th>Métrica Comparativa</th>
+                <th>jan–jul/2025</th>
+                <th>jan–jul/2026</th>
+                <th>Variação</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Receita Bruta</td><td>R$ 1,53 mi</td><td>R$ 1,43 mi</td><td>−6,7%</td></tr>
+              <tr><td>Dias com Registro</td><td>134 dias</td><td>126 dias</td><td>−6,0%</td></tr>
+              <tr><td><strong>Receita / Dia c/ Venda</strong></td><td><strong>R$ 11.447</strong></td><td><strong>R$ 11.364</strong></td><td><strong>−0,7%</strong></td></tr>
+              <tr><td>Pedidos / Dia</td><td>59,8</td><td>58,8</td><td>−1,6%</td></tr>
+            </tbody>
+          </table>
+          <p><strong>Diagnóstico Real:</strong> O negócio não está perdendo clientela. A queda aparente deve-se a 8 dias a menos exportados pelo sistema em 2026.</p>
+        </div>
+        <div class="slide__col-midia">
+          <img src="img/07-receita-mensal.png" alt="Receita Mensal Bruta" />
+        </div>
+      </div>
+    </article>
+
+    <!-- SLIDE 9 -->
+    <article class="slide" data-slide="9" data-fala="Poucos pedidos muito grandes puxam a média para cima. Para planejar o caixa, a mediana de R$ 162,50 é a régua correta.">
+      <div class="slide__tag">Slide 09 · Tíquete e Cauda Longa</div>
+      <h2 class="slide__titulo">O pedido típico é de R$ 162,50 (com cauda longa)</h2>
+      <div class="slide__corpo">
+        <div class="slide__col-texto">
+          <div class="kpi-destaque">R$ 162,50</div>
+          <div class="kpi-legenda">Mediana por pedido (Média: R$ 191,54 puxada por pedidos corporativos)</div>
+          <ul>
+            <li><strong>2,28 pizzas</strong> em média por pedido emitido.</li>
+            <li>38,0% pedem 1 pizza; 28,8% pedem 2 pizzas; 33,2% pedem 3 ou mais.</li>
+            <li>15,7% dos pedidos superam R$ 300,00 (maior pedido: R$ 2.221,00).</li>
+          </ul>
+          <p><strong>Alavancas:</strong> Incentivar combo para pedidos de 1 pizza e upgrade de tamanho para quem pede 2.</p>
+        </div>
+        <div class="slide__col-midia">
+          <img src="img/09-distribuicao-ticket.png" alt="Distribuição do Tíquete Médio" />
+        </div>
+      </div>
+    </article>
+
+    <!-- SLIDE 10 -->
+    <article class="slide" data-slide="10" data-fala="O cliente compra múltiplos sabores, mas não há um 'par mágico'. O combo deve reunir os mais pedidos pela popularidade.">
+      <div class="slide__tag">Slide 10 · Coocorrência & Combos</div>
+      <h2 class="slide__titulo">Clientes combinam sabores, mas sem par preferido</h2>
+      <div class="slide__corpo">
+        <div class="slide__col-texto">
+          <div class="kpi-destaque">61,0%</div>
+          <div class="kpi-legenda">dos pedidos possuem 2 ou mais sabores distintos</div>
+          <ul>
+            <li>Par mais frequente: <strong>Tailandesa + Tropical</strong> (270 pedidos juntos).</li>
+            <li><strong>Lift Médio: 1,09x</strong> (os sabores comportam-se de forma independente).</li>
+            <li>Não existe afinidade oculta: o que vende junto decorre da popularidade individual.</li>
+          </ul>
+          <p><strong>Diretriz comercial:</strong> Criar combos promocionais baseados nos sabores mais vendidos (top sellers), não em combinações exóticas.</p>
+        </div>
+        <div class="slide__col-midia">
+          <img src="img/08-coocorrencia.png" alt="Matriz de Coocorrência" />
+        </div>
+      </div>
+    </article>
+
+    <!-- SLIDE 11 -->
+    <article class="slide" data-slide="11" data-fala="Todas as estimativas são apresentadas em faixas prudentes com premissas claras, sem presumir lucros fictícios.">
+      <div class="slide__tag">Slide 11 · Matriz de Ações</div>
+      <h2 class="slide__titulo">As 5 ações priorizadas por impacto e esforço</h2>
+      <div class="slide__corpo">
+        <div class="slide__col-texto" style="flex: 2;">
+          <table class="tabela-slide">
+            <thead>
+              <tr>
+                <th>Ação Recomendada</th>
+                <th>Impacto Mensal</th>
+                <th>Esforço</th>
+                <th>Risco</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1. Reajuste 2–3% (G e GG)</td>
+                <td><strong>+R$ 2,0 a 3,1 mil</strong></td>
+                <td>Baixo</td>
+                <td>Médio</td>
+              </tr>
+              <tr>
+                <td>2. Upsell Atendimento: Upgrade M → G</td>
+                <td><strong>+R$ 1,2 a 2,5 mil</strong></td>
+                <td>Baixo</td>
+                <td>Baixo</td>
+              </tr>
+              <tr>
+                <td>3. Combo de 2 Sabores Líderes</td>
+                <td><strong>+R$ 2,8 a 4,6 mil</strong></td>
+                <td>Médio</td>
+                <td>Médio</td>
+              </tr>
+              <tr>
+                <td>4. Reforço de Equipe (11–13h e 17–19h)</td>
+                <td><strong>Protege 62,5% receita</strong></td>
+                <td>Médio</td>
+                <td>Baixo</td>
+              </tr>
+              <tr>
+                <td>5. Auditoria de Registro de Dias</td>
+                <td><strong>Qualidade da Gestão</strong></td>
+                <td>Baixo</td>
+                <td>Nulo</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </article>
+
+    <!-- SLIDE 12 -->
+    <article class="slide" data-slide="12" data-fala="A análise consultiva é tão útil pelo que mostra quanto pelo que se recusa categoricamente a inventar.">
+      <div class="slide__tag">Slide 12 · Conclusão & Próximos Passos</div>
+      <h2 class="slide__titulo">O que NÃO fazer & Como avançar com segurança</h2>
+      <div class="slide__corpo">
+        <div class="slide__col-texto">
+          <p><strong>Diretrizes Finais de Governança:</strong></p>
+          <ul>
+            <li><strong>NÃO</strong> cortar sabores por baixo volume.</li>
+            <li><strong>NÃO</strong> assumir que 2026 teve queda real de mercado.</li>
+            <li><strong>NÃO</strong> calcular margem ou lucro sem dados de compras/insumos.</li>
+          </ul>
+          <div style="background: rgba(229, 163, 173, 0.1); border-left: 4px solid var(--cor-destaque); padding: 14px 18px; border-radius: 0 8px 8px 0; margin-top: 16px;">
+            <strong style="color: var(--cor-destaque);">Próximo Salto de Maturidade da Gestão:</strong>
+            <p style="margin: 6px 0 0; font-size: 14px;">Implantar ficha técnica de custos por sabor (CMV), auditar o software de caixa e cadastrar o canal de venda em cada cupom.</p>
+          </div>
+        </div>
+        <div class="slide__col-midia">
+          <div style="background: var(--cor-palco); border: 1px solid var(--cor-slide-borda); border-radius: 12px; padding: 28px; text-align: center; width: 100%;">
+            <div style="font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 8px;">Isadora Sandri</div>
+            <div style="font-size: 14px; color: var(--cor-texto-suave);">Graduação em Administração · ATITUS</div>
+            <div style="margin-top: 16px;">
+              <a href="dashboard.html" class="btn-deck" style="width: 100%; justify-content: center;">Abrir Dashboard & IA →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Gaveta de Notas de Orador -->
+    <aside class="gaveta-notas" id="gaveta-notas">
+      <div style="margin-bottom: 4px;"><strong>Roteiro de Fala Sugerido (Notas de Orador):</strong></div>
+      <div id="texto-fala">Carregando roteiro...</div>
+    </aside>
+  </main>
+
+  <!-- Barra Inferior -->
+  <footer class="rodape-deck">
+    <div>
+      <button type="button" id="btn-ant" class="btn-deck">◀ Anterior (←)</button>
+      <button type="button" id="btn-prox" class="btn-deck" style="background: var(--cor-primaria);">Próximo (→) ▶</button>
+    </div>
+    <div class="contador-slides" id="contador-slides">01 / 12</div>
+    <div style="font-size: 12px; color: var(--cor-texto-suave);">Use as setas do teclado para navegar</div>
+  </footer>
+
+  <!-- Modal de Grade de Slides -->
+  <div class="grade-modal" id="grade-modal">
+    <div style="max-width: 1200px; margin: 0 auto 20px auto; display: flex; justify-content: space-between; align-items: center;">
+      <h3 style="font-size: 20px; color: #fff;">Visão Geral dos 12 Slides</h3>
+      <button type="button" id="btn-fechar-grade" class="btn-deck">Fechar (ESC)</button>
+    </div>
+    <div class="grade-modal__grid" id="container-grade"></div>
+  </div>
+
+  <script>
+    "use strict";
+
+    (function() {
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const totalSlides = slides.length;
+      let slideAtual = 1;
+
+      const barraProgresso = document.getElementById('barra-progresso');
+      const contadorSlides = document.getElementById('contador-slides');
+      const gavetaNotas = document.getElementById('gaveta-notas');
+      const textoFala = document.getElementById('texto-fala');
+      const btnNotas = document.getElementById('btn-notas');
+      const btnGrade = document.getElementById('btn-grade');
+      const gradeModal = document.getElementById('grade-modal');
+      const containerGrade = document.getElementById('container-grade');
+      const btnFecharGrade = document.getElementById('btn-fechar-grade');
+      const btnTelaCheia = document.getElementById('btn-tela-cheia');
+      const btnAnt = document.getElementById('btn-ant');
+      const btnProx = document.getElementById('btn-prox');
+
+      // Popula a grade de slides
+      slides.forEach((slide, idx) => {
+        const num = idx + 1;
+        const titEl = slide.querySelector('.slide__titulo') || slide.querySelector('h1') || slide.querySelector('h2');
+        const tit = titEl ? titEl.textContent.replace(/"/g, '') : `Slide ${num}`;
+
+        const card = document.createElement('div');
+        card.className = `grade-card ${num === 1 ? 'atual' : ''}`;
+        card.dataset.slideNum = num;
+        card.innerHTML = `
+          <span class="grade-card__num">Slide ${String(num).padStart(2, '0')}</span>
+          <div class="grade-card__tit">${tit}</div>
+        `;
+        card.addEventListener('click', () => {
+          irParaSlide(num);
+          fecharGrade();
+        });
+        containerGrade.appendChild(card);
+      });
+
+      function atualizarSlide() {
+        slides.forEach((s, idx) => {
+          s.classList.toggle('ativo', idx + 1 === slideAtual);
+        });
+
+        // Atualiza progresso e contador
+        const pct = (slideAtual / totalSlides) * 100;
+        barraProgresso.style.width = pct + '%';
+        contadorSlides.textContent = `${String(slideAtual).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+
+        // Atualiza fala de orador
+        const slideEl = slides[slideAtual - 1];
+        textoFala.textContent = slideEl.dataset.fala || "Nenhuma anotação de fala cadastrada para este slide.";
+
+        // Atualiza seleção na grade
+        const cards = containerGrade.querySelectorAll('.grade-card');
+        cards.forEach((c, idx) => {
+          c.classList.toggle('atual', idx + 1 === slideAtual);
+        });
+      }
+
+      function proximoSlide() {
+        if (slideAtual < totalSlides) {
+          slideAtual++;
+          atualizarSlide();
+        }
+      }
+
+      function slideAnterior() {
+        if (slideAtual > 1) {
+          slideAtual--;
+          atualizarSlide();
+        }
+      }
+
+      function irParaSlide(num) {
+        if (num >= 1 && num <= totalSlides) {
+          slideAtual = num;
+          atualizarSlide();
+        }
+      }
+
+      function toggleNotas() {
+        gavetaNotas.classList.toggle('aberta');
+        btnNotas.classList.toggle('ativo');
+      }
+
+      function toggleGrade() {
+        gradeModal.classList.toggle('aberta');
+        btnGrade.classList.toggle('ativo');
+      }
+
+      function fecharGrade() {
+        gradeModal.classList.remove('aberta');
+        btnGrade.classList.remove('ativo');
+      }
+
+      function toggleTelaCheia() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          if (document.exitFullscreen) document.exitFullscreen();
+        }
+      }
+
+      // Eventos de clique
+      btnProx.addEventListener('click', proximoSlide);
+      btnAnt.addEventListener('click', slideAnterior);
+      btnNotas.addEventListener('click', toggleNotas);
+      btnGrade.addEventListener('click', toggleGrade);
+      btnFecharGrade.addEventListener('click', fecharGrade);
+      btnTelaCheia.addEventListener('click', toggleTelaCheia);
+
+      // Eventos de teclado
+      window.addEventListener('keydown', (e) => {
+        if (gradeModal.classList.contains('aberta')) {
+          if (e.key === 'Escape') fecharGrade();
+          return;
+        }
+
+        switch (e.key) {
+          case 'ArrowRight':
+          case 'PageDown':
+          case ' ':
+            e.preventDefault();
+            proximoSlide();
+            break;
+          case 'ArrowLeft':
+          case 'PageUp':
+          case 'Backspace':
+            e.preventDefault();
+            slideAnterior();
+            break;
+          case 'Home':
+            e.preventDefault();
+            irParaSlide(1);
+            break;
+          case 'End':
+            e.preventDefault();
+            irParaSlide(totalSlides);
+            break;
+          case 'n':
+          case 'N':
+            toggleNotas();
+            break;
+          case 'g':
+          case 'G':
+            toggleGrade();
+            break;
+          case 'f':
+          case 'F':
+            toggleTelaCheia();
+            break;
+        }
+      });
+
+      // Suporte a swipe touch em celular
+      let touchStartX = 0;
+      window.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      window.addEventListener('touchend', (e) => {
+        const touchEndX = e.changedTouches[0].screenX;
+        const diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 50) {
+          if (diff > 0) proximoSlide();
+          else slideAnterior();
+        }
+      }, { passive: true });
+
+      // Inicialização
+      atualizarSlide();
+    })();
+  </script>
+</body>
+</html>

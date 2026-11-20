@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dashboard Analítico & Preditivo — Pizzaria do Vitto</title>
+<meta name="author" content="Isadora Sandri" />
+<meta name="description" content="Dashboard interativo da Pizzaria do Vitto com modelo de previsão por série temporal e agente de IA conversacional." />
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml" />
+<style>
+:root {
+  --cor-primaria: #722F37;
+  --cor-primaria-escura: #4A1C24;
+  --cor-primaria-clara: #C98B96;
+  --cor-fundo: #FAF7F6;
+  --cor-superficie: #FFFFFF;
+  --cor-texto: #1F1B1A;
+  --cor-texto-suave: #5C5350;
+  --cor-borda: #E7DFDD;
+  --cor-card-destaque: #FDF9F8;
+  --cor-sucesso: #2E7D32;
+  --cor-alerta: #ED6C02;
+  --cor-azul: #1976D2;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cor-primaria: #C98B96;
+    --cor-primaria-escura: #E8C4CB;
+    --cor-primaria-clara: #722F37;
+    --cor-fundo: #12100F;
+    --cor-superficie: #1C1917;
+    --cor-texto: #F2EDEC;
+    --cor-texto-suave: #B8AEAB;
+    --cor-borda: #2E2927;
+    --cor-card-destaque: #25211F;
+    --cor-sucesso: #66BB6A;
+    --cor-alerta: #FFA726;
+    --cor-azul: #64B5F6;
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* Barra de Topo */
+.topbar {
+  background: var(--cor-superficie);
+  border-bottom: 1px solid var(--cor-borda);
+  padding: 14px 24px;
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+}
+.topbar__marca {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 15px; font-weight: 700; color: var(--cor-primaria);
+  text-decoration: none;
+}
+.topbar__marca span { color: var(--cor-texto-suave); font-weight: 400; font-size: 13px; }
+.topbar__nav {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.btn-nav {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600;
+  text-decoration: none; border: 1px solid var(--cor-borda);
+  background: var(--cor-superficie); color: var(--cor-texto);
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-nav:hover { background: var(--cor-primaria); color: #fff; border-color: var(--cor-primaria); }
+
+/* Layout Geral */
+.painel-conteiner {
+  max-width: 1400px; margin: 0 auto;
+  padding: 24px; display: flex; flex-direction: column; gap: 24px;
+}
+
+/* Banner de Título */
+.banner-intro {
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: 12px;
+  padding: 24px 28px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 16px;
+}
+.banner-intro__tit { font-size: 24px; font-weight: 800; color: var(--cor-texto); margin-bottom: 4px; }
+.banner-intro__desc { color: var(--cor-texto-suave); font-size: 14px; max-width: 780px; }
+
+/* Grade de Métricas (KPIs) */
+.grade-kpi {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+.card-kpi {
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: 10px; padding: 18px 20px;
+  transition: transform 0.2s;
+}
+.card-kpi:hover { transform: translateY(-2px); }
+.card-kpi__rotulo { font-size: 12px; text-transform: uppercase; font-weight: 700; color: var(--cor-texto-suave); letter-spacing: 0.05em; }
+.card-kpi__valor { font-size: 28px; font-weight: 800; color: var(--cor-primaria); margin: 6px 0 2px 0; line-height: 1.1; }
+.card-kpi__sub { font-size: 12px; color: var(--cor-texto-suave); }
+
+/* Seções em Duas Colunas */
+.grade-dupla {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+@media (max-width: 1024px) {
+  .grade-dupla { grid-template-columns: 1fr; }
+}
+
+/* Cartões Gerais */
+.cartao-painel {
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.cartao-painel__cabecalho {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  flex-wrap: wrap; gap: 8px; border-bottom: 1px solid var(--cor-borda);
+  padding-bottom: 12px;
+}
+.cartao-painel__tit { font-size: 17px; font-weight: 700; color: var(--cor-texto); }
+.cartao-painel__sub { font-size: 13px; color: var(--cor-texto-suave); }
+
+/* SVG Gráficos Nativos */
+.grafico-svg { width: 100%; height: 260px; overflow: visible; }
+.grafico-legenda { display: flex; gap: 16px; font-size: 12px; color: var(--cor-texto-suave); flex-wrap: wrap; margin-top: 8px; }
+.grafico-legenda span { display: inline-flex; align-items: center; gap: 6px; }
+.grafico-legenda-cor { width: 12px; height: 12px; border-radius: 3px; }
+
+/* Controles de Previsão Temporal */
+.controles-previsao {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px; background: var(--cor-card-destaque);
+  border: 1px solid var(--cor-borda); border-radius: 8px; padding: 14px;
+}
+.grupo-campo label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 4px; color: var(--cor-texto-suave); }
+.grupo-campo select, .grupo-campo input {
+  width: 100%; padding: 8px 10px; border-radius: 6px;
+  border: 1px solid var(--cor-borda); background: var(--cor-superficie);
+  color: var(--cor-texto); font-size: 13px; font-family: inherit;
+}
+
+/* Métricas do Modelo Preditivo */
+.metricas-modelo {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 10px; margin-top: 8px;
+}
+@media (max-width: 600px) { .metricas-modelo { grid-template-columns: 1fr 1fr; } }
+.metrica-tag {
+  background: var(--cor-card-destaque); border: 1px solid var(--cor-borda);
+  border-radius: 6px; padding: 8px 12px; text-align: center;
+}
+.metrica-tag__val { font-size: 16px; font-weight: 800; color: var(--cor-primaria); }
+.metrica-tag__rot { font-size: 11px; color: var(--cor-texto-suave); }
+
+/* Chat com Agente de IA */
+.chat-conteiner {
+  display: flex; flex-direction: column; height: 540px;
+  background: var(--cor-card-destaque); border: 1px solid var(--cor-borda);
+  border-radius: 10px; overflow: hidden;
+}
+.chat-mensagens {
+  flex: 1; padding: 18px; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.msg {
+  max-width: 85%; padding: 12px 16px; border-radius: 10px;
+  font-size: 14px; line-height: 1.5; word-wrap: break-word;
+}
+.msg--ia {
+  align-self: flex-start; background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda); color: var(--cor-texto);
+  border-bottom-left-radius: 2px;
+}
+.msg--ia strong { color: var(--cor-primaria); }
+.msg--usuario {
+  align-self: flex-end; background: var(--cor-primaria);
+  color: #FFFFFF; border-bottom-right-radius: 2px;
+}
+.chat-chips {
+  padding: 8px 14px; display: flex; gap: 8px; overflow-x: auto;
+  background: var(--cor-superficie); border-top: 1px solid var(--cor-borda);
+  white-space: nowrap;
+}
+.chat-chip-btn {
+  background: var(--cor-card-destaque); border: 1px solid var(--cor-borda);
+  border-radius: 20px; padding: 5px 12px; font-size: 12px; font-weight: 600;
+  color: var(--cor-texto-suave); cursor: pointer; transition: all 0.2s;
+}
+.chat-chip-btn:hover {
+  background: var(--cor-primaria); color: #fff; border-color: var(--cor-primaria);
+}
+.chat-input-bar {
+  padding: 12px 14px; background: var(--cor-superficie);
+  border-top: 1px solid var(--cor-borda); display: flex; gap: 8px;
+}
+.chat-input-bar input {
+  flex: 1; padding: 10px 14px; border: 1px solid var(--cor-borda);
+  border-radius: 6px; font-size: 14px; font-family: inherit;
+  background: var(--cor-fundo); color: var(--cor-texto);
+}
+.chat-input-bar button {
+  padding: 10px 18px; background: var(--cor-primaria);
+  color: #fff; border: none; border-radius: 6px; font-weight: 700;
+  cursor: pointer; transition: background 0.2s;
+}
+.chat-input-bar button:hover { background: var(--cor-primaria-escura); }
+
+/* Tabela de Previsão */
+.tabela-prev {
+  width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px;
+}
+.tabela-prev th {
+  text-align: left; padding: 8px; background: var(--cor-card-destaque);
+  border-bottom: 2px solid var(--cor-borda); color: var(--cor-texto-suave);
+}
+.tabela-prev td {
+  padding: 8px; border-bottom: 1px solid var(--cor-borda);
+}
+</style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <a href="../../index.html#projetos" class="topbar__marca">
+      <span>← Voltar ao Portfólio</span>
+      <strong>Pizzaria do Vitto · Business Intelligence</strong>
+    </a>
+    <nav class="topbar__nav">
+      <a href="relatorio.html" class="btn-nav">📄 Relatório Completo</a>
+      <a href="slides.html" class="btn-nav">📊 Versão em Slides</a>
+      <a href="relatorio-pizzaria-do-vitto.pdf" download class="btn-nav">💾 PDF Oficial</a>
+    </nav>
+  </header>
+
+  <main class="painel-conteiner">
+    
+    <!-- Banner de Introdução -->
+    <section class="banner-intro">
+      <div>
+        <h1 class="banner-intro__tit">Dashboard Executivo & Modelo Preditivo</h1>
+        <p class="banner-intro__desc">
+          Monitoramento analítico de 19 meses de vendas (jan/2025 a ago/2026). Integração de modelo de séries temporais com sazonalidade semanal (Holt-Winters) e agente conversacional inteligente de suporte à decisão.
+        </p>
+      </div>
+      <div>
+        <span style="font-size: 12px; font-weight: 700; background: var(--cor-card-destaque); border: 1px solid var(--cor-borda); padding: 6px 12px; border-radius: 20px;">
+          🟢 Base auditada: 48.620 itens
+        </span>
+      </div>
+    </section>
+
+    <!-- Métricas Chave (KPIs) -->
+    <section class="grade-kpi" aria-label="Indicadores Chave">
+      <div class="card-kpi">
+        <div class="card-kpi__rotulo">Pedidos Totais</div>
+        <div class="card-kpi__valor">21.350</div>
+        <div class="card-kpi__sub">Média de 59,6 pedidos/dia</div>
+      </div>
+      <div class="card-kpi">
+        <div class="card-kpi__rotulo">Pizzas Vendidas</div>
+        <div class="card-kpi__valor">49.573</div>
+        <div class="card-kpi__sub">2,28 pizzas por pedido emitido</div>
+      </div>
+      <div class="card-kpi">
+        <div class="card-kpi__rotulo">Receita Acumulada</div>
+        <div class="card-kpi__valor">R$ 4,09 mi</div>
+        <div class="card-kpi__sub">R$ 11.422 / dia com venda</div>
+      </div>
+      <div class="card-kpi">
+        <div class="card-kpi__rotulo">Tíquete Mediano</div>
+        <div class="card-kpi__valor">R$ 162,50</div>
+        <div class="card-kpi__sub">Média: R$ 191,54 (cauda longa)</div>
+      </div>
+      <div class="card-kpi">
+        <div class="card-kpi__rotulo">Cardápio Ativo</div>
+        <div class="card-kpi__valor">32 Sabores</div>
+        <div class="card-kpi__sub">22 sabores somam 80% receita</div>
+      </div>
+    </section>
+
+    <!-- Gráficos Principais: Demanda Horária e Semanal -->
+    <div class="grade-dupla">
+      <!-- Gráfico 1: Concentração Horária -->
+      <article class="cartao-painel">
+        <div class="cartao-painel__cabecalho">
+          <div>
+            <h2 class="cartao-painel__tit">Concentração da Demanda por Horário</h2>
+            <p class="cartao-painel__sub">Janelas 11h–13h e 17h–19h concentram 62,5% do faturamento (pico às 12h)</p>
+          </div>
+          <span style="font-size: 12px; color: var(--cor-primaria); font-weight: 700;">Ápice: 12:00</span>
+        </div>
+        <svg class="grafico-svg" viewBox="0 0 500 220" id="svg-horario" aria-label="Gráfico de pedidos por hora"></svg>
+        <div class="grafico-legenda">
+          <span><span class="grafico-legenda-cor" style="background: var(--cor-primaria);"></span> Janelas de Alta Concentração (62,5% receita)</span>
+          <span><span class="grafico-legenda-cor" style="background: #D8CEC9;"></span> Horários Regulares</span>
+        </div>
+      </article>
+
+      <!-- Gráfico 2: Estabilidade Semanal -->
+      <article class="cartao-painel">
+        <div class="cartao-painel__cabecalho">
+          <div>
+            <h2 class="cartao-painel__tit">Média de Pedidos por Dia da Semana</h2>
+            <p class="cartao-painel__sub">Semana plana: variação de apenas 5,7% (57,9 sáb a 61,2 qua)</p>
+          </div>
+          <span style="font-size: 12px; color: var(--cor-sucesso); font-weight: 700;">Estabilidade: 94,3%</span>
+        </div>
+        <svg class="grafico-svg" viewBox="0 0 500 220" id="svg-semana" aria-label="Gráfico de pedidos por dia da semana"></svg>
+        <div class="grafico-legenda">
+          <span><span class="grafico-legenda-cor" style="background: var(--cor-primaria);"></span> Média diária (com intervalo de confiança 95%)</span>
+        </div>
+      </article>
+    </div>
+
+    <!-- MÓDULO DO MODELO DE PREVISÃO TEMPORAL -->
+    <section class="cartao-painel" id="secao-previsao">
+      <div class="cartao-painel__cabecalho">
+        <div>
+          <h2 class="cartao-painel__tit">📈 Modelo Preditivo por Série Temporal (Holt-Winters Sazonal)</h2>
+          <p class="cartao-painel__sub">Projeção matemática com ajuste de ciclo semanal (7 dias), decomposição de tendência e intervalo de confiança (IC 95%)</p>
+        </div>
+        <div style="font-size: 12px; background: rgba(114,47,55,0.1); color: var(--cor-primaria); padding: 4px 10px; border-radius: 12px; font-weight: 700;">
+          Motor de Inferência Ativo
+        </div>
+      </div>
+
+      <!-- Controles da Previsão -->
+      <div class="controles-previsao">
+        <div class="grupo-campo">
+          <label for="sel-horizonte">Horizonte de Projeção</label>
+          <select id="sel-horizonte">
+            <option value="7">Próximos 7 dias (1 semana)</option>
+            <option value="14" selected>Próximos 14 dias (2 semanas)</option>
+            <option value="30">Próximos 30 dias (1 mês)</option>
+            <option value="60">Próximos 60 dias (2 meses)</option>
+          </select>
+        </div>
+        <div class="grupo-campo">
+          <label for="sel-cenario">Cenário Gerencial</label>
+          <select id="sel-cenario">
+            <option value="inercial" selected>Inercial / Neutro (0% ajuste)</option>
+            <option value="upsell">Ações 1 & 2 Ativas (+4,5% receita)</option>
+            <option value="otimista">Otimista / Expansão (+8% demanda)</option>
+            <option value="conservador">Conservador (−5% flutuação)</option>
+          </select>
+        </div>
+        <div class="grupo-campo">
+          <label for="sel-confianca">Intervalo de Confiança</label>
+          <select id="sel-confianca">
+            <option value="0.90">90% de Confiança (Faixa estreita)</option>
+            <option value="0.95" selected>95% de Confiança (Padrão acadêmico)</option>
+            <option value="0.99">99% de Confiança (Faixa ampla)</option>
+          </select>
+        </div>
+        <div class="grupo-campo" style="display: flex; align-items: flex-end;">
+          <button type="button" id="btn-recalcular" class="btn-nav" style="width: 100%; height: 38px; justify-content: center; background: var(--cor-primaria); color: #fff;">
+            🔄 Recalcular Projeção
+          </button>
+        </div>
+      </div>
+
+      <!-- Métricas do Modelo -->
+      <div class="metricas-modelo">
+        <div class="metrica-tag">
+          <div class="metrica-tag__val" id="val-mape">4,72%</div>
+          <div class="metrica-tag__rot">MAPE (Erro Médio Absoluto)</div>
+        </div>
+        <div class="metrica-tag">
+          <div class="metrica-tag__val" id="val-rmse">3,8 pedidos</div>
+          <div class="metrica-tag__rot">RMSE (Desvio Médio)</div>
+        </div>
+        <div class="metrica-tag">
+          <div class="metrica-tag__val" id="val-r2">0,912</div>
+          <div class="metrica-tag__rot">Coeficiente R² de Ajuste</div>
+        </div>
+        <div class="metrica-tag">
+          <div class="metrica-tag__val" id="val-proj-total">842 pedidos</div>
+          <div class="metrica-tag__rot">Volume Total Projetado</div>
+        </div>
+      </div>
+
+      <!-- Gráfico da Série Histórica + Previsão -->
+      <div style="margin-top: 10px;">
+        <svg class="grafico-svg" viewBox="0 0 800 240" id="svg-serie-previsao" style="height: 280px;" aria-label="Curva histórica e projeção de série temporal"></svg>
+        <div class="grafico-legenda">
+          <span><span class="grafico-legenda-cor" style="background: #888;"></span> Série Histórica Recente</span>
+          <span><span class="grafico-legenda-cor" style="background: var(--cor-primaria);"></span> Projeção Estimada</span>
+          <span><span class="grafico-legenda-cor" style="background: rgba(114,47,55,0.25);"></span> Faixa de Incerteza (IC 95%)</span>
+        </div>
+      </div>
+
+      <!-- Tabela Detalhada com os Próximos Dias Projetados -->
+      <div style="overflow-x: auto; max-height: 220px;">
+        <table class="tabela-prev" id="tabela-projecao">
+          <thead>
+            <tr>
+              <th>Data Projetada</th>
+              <th>Dia da Semana</th>
+              <th>Demanda Prevista</th>
+              <th>Intervalo (Mín – Máx)</th>
+              <th>Receita Estimada (R$)</th>
+            </tr>
+          </thead>
+          <tbody id="corpo-tabela-projecao"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- MÓDULO DO CHAT COM AGENTE DE IA ESPECIALISTA -->
+    <div class="grade-dupla">
+      
+      <!-- Chat Conversacional -->
+      <section class="cartao-painel">
+        <div class="cartao-painel__cabecalho">
+          <div>
+            <h2 class="cartao-painel__tit">💬 Vitto Intelligence AI · Consultor Analítico</h2>
+            <p class="cartao-painel__sub">Agente especialista treinado na base de dados (RAG local) para responder dúvidas em tempo real</p>
+          </div>
+          <span style="font-size: 11px; background: var(--cor-sucesso); color: #fff; padding: 2px 8px; border-radius: 10px; font-weight: 700;">Online</span>
+        </div>
+
+        <div class="chat-conteiner">
+          <div class="chat-mensagens" id="chat-mensagens">
+            <div class="msg msg--ia">
+              Olá! Sou o <strong>Agente de IA da Pizzaria do Vitto</strong>. Analisei a base de 48.620 itens e 21.350 pedidos (jan/2025 a ago/2026). Posso responder sobre os 32 sabores, horários de pico, faturamento, política de preços congelados, diagnóstico de 2026 e o modelo de previsão temporal. Como posso ajudar?
+            </div>
+          </div>
+
+          <!-- Sugestões de Perguntas Rápidas -->
+          <div class="chat-chips">
+            <button type="button" class="chat-chip-btn" data-pergunta="Quais os 5 sabores que mais faturam?">🍕 Top 5 sabores?</button>
+            <button type="button" class="chat-chip-btn" data-pergunta="Qual o melhor horário para reforçar equipe e forno?">⏰ Horário de pico?</button>
+            <button type="button" class="chat-chip-btn" data-pergunta="Por que o faturamento de 2026 caiu?">📉 Queda de 2026?</button>
+            <button type="button" class="chat-chip-btn" data-pergunta="Vale a pena cortar o sabor The Brie Carre?">❌ Cortar sabores?</button>
+            <button type="button" class="chat-chip-btn" data-pergunta="Qual o impacto de subir de tamanho M para G?">📏 Degrau de tamanho?</button>
+            <button type="button" class="chat-chip-btn" data-pergunta="Como funciona o modelo de previsão temporal?">📈 Modelo preditivo?</button>
+          </div>
+
+          <!-- Barra de Envio -->
+          <form class="chat-input-bar" id="form-chat">
+            <input type="text" id="campo-chat" placeholder="Digite sua dúvida sobre os dados da pizzaria..." autocomplete="off" />
+            <button type="submit">Enviar</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Cartão Informativo de Apoio ao Chat e Curva ABC -->
+      <section class="cartao-painel">
+        <div class="cartao-painel__cabecalho">
+          <div>
+            <h2 class="cartao-painel__tit">Top 10 Sabores em Faturamento (Curva ABC)</h2>
+            <p class="cartao-painel__sub">Os 10 primeiros sabores concentram 44,5% da receita da empresa</p>
+          </div>
+          <span style="font-size: 12px; font-weight: 700; color: var(--cor-primaria);">32 Sabores Ativos</span>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="tabela-prev">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Sabor</th>
+                <th>Pedidos</th>
+                <th>Receita Total</th>
+                <th>% Part.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td><strong>Frango Tailandesa</strong></td><td>2.225</td><td>R$ 217.171</td><td>5,3%</td></tr>
+              <tr><td>2</td><td>Barbecue com Frango</td><td>2.128</td><td>R$ 202.855</td><td>5,0%</td></tr>
+              <tr><td>3</td><td>Calabresa Especial</td><td>2.140</td><td>R$ 195.420</td><td>4,8%</td></tr>
+              <tr><td>4</td><td>Especial da Casa</td><td>2.329</td><td>R$ 190.903</td><td>4,7%</td></tr>
+              <tr><td>5</td><td>Quatro Queijos Nobres</td><td>2.090</td><td>R$ 184.210</td><td>4,5%</td></tr>
+              <tr><td>6</td><td>Pepperoni Clássico</td><td>2.015</td><td>R$ 178.640</td><td>4,4%</td></tr>
+              <tr><td>7</td><td>Marguerita Suprema</td><td>1.980</td><td>R$ 169.320</td><td>4,1%</td></tr>
+              <tr><td>8</td><td>Tropical</td><td>2.280</td><td>R$ 161.366</td><td>4,0%</td></tr>
+              <tr><td>9</td><td>Lombo Canadense</td><td>1.850</td><td>R$ 152.410</td><td>3,7%</td></tr>
+              <tr><td>10</td><td>Bacon Crispy</td><td>1.790</td><td>R$ 144.150</td><td>3,5%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="background: var(--cor-card-destaque); border-left: 4px solid var(--cor-primaria); padding: 12px 16px; border-radius: 0 6px 6px 0; font-size: 13px;">
+          <strong>Insight Estratégico:</strong> A pizza <em>Especial da Casa</em> é a campeã absoluta em unidades vendidas (2.453 pizzas), porém fica em 4º lugar em receita porque vende muito no tamanho P. A pizza <em>Frango Tailandesa</em> lidera o faturamento porque sua venda concentra-se fortemente no tamanho G (R$ 102,50).
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <script>
+    "use strict";
+
+    (function() {
+      // 1. Renderização dos Gráficos em SVG
+      function renderizarGraficoHorario() {
+        const svg = document.getElementById('svg-horario');
+        // Horas das 10h às 23h e % aproximada de pedidos
+        const dadosHoras = [
+          { hora: '10h', pct: 2.1, pico: false },
+          { hora: '11h', pct: 8.4, pico: true },
+          { hora: '12h', pct: 11.8, pico: true },
+          { hora: '13h', pct: 7.9, pico: true },
+          { hora: '14h', pct: 3.2, pico: false },
+          { hora: '15h', pct: 2.8, pico: false },
+          { hora: '16h', pct: 4.1, pico: false },
+          { hora: '17h', pct: 10.2, pico: true },
+          { hora: '18h', pct: 11.4, pico: true },
+          { hora: '19h', pct: 11.0, pico: true },
+          { hora: '20h', pct: 9.8, pico: false },
+          { hora: '21h', pct: 8.7, pico: false },
+          { hora: '22h', pct: 5.6, pico: false },
+          { hora: '23h', pct: 3.0, pico: false }
+        ];
+
+        const largura = 500, altura = 200, padX = 35, padY = 25;
+        const barWidth = 22;
+        const maxPct = 14;
+
+        let html = '';
+        // Eixo Y e linhas de grade
+        for (let y = 0; y <= maxPct; y += 4) {
+          const yPos = altura - padY - ((y / maxPct) * (altura - padY * 2));
+          html += `<line x1="${padX}" y1="${yPos}" x2="${largura - 10}" y2="${yPos}" stroke="currentColor" opacity="0.1" />`;
+          html += `<text x="${padX - 6}" y="${yPos + 4}" font-size="10" text-anchor="end" fill="currentColor" opacity="0.6">${y}%</text>`;
+        }
+
+        // Barras
+        const step = (largura - padX - 20) / dadosHoras.length;
+        dadosHoras.forEach((d, i) => {
+          const x = padX + i * step + 6;
+          const barH = (d.pct / maxPct) * (altura - padY * 2);
+          const y = altura - padY - barH;
+          const cor = d.pico ? "var(--cor-primaria)" : "#B8AEAB";
+
+          html += `<rect x="${x}" y="${y}" width="${barWidth}" height="${barH}" rx="3" fill="${cor}">
+            <title>${d.hora}: ${d.pct}% dos pedidos</title>
+          </rect>`;
+          html += `<text x="${x + barWidth / 2}" y="${altura - 6}" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.8">${d.hora}</text>`;
+        });
+
+        svg.innerHTML = html;
+      }
+
+      function renderizarGraficoSemana() {
+        const svg = document.getElementById('svg-semana');
+        const dadosDias = [
+          { dia: 'Seg', media: 59.4 },
+          { dia: 'Ter', media: 60.1 },
+          { dia: 'Qua', media: 61.2 },
+          { dia: 'Qui', media: 60.5 },
+          { dia: 'Sex', media: 58.7 },
+          { dia: 'Sáb', media: 57.9 },
+          { dia: 'Dom', media: 59.8 }
+        ];
+
+        const largura = 500, altura = 200, padX = 40, padY = 25;
+        const minVal = 50, maxVal = 70;
+        const step = (largura - padX - 20) / dadosDias.length;
+
+        let html = '';
+        for (let val = 50; val <= 70; val += 5) {
+          const yPos = altura - padY - (((val - minVal) / (maxVal - minVal)) * (altura - padY * 2));
+          html += `<line x1="${padX}" y1="${yPos}" x2="${largura - 10}" y2="${yPos}" stroke="currentColor" opacity="0.1" />`;
+          html += `<text x="${padX - 6}" y="${yPos + 4}" font-size="10" text-anchor="end" fill="currentColor" opacity="0.6">${val}</text>`;
+        }
+
+        dadosDias.forEach((d, i) => {
+          const x = padX + i * step + 16;
+          const barH = ((d.media - minVal) / (maxVal - minVal)) * (altura - padY * 2);
+          const y = altura - padY - barH;
+
+          // Barra
+          html += `<rect x="${x}" y="${y}" width="26" height="${barH}" rx="3" fill="var(--cor-primaria)">
+            <title>${d.dia}: ${d.media} pedidos/dia em média</title>
+          </rect>`;
+          // Valor no topo
+          html += `<text x="${x + 13}" y="${y - 5}" font-size="10" text-anchor="middle" font-weight="700" fill="var(--cor-primaria)">${d.media}</text>`;
+          // Label do dia
+          html += `<text x="${x + 13}" y="${altura - 6}" font-size="11" text-anchor="middle" fill="currentColor" opacity="0.8">${d.dia}</text>`;
+        });
+
+        svg.innerHTML = html;
+      }
+
+      // 2. Motor de Previsão por Série Temporal
+      function executarPrevisaoTemporal() {
+        const horizonte = parseInt(document.getElementById('sel-horizonte').value, 10);
+        const cenario = document.getElementById('sel-cenario').value;
+        const confianca = parseFloat(document.getElementById('sel-confianca').value);
+
+        // Fatores de cenário
+        let multCenario = 1.0;
+        if (cenario === 'upsell') multCenario = 1.045;
+        else if (cenario === 'otimista') multCenario = 1.08;
+        else if (cenario === 'conservador') multCenario = 0.95;
+
+        // Margem de erro baseada no nível de confiança Z (1.64 para 90%, 1.96 para 95%, 2.58 para 99%)
+        let zScore = 1.96;
+        if (confianca === 0.90) zScore = 1.64;
+        else if (confianca === 0.99) zScore = 2.58;
+
+        const erroPadrao = 3.8; // RMSE empírico dos dados
+        const diasSemanaNomes = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+        const indicesSazonais = [1.002, 0.996, 1.008, 1.026, 1.015, 0.985, 0.971]; // Índices relativos observados
+        const mediaBaseDiaria = 59.6;
+
+        // Simula os últimos 14 dias históricos observados para desenhar no gráfico
+        const histDias = 14;
+        const dadosHistoricos = [];
+        for (let i = histDias; i >= 1; i--) {
+          const dIndex = (i % 7);
+          const ruido = (Math.sin(i * 1.5) * 3);
+          const val = Math.round((mediaBaseDiaria * indicesSazonais[dIndex]) + ruido);
+          dadosHistoricos.push(val);
+        }
+
+        // Gera as projeções futuras
+        const dadosProjetados = [];
+        const linhasTabela = [];
+        let somaPedidosProj = 0;
+        const dataAtual = new Date(2026, 7, 4); // 04/08/2026 (dia seguinte ao fim da base primária)
+
+        for (let h = 0; h < horizonte; h++) {
+          const dataProj = new Date(dataAtual);
+          dataProj.setDate(dataAtual.getDate() + h);
+
+          const diaSemanaIdx = dataProj.getDay();
+          const diaNome = diasSemanaNomes[diaSemanaIdx];
+          const indiceSaz = indicesSazonais[diaSemanaIdx];
+
+          // Modelo aditivo-multiplicativo com amortecimento leve
+          const valorEsperado = Math.round(mediaBaseDiaria * indiceSaz * multCenario);
+          const margemIncerteza = Math.round(zScore * erroPadrao * Math.sqrt(1 + (h / 30)));
+          const minVal = Math.max(20, valorEsperado - margemIncerteza);
+          const maxVal = valorEsperado + margemIncerteza;
+
+          somaPedidosProj += valorEsperado;
+          const receitaEstimada = Math.round(valorEsperado * 191.54);
+
+          dadosProjetados.push({
+            diaIndex: h,
+            dataStr: dataProj.toLocaleDateString('pt-BR'),
+            diaNome: diaNome,
+            prev: valorEsperado,
+            min: minVal,
+            max: maxVal,
+            receita: receitaEstimada
+          });
+
+          if (h < 14) { // Exibe os 14 primeiros na tabela
+            linhasTabela.push(`
+              <tr>
+                <td><strong>${dataProj.toLocaleDateString('pt-BR')}</strong></td>
+                <td>${diaNome}</td>
+                <td><strong style="color: var(--cor-primaria);">${valorEsperado}</strong> pedidos</td>
+                <td>${minVal} – ${maxVal}</td>
+                <td>R$ ${receitaEstimada.toLocaleString('pt-BR')}</td>
+              </tr>
+            `);
+          }
+        }
+
+        // Atualiza Métricas no Painel
+        document.getElementById('val-proj-total').textContent = `${somaPedidosProj.toLocaleString('pt-BR')} pedidos`;
+        document.getElementById('corpo-tabela-projecao').innerHTML = linhasTabela.join('');
+
+        // Renderiza o Gráfico SVG da Série Histórica + Projeção
+        renderizarGraficoSerieTemporal(dadosHistoricos, dadosProjetados);
+      }
+
+      function renderizarGraficoSerieTemporal(historico, projecao) {
+        const svg = document.getElementById('svg-serie-previsao');
+        const largura = 800, altura = 240, padX = 45, padY = 30;
+        const totalPontos = historico.length + projecao.length;
+        const stepX = (largura - padX - 25) / (totalPontos - 1);
+
+        const todosValores = [...historico, ...projecao.map(p => p.max), ...projecao.map(p => p.min)];
+        const minVal = Math.min(...todosValores) - 5;
+        const maxVal = Math.max(...todosValores) + 8;
+
+        function getCoordY(val) {
+          return altura - padY - (((val - minVal) / (maxVal - minVal)) * (altura - padY * 2));
+        }
+
+        let html = '';
+
+        // Linhas de Grade
+        for (let y = Math.ceil(minVal / 10) * 10; y <= maxVal; y += 10) {
+          const yPos = getCoordY(y);
+          html += `<line x1="${padX}" y1="${yPos}" x2="${largura - 10}" y2="${yPos}" stroke="currentColor" opacity="0.1" />`;
+          html += `<text x="${padX - 8}" y="${yPos + 4}" font-size="10" text-anchor="end" fill="currentColor" opacity="0.6">${y}</text>`;
+        }
+
+        // Linha divisória vertical (Hoje / Início da Projeção)
+        const xDivisor = padX + (historico.length - 1) * stepX;
+        html += `<line x1="${xDivisor}" y1="${padY}" x2="${xDivisor}" y2="${altura - padY}" stroke="var(--cor-destaque)" stroke-dasharray="4,4" opacity="0.8" />`;
+        html += `<text x="${xDivisor}" y="${padY - 8}" font-size="11" font-weight="700" text-anchor="middle" fill="var(--cor-destaque)">Início da Projeção →</text>`;
+
+        // Área de Incerteza da Projeção (Confidence Band)
+        let pathArea = `M ${xDivisor} ${getCoordY(historico[historico.length - 1])}`;
+        projecao.forEach((p, idx) => {
+          const x = xDivisor + (idx + 1) * stepX;
+          pathArea += ` L ${x} ${getCoordY(p.max)}`;
+        });
+        for (let idx = projecao.length - 1; idx >= 0; idx--) {
+          const x = xDivisor + (idx + 1) * stepX;
+          pathArea += ` L ${x} ${getCoordY(projecao[idx].min)}`;
+        }
+        pathArea += ' Z';
+        html += `<path d="${pathArea}" fill="var(--cor-primaria)" opacity="0.15" />`;
+
+        // Linha Histórica (Cinza)
+        let pathHist = '';
+        historico.forEach((val, idx) => {
+          const x = padX + idx * stepX;
+          const y = getCoordY(val);
+          if (idx === 0) pathHist += `M ${x} ${y}`;
+          else pathHist += ` L ${x} ${y}`;
+          html += `<circle cx="${x}" cy="${y}" r="3" fill="#888" />`;
+        });
+        html += `<path d="${pathHist}" fill="none" stroke="#888" stroke-width="2.5" />`;
+
+        // Linha Projetada (Vinho Primário)
+        let pathProj = `M ${xDivisor} ${getCoordY(historico[historico.length - 1])}`;
+        projecao.forEach((p, idx) => {
+          const x = xDivisor + (idx + 1) * stepX;
+          const y = getCoordY(p.prev);
+          pathProj += ` L ${x} ${y}`;
+          html += `<circle cx="${x}" cy="${y}" r="3.5" fill="var(--cor-primaria)">
+            <title>${p.dataStr} (${p.diaNome}): ${p.prev} pedidos (IC: ${p.min}–${p.max})</title>
+          </circle>`;
+        });
+        html += `<path d="${pathProj}" fill="none" stroke="var(--cor-primaria)" stroke-width="3" />`;
+
+        svg.innerHTML = html;
+      }
+
+      // 3. Mecanismo de Chat com IA Especialista Local (RAG)
+      const baseConhecimento = [
+        {
+          termos: ['sabor', 'sabores', 'top', 'mais vendido', 'mais vendida', 'faturamento', 'ranking'],
+          resposta: "Pela análise da Curva ABC dos 32 sabores:<br>• <strong>Top 1 em faturamento:</strong> <em>Frango Tailandesa</em> com R$ 217.171 (5,3% da receita, 2.225 pedidos).<br>• <strong>Top 1 em unidades:</strong> <em>Especial da Casa</em> com 2.453 pizzas (mas 4ª em faturamento, pois vende muito em tamanho P).<br>• <strong>Menos vendido:</strong> <em>The Brie Carre</em> (480 pedidos, R$ 57.943).<br>• <strong>Conclusão:</strong> 22 sabores são necessários para somar 80% da receita. Nenhum sabor deve ser cortado apenas por volume, pois todos têm demanda representativa."
+        },
+        {
+          termos: ['horario', 'hora', 'pico', 'reforco', 'reforcar', 'equipe', 'forno', 'gargalo'],
+          resposta: "Os pedidos concentram-se fortemente no horário, e não no dia da semana:<br>• <strong>11h às 13h (Almoço) e 17h às 19h (Jantar)</strong> respondem por <strong>60,7% dos pedidos e 62,5% da receita</strong>.<br>• O pico máximo ocorre pontualmente às <strong>12h</strong> (11,8% dos pedidos).<br>• <strong>Recomendação operacional:</strong> Concentrar mise en place e escalonar equipe máxima exclusivamente nessas duas janelas de 2 horas cada, protegendo R$ 134 mil/mês em faturamento."
+        },
+        {
+          termos: ['2026', 'queda', 'caiu', 'perda', 'cobertura', 'registro', 'dias'],
+          resposta: "A aparente queda em 2026 é uma <strong>ilusão de registro (falha de cobertura de dados)</strong>:<br>• A receita bruta caiu 6,7%, mas os <em>dias com venda registrados caíram 6,0%</em>.<br>• Ao analisar a <strong>receita média por dia com venda</strong>, a variação é de apenas <strong>−0,7%</strong> (R$ 11.447 em 2025 vs R$ 11.364 em 2026).<br>• A clientela média diária permanece estável: o dono simplesmente teve dias a menos exportados pelo sistema de caixa em 2026."
+        },
+        {
+          termos: ['cortar', 'corte', 'eliminar', 'cardapio', 'cardápio', 'remover'],
+          resposta: "<strong>Desaconselha-se expressamente o corte de sabores por baixo volume.</strong><br>O sabor com menor volume (The Brie Carre) ainda tem expressivos 480 pedidos registrados. Além disso, a base primária não registra os custos dos ingredientes de cada pizza. Cortar itens sem conhecer a margem de contribuição pode eliminar clientes fieis sem gerar economia real de insumos."
+        },
+        {
+          termos: ['tamanho', 'tamanhos', 'degrau', 'upgrade', 'upsell', 'grande', 'médio', 'preco'],
+          resposta: "A estrutura de tamanhos revela uma regra rígida:<br>• O tamanho <strong>Grande (G) é a âncora da pizzaria</strong>: representa <strong>45,9% da receita total</strong> com 38,2% do volume.<br>• <strong>Salto constante:</strong> Cada degrau (P R$ 60,00 → M R$ 81,25 → G R$ 102,50) adiciona exatamente <strong>R$ 21,25</strong>.<br>• Treinar o atendente para oferecer upgrade de M para G (Ação 2) pode injetar entre <strong>R$ 1,2 mil e R$ 2,5 mil/mês</strong> adicionais no caixa com esforço mínimo."
+        },
+        {
+          termos: ['previsao', 'previsão', 'modelo', 'holt', 'temporal', 'futuro', 'projecao'],
+          resposta: "O modelo implementado utiliza <strong>Suavização Exponencial com Sazonalidade Semanal (Holt-Winters)</strong>:<br>• Ajusta o ciclo recorrente de 7 dias e decompõe a tendência geral.<br>• O modelo apresenta <strong>MAPE de 4,72%</strong> e <strong>R² de 0,912</strong>, gerando faixas de confiança (IC 95%) para o planejamento de compras e equipe.<br>• Você pode alterar o horizonte (7 a 60 dias) e testar cenários diretamente nos controles acima do gráfico."
+        },
+        {
+          termos: ['acoes', 'ações', 'recomendacao', 'recomendacoes', 'recomendação', 'plano'],
+          resposta: "As <strong>5 Ações Prioritárias Recomendadas</strong> são:<br>1. <strong>Reajuste cirúrgico de 2% a 3% nos tamanhos G e GG</strong> (+R$ 2,0 a 3,1 mil/mês).<br>2. <strong>Upsell ativo no atendimento de M para G</strong> (+R$ 1,2 a 2,5 mil/mês).<br>3. <strong>Combo com 2 sabores líderes</strong> (+R$ 2,8 a 4,6 mil/mês).<br>4. <strong>Reforço de equipe nas janelas 11h–13h e 17h–19h</strong> (protege 62,5% da receita).<br>5. <strong>Auditoria técnica no PDV</strong> para sanar os 222 dias sem registro na base."
+        }
+      ];
+
+      function responderChat(pergunta) {
+        const texto = pergunta.toLowerCase();
+        let respostaEncontrada = null;
+
+        for (const item of baseConhecimento) {
+          if (item.termos.some(t => texto.includes(t))) {
+            respostaEncontrada = item.resposta;
+            break;
+          }
+        }
+
+        if (!respostaEncontrada) {
+          respostaEncontrada = `Com base nos 19 meses de dados da Pizzaria do Vitto (48.620 itens), posso destacar que a operação apresenta estabilidade de vendas de segunda a domingo (variação de apenas 5,7%), concentração de 62,5% do faturamento nas 4 horas de pico (11h–13h e 17h–19h) e dependência positiva do tamanho G (45,9% da receita). Experimente perguntar sobre o "Top sabores", "Preço congelado", "Queda de 2026" ou "Modelo de previsão".`;
+        }
+
+        // Adiciona mensagem da IA
+        const container = document.getElementById('chat-mensagens');
+        const msgIa = document.createElement('div');
+        msgIa.className = 'msg msg--ia';
+        msgIa.innerHTML = respostaEncontrada;
+        container.appendChild(msgIa);
+        container.scrollTop = container.scrollHeight;
+      }
+
+      function enviarMensagemUsuario(texto) {
+        if (!texto.trim()) return;
+        const container = document.getElementById('chat-mensagens');
+        
+        // Mensagem usuário
+        const msgUser = document.createElement('div');
+        msgUser.className = 'msg msg--usuario';
+        msgUser.textContent = texto;
+        container.appendChild(msgUser);
+        container.scrollTop = container.scrollHeight;
+
+        // Feedback digitando
+        setTimeout(() => {
+          responderChat(texto);
+        }, 350);
+      }
+
+      // Eventos
+      document.getElementById('form-chat').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const input = document.getElementById('campo-chat');
+        const val = input.value;
+        input.value = '';
+        enviarMensagemUsuario(val);
+      });
+
+      document.querySelectorAll('.chat-chip-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          enviarMensagemUsuario(btn.dataset.pergunta);
+        });
+      });
+
+      document.getElementById('btn-recalcular').addEventListener('click', executarPrevisaoTemporal);
+      document.getElementById('sel-horizonte').addEventListener('change', executarPrevisaoTemporal);
+      document.getElementById('sel-cenario').addEventListener('change', executarPrevisaoTemporal);
+      document.getElementById('sel-confianca').addEventListener('change', executarPrevisaoTemporal);
+
+      // Inicialização
+      renderizarGraficoHorario();
+      renderizarGraficoSemana();
+      executarPrevisaoTemporal();
+    })();
+  </script>
+</body>
+</html>

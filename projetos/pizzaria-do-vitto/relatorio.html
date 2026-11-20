@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pizzaria do Vitto — Relatório de Análise Estatística e Diagnóstico</title>
+<meta name="author" content="Isadora Sandri" />
+<meta name="description" content="Relatório técnico e consultivo de análise de vendas da Pizzaria do Vitto: 48.620 itens, 21.350 pedidos, jan/2025 a ago/2026." />
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml" />
+<style>
+@page {
+  size: A4;
+  margin: 20mm 18mm 16mm 18mm;
+  @top-left {
+    content: "Pizzaria do Vitto · Relatório de análise de vendas";
+    font-family: "Segoe UI", sans-serif; font-size: 7pt; color: #722F37;
+    letter-spacing: .02em; vertical-align: bottom; padding-bottom: 2.5mm;
+    border-bottom: .4pt solid #e2ddd6;
+  }
+  @top-right {
+    content: "Isadora Sandri · Administração ATITUS";
+    font-family: "Segoe UI", sans-serif; font-size: 7pt; color: #8a8a8a;
+    vertical-align: bottom; padding-bottom: 2.5mm; border-bottom: .4pt solid #e2ddd6;
+  }
+  @bottom-left {
+    content: "Receita e preços: estudo acadêmico-consultivo";
+    font-family: "Segoe UI", sans-serif; font-size: 6.6pt; color: #a09a92;
+  }
+  @bottom-right {
+    content: counter(page) " / " counter(pages);
+    font-family: "Segoe UI", sans-serif; font-size: 7.4pt; color: #555;
+  }
+}
+
+@page cover {
+  margin: 0;
+  @top-left { content: none; border: none; }
+  @top-right { content: none; border: none; }
+  @bottom-left { content: none; }
+  @bottom-right { content: none; }
+}
+
+:root {
+  --cor-primaria: #722F37;
+  --cor-primaria-escura: #4A1C24;
+  --cor-fundo: #F5F2EF;
+  --cor-papel: #FFFFFF;
+  --cor-texto: #1F1B1A;
+  --cor-texto-suave: #5C5350;
+  --cor-borda: #E7DFDD;
+  --cor-destaque-fundo: #FAF7F6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --cor-fundo: #12100F;
+    --cor-papel: #1C1917;
+    --cor-texto: #F2EDEC;
+    --cor-texto-suave: #B8AEAB;
+    --cor-borda: #2E2927;
+    --cor-destaque-fundo: #25211F;
+  }
+}
+
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; scroll-behavior: smooth; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 11pt; line-height: 1.7; color: var(--cor-texto);
+  background-color: var(--cor-fundo);
+  margin: 0; padding: 0;
+}
+
+/* Barra de Ações Superior (apenas tela) */
+.barra-acoes {
+  position: sticky; top: 0; z-index: 1000;
+  background: var(--cor-papel);
+  border-bottom: 1px solid var(--cor-borda);
+  padding: 12px 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.barra-acoes__conteiner {
+  max-width: 900px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+}
+.barra-acoes__marca {
+  font-weight: 700; font-size: 14px; color: var(--cor-primaria);
+  text-decoration: none; display: flex; align-items: center; gap: 8px;
+}
+.barra-acoes__links {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.botao-acao {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600;
+  text-decoration: none; cursor: pointer; transition: all 0.2s;
+  border: 1px solid var(--cor-borda);
+  background: var(--cor-destaque-fundo);
+  color: var(--cor-texto);
+}
+.botao-acao:hover {
+  background: var(--cor-primaria);
+  color: #fff; border-color: var(--cor-primaria);
+}
+.botao-acao--destaque {
+  background: var(--cor-primaria);
+  color: #fff; border-color: var(--cor-primaria);
+}
+.botao-acao--destaque:hover {
+  background: var(--cor-primaria-escura);
+}
+
+/* Conteiner do Relatório em Tela */
+.documento-wrapper {
+  max-width: 210mm;
+  margin: 24px auto;
+  background: var(--cor-papel);
+  box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+  border: 1px solid var(--cor-borda);
+  border-radius: 4px;
+}
+
+/* Estilos de Páginas */
+.cover {
+  page: cover;
+  box-sizing: border-box;
+  padding: 40px 48px;
+  position: relative;
+  border-bottom: 2px solid var(--cor-borda);
+}
+.cover .bar {
+  height: 8px; background: var(--cor-primaria);
+  margin: -40px -48px 30px -48px;
+}
+.cover .kicker {
+  font-size: 9pt; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--cor-primaria); font-weight: 700; margin-bottom: 12px;
+}
+.cover h1 {
+  font-size: 32pt; line-height: 1.1; font-weight: 700; letter-spacing: -.02em;
+  margin: 0 0 16px 0; color: var(--cor-texto);
+}
+.cover h1 .thin {
+  font-weight: 300; color: var(--cor-texto-suave); display: block;
+  font-size: 20pt; margin-top: 8px;
+}
+.cover .sub {
+  font-size: 13pt; line-height: 1.45; color: var(--cor-texto-suave);
+  margin-top: 14px; max-width: 600px;
+}
+.cover .rule {
+  width: 50px; height: 3px; background: var(--cor-primaria);
+  margin: 20px 0;
+}
+.cover .howto {
+  background: var(--cor-destaque-fundo); border-left: 4px solid var(--cor-primaria);
+  padding: 14px 18px; font-size: 9.5pt; line-height: 1.6;
+  border-radius: 0 6px 6px 0; margin-top: 16px;
+}
+.cover .meta {
+  font-size: 9pt; line-height: 1.7; color: var(--cor-texto-suave);
+  margin-top: 20px;
+}
+.cover .meta strong { color: var(--cor-texto); }
+
+.cover .index { margin-top: 28px; }
+.cover .index .title {
+  font-size: 8pt; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--cor-primaria); font-weight: 700; margin-bottom: 8px;
+}
+.cover .index ol { list-style: none; margin: 0; padding: 0; }
+.cover .index li {
+  font-size: 10pt; padding: 6px 0;
+  border-bottom: 1px solid var(--cor-borda); display: flex; align-items: center; gap: 10px;
+}
+.cover .index li span { color: var(--cor-primaria); font-weight: 700; width: 26px; }
+
+/* Corpo das seções */
+.conteudo-relatorio { padding: 40px 48px; }
+.page { margin-bottom: 48px; }
+
+h2 {
+  font-size: 20pt; font-weight: 700; letter-spacing: -.015em;
+  color: var(--cor-texto); margin: 0 0 18px 0; padding-bottom: 8px;
+  border-bottom: 2px solid var(--cor-primaria);
+}
+h3 {
+  font-size: 13pt; font-weight: 700; color: var(--cor-primaria);
+  margin: 24px 0 8px 0;
+}
+p { margin: 0 0 14px 0; color: var(--cor-texto); }
+strong { font-weight: 700; color: var(--cor-texto); }
+
+/* Cartão hero de métrica */
+.hero-metrica {
+  background: var(--cor-destaque-fundo); border: 1px solid var(--cor-borda);
+  border-radius: 8px; padding: 18px 22px; margin: 16px 0;
+}
+.hero-metrica .num {
+  font-size: 30pt; line-height: 1; font-weight: 800;
+  color: var(--cor-primaria); letter-spacing: -.02em; display: block;
+}
+.hero-metrica .lbl {
+  font-size: 10pt; color: var(--cor-texto-suave); margin-top: 6px; display: block;
+}
+
+/* Tabelas */
+table {
+  width: 100%; border-collapse: collapse; margin: 18px 0;
+  font-size: 9.5pt;
+}
+th {
+  text-align: left; font-weight: 700; background: var(--cor-destaque-fundo);
+  border-bottom: 2px solid var(--cor-borda); padding: 8px 10px;
+}
+td { padding: 8px 10px; border-bottom: 1px solid var(--cor-borda); }
+tbody tr:hover { background: var(--cor-destaque-fundo); }
+
+/* Blocos de Ação e Significado */
+.bloco-acao {
+  background: var(--cor-destaque-fundo); border-left: 4px solid var(--cor-primaria);
+  padding: 12px 18px; margin: 16px 0; border-radius: 0 6px 6px 0;
+}
+.bloco-significado {
+  border-left: 4px solid var(--cor-borda); padding-left: 16px; margin: 16px 0;
+}
+.bloco-confianca {
+  font-size: 9pt; color: var(--cor-texto-suave); border-top: 1px dashed var(--cor-borda);
+  padding-top: 8px; margin-top: 10px;
+}
+
+figure { margin: 24px 0; text-align: center; }
+figure img {
+  max-width: 100%; height: auto; border: 1px solid var(--cor-borda);
+  border-radius: 6px; background: #fff;
+}
+figcaption { font-size: 8.5pt; color: var(--cor-texto-suave); margin-top: 6px; }
+
+/* Impressão */
+@media print {
+  body { background: #fff !important; color: #000 !important; font-size: 10pt; }
+  .barra-acoes { display: none !important; }
+  .documento-wrapper {
+    max-width: 100% !important; margin: 0 !important;
+    border: none !important; box-shadow: none !important;
+  }
+  .conteudo-relatorio, .cover { padding: 0 !important; }
+  .page { page-break-before: always; margin-bottom: 0; }
+  .page.first { page-break-before: auto; }
+}
+</style>
+</head>
+<body>
+
+  <!-- Barra de Ações Superior (Apenas Tela) -->
+  <aside class="barra-acoes" aria-label="Ações do documento">
+    <div class="barra-acoes__conteiner">
+      <a href="../../index.html#projetos" class="barra-acoes__marca">
+        ← Voltar ao Portfólio (Isadora Sandri)
+      </a>
+      <div class="barra-acoes__links">
+        <a href="slides.html" class="botao-acao">📊 Versão em Slides</a>
+        <a href="dashboard.html" class="botao-acao">⚡ Dashboard & IA</a>
+        <a href="relatorio-pizzaria-do-vitto.pdf" download class="botao-acao botao-acao--destaque">📄 Baixar PDF Oficial</a>
+        <button type="button" onclick="window.print()" class="botao-acao">🖨️ Imprimir / Salvar PDF</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="documento-wrapper">
+    <!-- CAPA -->
+    <header class="cover">
+      <div class="bar"></div>
+      <div class="kicker">Relatório de Análise Estatística & Diagnóstico Operacional</div>
+      <h1>Pizzaria do Vitto<span class="thin">Cardápio, Preço e Demanda em 19 Meses de Vendas</span></h1>
+      <div class="rule"></div>
+      <div class="sub">Uma síntese orientada à tomada de decisão: o número que importa, o significado prático e a recomendação para a operação.</div>
+
+      <div class="howto">
+        <strong>Como interpretar este documento:</strong> Cada indicador declara sua respectiva unidade de observação (<em>item</em>, <em>pedido</em> ou <em>dia com venda</em>). Onde constam faixas ("entre X e Y"), referem-se a intervalos de confiança de 95%. Todas as análises respeitam as limitações da base primária (não há custos contábeis cadastrados, portanto não se estima margem de lucro líquido).
+      </div>
+
+      <div class="meta">
+        <strong>Período analisado:</strong> 01/01/2025 a 03/08/2026 (580 dias corridos, sendo 358 dias com vendas registradas)<br />
+        <strong>Volume total da base:</strong> 48.620 itens de pedidos · 21.350 pedidos emitidos · 49.573 pizzas comercializadas · R$ 4.089.300,25 faturados<br />
+        <strong>Autora do projeto:</strong> Isadora Sandri · Graduação em Administração · ATITUS Passo Fundo
+      </div>
+
+      <div class="index">
+        <div class="title">Estrutura do Relatório</div>
+        <ol>
+          <li><span>01</span> Os 5 Achados Centrais que Mudam Decisão</li>
+          <li><span>02</span> As 5 Ações Prioritárias Recomendadas (Impacto vs Esforço)</li>
+          <li><span>03</span> Aprofundamento Analítico dos Achados A1 a A7</li>
+          <li><span>04</span> Decomposição de Preço, Volume e Cobertura</li>
+          <li><span>05</span> Limites Metodológicos e Próximos Passos</li>
+        </ol>
+      </div>
+    </header>
+
+    <div class="conteudo-relatorio">
+      <!-- SEÇÃO 1: OS 5 ACHADOS -->
+      <section class="page first">
+        <h2>01 · Os 5 Achados Centrais que Mudam Decisão</h2>
+        <p>Síntese executiva dos principais padrões revelados pelo tratamento e mineração dos dados históricos.</p>
+
+        <h3>1 · Cardápio equilibrado e espalhado (sem cauda descartável)</h3>
+        <div class="hero-metrica">
+          <span class="num">22 sabores</span>
+          <span class="lbl">são necessários para somar 80% da receita (Curva ABC ampla)</span>
+        </div>
+        <p>O cardápio conta com 32 sabores ativos e o sabor líder (Frango Tailandesa) responde por apenas 5,3% da receita. Até mesmo o sabor menos vendido (The Brie Carre) acumula 480 pedidos no período. <strong>Conclusão: não existe candidato a corte imediato exclusivamente por baixo volume.</strong></p>
+
+        <h3>2 · O tamanho Grande (G) sustenta a receita do negócio</h3>
+        <div class="hero-metrica">
+          <span class="num">45,9%</span>
+          <span class="lbl">do faturamento total advém do tamanho G, com 38,2% do volume em unidades</span>
+        </div>
+        <p>A progressão de preços é rígida e constante: cada salto de tamanho (P → M → G) adiciona exatamente R$ 21,25 à pizza. Converter um cliente de M para G agrega mais receita líquida do que vender um adicional de baixo valor.</p>
+
+        <h3>3 · Demanda semanal plana; forte concentração horária</h3>
+        <div class="hero-metrica">
+          <span class="num">62,5%</span>
+          <span class="lbl">da receita acontece em apenas 4 horas do dia (11h–13h e 17h–19h)</span>
+        </div>
+        <p>Entre o dia de menor média (sábado, com 57,9 pedidos/dia) e o de maior média (quarta, com 61,2 pedidos/dia), a variação é de apenas 5,7%, o que representa flutuação puramente aleatória. O verdadeiro gargalo operacional é a hora de atendimento, não o dia da semana.</p>
+
+        <h3>4 · Preço de tabela congelado por 19 meses consecutivos</h3>
+        <div class="hero-metrica">
+          <span class="num">R$ 60,00 · R$ 81,25 · R$ 102,50</span>
+          <span class="lbl">medianas dos tamanhos P, M e G inalteradas de jan/2025 a ago/2026</span>
+        </div>
+        <p>Não houve qualquer reajuste tarifário durante todo o período coberto pela base, gerando defasagem inflacionária real e perda gradual de margem operacional.</p>
+
+        <h3>5 · A queda de faturamento em 2026 decorre de cobertura de registros</h3>
+        <div class="hero-metrica">
+          <span class="num">−0,7%</span>
+          <span class="lbl">variação da receita por dia com venda em 2026 versus período equivalente de 2025</span>
+        </div>
+        <p>Embora a receita bruta acumulada em 2026 tenha caído 6,7%, o número de dias com venda registrados caiu 6,0%. A demanda média diária permanece estável: o negócio sofre de falha de cobertura de dados na planilha, não de perda real de clientes.</p>
+      </section>
+
+      <!-- SEÇÃO 2: PLANO DE AÇÃO -->
+      <section class="page">
+        <h2>02 · As 5 Ações Prioritárias Recomendadas</h2>
+        <p>Proposições práticas estruturadas por impacto financeiro estimado, esforço de implementação e nível de risco.</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Ação Proposta</th>
+              <th>Impacto Estimado (Receita Bruta)</th>
+              <th>Esforço</th>
+              <th>Risco</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. Reajuste de 2% a 3% nos tamanhos G e GG</strong></td>
+              <td>+R$ 2,0 mil a R$ 3,1 mil/mês</td>
+              <td>Baixo</td>
+              <td>Médio (testar por 30 dias)</td>
+            </tr>
+            <tr>
+              <td><strong>2. Treinamento de Upsell: Upgrade M → G</strong></td>
+              <td>+R$ 1,2 mil a R$ 2,5 mil/mês</td>
+              <td>Baixo</td>
+              <td>Baixo (benefício imediato)</td>
+            </tr>
+            <tr>
+              <td><strong>3. Criação de Combo com 2 Sabores Mais Pedidos</strong></td>
+              <td>+R$ 2,8 mil a R$ 4,6 mil/mês</td>
+              <td>Médio</td>
+              <td>Médio (monitorar canibalização)</td>
+            </tr>
+            <tr>
+              <td><strong>4. Redimensionamento de Equipe e Forno nos Picos</strong></td>
+              <td>Protege 62,5% da receita (R$ 134 mil/mês)</td>
+              <td>Médio</td>
+              <td>Baixo (evita perda de fila)</td>
+            </tr>
+            <tr>
+              <td><strong>5. Auditoria e Padronização do Registro de Dias</strong></td>
+              <td>Elimina cegueira gerencial dos 222 dias ausentes</td>
+              <td>Baixo</td>
+              <td>Nulo</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="bloco-acao">
+          <strong>Recomendação Negativa Expressa:</strong> Desaconselha-se expressamente o corte de sabores com base única no volume de vendas. Como o sabor com menor volume tem quase 500 pedidos e não há dados contábeis de custo unitário de ingredientes, eliminar sabores pode reduzir receita sem gerar economia real de insumos.
+        </div>
+      </section>
+
+      <!-- SEÇÃO 3: APROFUNDAMENTO A1 A A7 -->
+      <section class="page">
+        <h2>03 · Diagnóstico Aprofundado (A1 a A7)</h2>
+
+        <h3>A1 · Mix de Produtos e Curva ABC de Sabores</h3>
+        <p class="bloco-significado">
+          O produto líder em unidades vendidas (Especial da Casa, com 2.453 pizzas) é apenas o 4º colocado em faturamento total, enquanto a pizza Tropical é a 3ª em volume e a 8ª em receita. Isso ocorre porque pizzas com ingredientes premium concentram-se no tamanho G, gerando maior tíquete por unidade.
+        </p>
+        <figure>
+          <img src="img/04-mix-sabores-receita.png" alt="Curva de receita por sabor na Pizzaria do Vitto" loading="lazy" />
+          <figcaption>Figura 1: Faturamento acumulado e participação por sabor no cardápio.</figcaption>
+        </figure>
+
+        <h3>A2 · O Salto de Preço de R$ 21,25 entre Tamanhos</h3>
+        <p class="bloco-significado">
+          A análise de 18.526 itens do tamanho G demonstra sua dominância. O degrau mediano é consistente em 25 sabores com mais de 100 itens comercializados nos três tamanhos principais.
+        </p>
+        <figure>
+          <img src="img/05-preco-por-tamanho.png" alt="Distribuição de preços por tamanho" loading="lazy" />
+          <figcaption>Figura 2: Preço mediano e distribuição interquartil por categoria de tamanho.</figcaption>
+        </figure>
+
+        <h3>A3 · Padrão de Demanda Horária e Semanal</h3>
+        <p class="bloco-significado">
+          A análise de variância da demanda diária não revela dias fracos ou fortes estatisticamente significativos. Em contrapartida, as janelas das 11h–13h (almoço) e 17h–19h (início do jantar) concentram o fluxo de pedidos.
+        </p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <figure>
+            <img src="img/06-pedidos-por-dia-semana.png" alt="Média de pedidos por dia da semana" loading="lazy" />
+            <figcaption>Figura 3: Estabilidade da demanda ao longo da semana.</figcaption>
+          </figure>
+          <figure>
+            <img src="img/06-pedidos-por-hora.png" alt="Pico de pedidos por horário" loading="lazy" />
+            <figcaption>Figura 4: Concentração horária com ápice às 12h.</figcaption>
+          </figure>
+        </div>
+
+        <h3>A4 · Evolução Mensal e Estabilidade do Tíquete</h3>
+        <p class="bloco-significado">
+          A série mensal ilustra que os preços unitários médios flutuam em torno de R$ 82,45 sem tendência de alta, enquanto o volume total mensal reflete diretamente o número de dias cadastrados em cada mês.
+        </p>
+        <figure>
+          <img src="img/07-receita-mensal.png" alt="Evolução da receita mensal ao longo dos 19 meses" loading="lazy" />
+          <figcaption>Figura 5: Receita mensal bruta e número de dias com venda registrados.</figcaption>
+        </figure>
+
+        <h3>A5 · Coocorrência de Sabores no Mesmo Pedido</h3>
+        <p class="bloco-significado">
+          61,0% dos 21.350 pedidos contêm dois ou mais sabores. Entretanto, o lift médio entre pares de sabores é de apenas 1,09x (próximo de 1,0x, indicando independência estocástica). Isso comprova que clientes não buscam uma "dupla mágica", mas sim escolhem sabores por preferência individual.
+        </p>
+        <figure>
+          <img src="img/08-coocorrencia.png" alt="Matriz de coocorrência de sabores" loading="lazy" />
+          <figcaption>Figura 6: Frequência de pedidos simultâneos entre os sabores mais populares.</figcaption>
+        </figure>
+
+        <h3>A6 · Distribuição do Tíquete Médio por Pedido</h3>
+        <p class="bloco-significado">
+          A mediana do pedido é de R$ 162,50 e a média é de R$ 191,54. A cauda longa (15,7% dos pedidos superam R$ 300,00 e o maior pedido registrado alcançou R$ 2.221,00) puxa a média para cima, recomendando o uso da mediana para planejamento diário.
+        </p>
+        <figure>
+          <img src="img/09-distribuicao-ticket.png" alt="Histograma da distribuição do valor dos pedidos" loading="lazy" />
+          <figcaption>Figura 7: Distribuição de frequência do valor total por pedido.</figcaption>
+        </figure>
+      </section>
+
+      <!-- SEÇÃO 4: LIMITES E CONSIDERAÇÕES -->
+      <section class="page">
+        <h2>04 · Limitações do Estudo e Recomendações Metodológicas</h2>
+        <div class="bloco-significado">
+          <p><strong>Fronteiras do Estudo:</strong></p>
+          <ul>
+            <li><strong>Ausência de Custos:</strong> A base primária registra apenas preço de venda, inviabilizando cálculo de margem de contribuição real e ponto de equilíbrio por sabor.</li>
+            <li><strong>Ausência de Identificador de Cliente:</strong> Não é possível calcular métricas de retenção (LTV, Churn, Recompra).</li>
+            <li><strong>Ausência de Canal de Venda:</strong> Não se distingue pedidos de balcão, salão, telefone ou aplicativos de entrega terceirizados.</li>
+            <li><strong>Lacunas Temporais (222 dias sem dados):</strong> Recomenda-se saneamento urgente do software de PDV da pizzaria para garantir registro contínuo.</li>
+          </ul>
+        </div>
+
+        <blockquote style="margin-top: 30px; font-size: 9.5pt; color: var(--cor-texto-suave);">
+          <strong>Nota Acadêmica de Defesa:</strong> O presente relatório foi elaborado com base nos princípios de Ciência de Dados aplicada à Administração, adotando intervalos de confiança de 95%, estatísticas não-paramétricas (medianas e quartis) e decomposição estrutural de séries temporais. Todo o código analítico e scripts de reprodução encontram-se versionados no repositório oficial do projeto.
+        </blockquote>
+      </section>
+    </div>
+  </main>
+
+</body>
+</html>
