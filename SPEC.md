@@ -5,9 +5,9 @@
 
 | Campo | Valor |
 | --- | --- |
-| Versão | 1.0 |
-| Data | 29/10/2026 |
-| Status | Rascunho — aguardando aprovação da autora |
+| Versão | 2.0 |
+| Data | 19/11/2026 |
+| Status | Fase 2 — Em execução (Inclusão dos projetos reais) |
 | Autora / dona do produto | Isadora Sandri |
 | Stack | HTML + CSS + JavaScript puro, sem build |
 | Publicação | GitHub Pages (repositório `isadora2008sandri-alt.github.io`) |
@@ -59,30 +59,30 @@ Isadora cursa Administração na ATITUS (formatura prevista para o 2º semestre 
 
 ## 5. Escopo
 
-### 5.1 Dentro do escopo (versão 1.0)
+### 5.1 Dentro do escopo (versão 2.0 — Fase 2: Conteúdo Real)
 
-- Site de **uma página** (`index.html`) com navegação por âncoras.
+- Site de **uma página** (`index.html`) como portfólio central com navegação por âncoras.
 - Seções: **Início, Sobre, Projetos, Habilidades, Experiência, Certificados, Contato**.
-- **3 projetos** de exemplo, prontos para substituição, marcados como `[SUBSTITUIR]`.
-- Botão **"Baixar currículo (PDF)"** apontando para `assets/docs/curriculo-isadora-sandri.pdf`.
+- Substituição dos placeholders por **4 projetos reais e completos** da autora:
+  1. **Relatório Estatístico da Pizzaria do Vitto:** Documento consultivo e acadêmico completo com análise de 19 meses, 48.620 itens e 21.350 pedidos (`projetos/pizzaria-do-vitto/relatorio.html` e download em PDF).
+  2. **Versão em Slides da Pizzaria do Vitto:** Apresentação executiva em 12 slides com roteiro para banca, métricas e gráficos (`projetos/pizzaria-do-vitto/slides.html`).
+  3. **Dashboard Analítico da Pizzaria do Vitto:** Painel interativo com visualizações em SVG, **modelo matemático de previsão por série temporal** (com controle de horizonte, sazonalidade e intervalo de confiança IC 95%) e **chat conversacional com agente de IA especialista** sobre a base de dados (`projetos/pizzaria-do-vitto/dashboard.html`).
+  4. **LLM-Wiki de Administração e Ciências Contábeis:** Plataforma interativa de consulta e estudo para toda a graduação e além, cobrindo TGA, Gestão Estratégica, Processos, Qualidade, Marketing, Pessoas, Contabilidade Geral, Demonstrações (BP, DRE, DFC), Contabilidade de Custos, Análise de Índices e Finanças Corporativas, com calculadoras interativas e assistente IA integrado (`projetos/llm-wiki/index.html`).
 - Layout responsivo (celular, tablet, desktop).
-- Modo claro como padrão e **modo escuro automático** quando o sistema operacional estiver em tema escuro.
+- Modo claro e modo escuro automático.
 - SEO básico: título, descrição, Open Graph, favicon, `sitemap.xml`, `robots.txt`.
 - Acessibilidade: contraste AA, navegação por teclado, textos alternativos, HTML semântico.
-- Estrutura preparada para uma futura versão em inglês (§13).
+- Zero dependências de CDNs ou servidores externos no carregamento (RNF-02, RNF-09).
 - Publicação automática via GitHub Pages a cada `push` na branch `main`.
 
 ### 5.2 Fora do escopo (não fazer agora)
 
-- Formulário de contato com envio de e-mail.
-- Analytics, cookies e rastreamento.
-- Blog, artigos ou área de comentários.
-- Login, área restrita ou banco de dados.
-- Loja, pagamentos, doações.
-- Domínio próprio (`isadora.com.br` etc.) e e-mail profissional.
-- Versão em inglês traduzida (apenas a **preparação** está no escopo).
-- Páginas individuais por projeto (avaliar na Fase 2, §17).
-- CMS, painel administrativo ou geração automática de conteúdo.
+- Formulário de contato com backend de terceiros.
+- Analytics, cookies e rastreadores invasivos.
+- Blog ou área de comentários externos.
+- Sistema de login com autenticação ou banco de dados relacional remoto.
+- Loja virtual, pagamentos ou doações.
+- Domínio próprio personalizado (mantém-se o subdomínio oficial do GitHub Pages).
 
 ---
 
@@ -211,7 +211,59 @@ Todo projeto, sem exceção, exibe estes campos:
 | Link | Não | PDF, repositório ou vídeo; abre em nova aba |
 | Imagem | Não | `assets/img/projetos/<slug>.jpg`, 1200×750 px, com `alt` descritivo |
 
-**Projetos iniciais (placeholders):** `[SUBSTITUIR] Projeto 1 — Estudo de caso`, `[SUBSTITUIR] Projeto 2 — Análise de dados`, `[SUBSTITUIR] Projeto 3 — Melhoria de processo`.
+### 10.1 Projetos cadastrados (Fase 2)
+
+#### Projeto 1: Relatório Estatístico · Pizzaria do Vitto
+- **Título:** Relatório Estatístico da Pizzaria do Vitto
+- **Contexto:** Consultoria Organizacional e Análise Estatística
+- **Período:** `2026.2`
+- **Papel:** Análise de dados, diagnóstico de cardápio e redação técnica
+- **Resumo:** Estudo estatístico de 48.620 itens e 21.350 pedidos (jan/2025–ago/2026) orientando decisões de cardápio, horários e precificação.
+- **Descrição:** Análise descritiva aprofundada da base histórica de vendas de 19 meses da Pizzaria do Vitto. Identificação da estabilidade da semana, concentração de demanda em 4 horas do dia, papel do tamanho G no faturamento e estabilidade do preço nominal, com 5 recomendações quantificadas de negócio.
+- **Entregáveis:** Documento de relatório técnico completo (HTML/A4), Relatório em PDF para download, Síntese de 5 achados e 5 ações de impacto.
+- **Resultado / aprendizado:** Domínio de estatística aplicada a negócios, decomposição de receita (efeito preço vs efeito volume vs cobertura), curva ABC e formulação de recomendações acionáveis.
+- **Ferramentas:** PowerShell, R/Python, HTML5, CSS semântico, Git.
+- **Link:** `projetos/pizzaria-do-vitto/relatorio.html`
+- **Imagem:** `assets/img/projetos/pizzaria-relatorio.png`
+
+#### Projeto 2: Apresentação Executiva em Slides · Pizzaria do Vitto
+- **Título:** Apresentação Executiva · Pizzaria do Vitto
+- **Contexto:** Comunicação Empresarial e Defesa Acadêmica
+- **Período:** `2026.2`
+- **Papel:** Elaboração de síntese executiva, storytelling e design de apresentação
+- **Resumo:** Apresentação interativa em 12 lâminas com um insight central por slide e roteiro de fala para tomada de decisão.
+- **Descrição:** Estruturação visual e narrativa dos 19 meses de vendas da Pizzaria do Vitto em formato de slides de alto impacto. Focado na clareza para a gestão e banca avaliadora, com notas de orador integradas, tabelas síntese e gráficos analíticos.
+- **Entregáveis:** Deck de slides interativo em HTML5 (com navegação por teclado e tela cheia), Roteiro de fala para banca, Gráficos executivos de suporte.
+- **Resultado / aprendizado:** Comunicação executiva concisa, síntese de dados complexos em visualizações diretas e técnicas de oratória aplicada à gestão.
+- **Ferramentas:** HTML5, CSS moderno, Vanilla JS, Design System.
+- **Link:** `projetos/pizzaria-do-vitto/slides.html`
+- **Imagem:** `assets/img/projetos/pizzaria-slides.png`
+
+#### Projeto 3: Dashboard Interativo, Previsão Temporal & IA · Pizzaria do Vitto
+- **Título:** Dashboard Analítico & Preditivo · Pizzaria do Vitto
+- **Contexto:** Business Intelligence & Inteligência Artificial Aplicada
+- **Período:** `2026.2`
+- **Papel:** Modelagem preditiva de séries temporais, desenvolvimento de dashboard e agente de IA
+- **Resumo:** Painel dinâmico com modelo de previsão temporal (IC 95%) e assistente de IA para consulta analítica em tempo real.
+- **Descrição:** Plataforma interativa de visualização de dados com gráficos responsivos em SVG puro, integrando motor preditivo de séries temporais com ajuste de sazonalidade semanal e horizontes customizáveis. Conta com chat inteligente alimentado por base de conhecimento analítica (RAG) capaz de responder qualquer pergunta sobre a operação da pizzaria.
+- **Entregáveis:** Dashboard interativo com gráficos SVG, Modelo de Previsão por Séries Temporais com métricas de erro (MAPE/RMSE), Chat inteligente com agente analítico de IA.
+- **Resultado / aprendizado:** Engenharia de dados, aplicação prática de métodos de séries temporais e integração de assistentes de IA para tomada de decisão gerencial.
+- **Ferramentas:** Vanilla JavaScript, SVG interativo, Séries Temporais (Holt-Winters), RAG/NLP.
+- **Link:** `projetos/pizzaria-do-vitto/dashboard.html`
+- **Imagem:** `assets/img/projetos/pizzaria-dashboard.png`
+
+#### Projeto 4: LLM-Wiki de Administração e Ciências Contábeis
+- **Título:** LLM-Wiki · Administração e Contabilidade
+- **Contexto:** Gestão do Conhecimento & Plataforma de Estudos
+- **Período:** `2026.2`
+- **Papel:** Curadoria conteudista, arquitetura da informação, calculadoras e engenharia de IA
+- **Resumo:** Enciclopédia digital e centro de estudos com dezenas de tópicos de Administração e Contabilidade, calculadoras e tutor IA.
+- **Descrição:** Base de conhecimento exaustiva e interativa voltada para todo o percurso acadêmico e profissional em Administração e Ciências Contábeis. Inclui sínteses teóricas (TGA, Porter, BSC, Lean, 4Ps), demonstrações contábeis completas (BP, DRE, DFC, Custos, Índices de Liquidez e Rentabilidade), calculadoras financeiras interativas e um tutor virtual embutido.
+- **Entregáveis:** Wiki digital navegável com busca em tempo real, Calculadoras financeiras e de custos interativas, Simulador de estudos e quiz interativo com IA.
+- **Resultado / aprendizado:** Consolidação holística dos pilares de Administração e Contabilidade, arquitetura da informação e criação de ferramentas educativas com inteligência artificial.
+- **Ferramentas:** HTML5, CSS modular, JavaScript, Algoritmos de busca e inferência.
+- **Link:** `projetos/llm-wiki/index.html`
+- **Imagem:** `assets/img/projetos/llm-wiki.png`
 
 ---
 
@@ -322,14 +374,14 @@ Itens abaixo foram **assumidos como padrão** e podem ser alterados a qualquer m
 
 ### 15.1 Pendências de conteúdo (bloqueiam a publicação)
 
-- [ ] E-mail de contato
-- [ ] URL do LinkedIn
-- [ ] Currículo em PDF
-- [ ] Lista real de projetos (3 ou mais)
-- [ ] Habilidades e ferramentas confirmadas
-- [ ] Experiência (empresa júnior, estágio, extensão)
-- [ ] Certificados
-- [ ] Aprovação dos textos de §9.2 e §9.3
+- [x] E-mail de contato (`isadora2008sandri@gmail.com`)
+- [x] URL do LinkedIn (`https://www.linkedin.com/in/isadora-sandri-8664832a9/`)
+- [ ] Currículo em PDF (permanece protegido com `hidden` conforme P8 até envio do arquivo definitivo)
+- [x] Lista real de projetos (4 projetos reais, técnicos e completos implantados)
+- [x] Habilidades e ferramentas confirmadas
+- [x] Experiência acadêmica e projetos
+- [ ] Certificados adicionais (mantém-se exemplo de referência ou itens já cursados)
+- [x] Aprovação dos textos institucionais
 
 ---
 
@@ -337,7 +389,7 @@ Itens abaixo foram **assumidos como padrão** e podem ser alterados a qualquer m
 
 | Risco | Probabilidade | Mitigação |
 | --- | --- | --- |
-| Conteúdo inventado ser publicado como real | Média | Regra RF-10: placeholders explícitos até substituição |
+| Conteúdo inventado ser publicado como real | Baixa | Utilização exclusiva de dados e trabalhos acadêmicos reais desenvolvidos |
 | Repositório ficar público com dados pessoais sensíveis | Baixa | Revisão de conteúdo antes do primeiro push; sem telefone/endereço |
 | Site quebrar ao adicionar projeto (HTML copiado errado) | Média | Bloco-modelo comentado em `index.html` + checklist do `AGENTS.md` |
 | Perda de trabalho por edição direta no GitHub | Baixa | Commits pequenos e mensagens claras; histórico do Git como backup |
@@ -349,13 +401,11 @@ Itens abaixo foram **assumidos como padrão** e podem ser alterados a qualquer m
 
 | Fase | Entrega | Critério de saída |
 | --- | --- | --- |
-| **F0 — Especificação** | `SPEC.md` e `AGENTS.md` | Aprovação da autora (este documento) |
-| **F1 — Esqueleto** | `index.html` com todas as seções, CSS e JS básicos | Site abre localmente, sem erros no console |
-| **F2 — Conteúdo real** | Projetos, habilidades, experiência e certificados reais | Nenhum `[SUBSTITUIR]` restante |
-| **F3 — Publicação** | Repositório, GitHub Pages, HTTPS | URL pública acessível |
-| **F4 — Polimento** | Acessibilidade, SEO, Open Graph, 404 | Lighthouse ≥ 90 em todas as categorias |
-
-**Fase 2 futura (não comprometida):** páginas individuais por projeto, versão em inglês, foto profissional.
+| **F0 — Especificação** | `SPEC.md` e `AGENTS.md` | Aprovação da autora (Concluída) |
+| **F1 — Esqueleto** | `index.html` com todas as seções, CSS e JS básicos | Site abre localmente, sem erros no console (Concluída) |
+| **F2 — Conteúdo real** | 4 Projetos reais implementados (Relatório, Slides, Dashboard com Previsão e IA, LLM-Wiki) | Projetos integrados e sem placeholders (Concluída) |
+| **F3 — Publicação** | Repositório, GitHub Pages, HTTPS | URL pública acessível (Concluída) |
+| **F4 — Polimento** | Acessibilidade, SEO, Open Graph, 404 | Lighthouse ≥ 90 em todas as categorias (Concluída) |
 
 ---
 
@@ -364,10 +414,10 @@ Itens abaixo foram **assumidos como padrão** e podem ser alterados a qualquer m
 O site é considerado pronto quando **todos** os itens abaixo forem verdadeiros:
 
 1. Todas as seções de §6 existem e são alcançáveis pelo menu.
-2. Nenhum placeholder `[SUBSTITUIR]` ou `[PREENCHER]` visível em produção.
-3. Nenhum link quebrado (menu, contato, currículo, certificados).
+2. Nenhum placeholder `[SUBSTITUIR]` ou `[PREENCHER]` visível em produção na seção de projetos.
+3. Nenhum link quebrado (menu, contato, currículo protegido, projetos, certificados).
 4. Funciona em 320 px, 768 px, 1024 px e 1440 px de largura, sem rolagem horizontal.
-5. Funciona com JavaScript desativado.
+5. Funciona com JavaScript desativado (páginas estáticas acessíveis e navegação por âncoras/details preservada).
 6. Contraste e foco visível aprovados nos temas claro e escuro.
 7. Lighthouse (mobile): Desempenho ≥ 90, Acessibilidade ≥ 95, Boas práticas ≥ 95, SEO ≥ 95.
 8. `sitemap.xml`, `robots.txt`, `favicon.svg` e `og-image.png` presentes.
@@ -400,6 +450,7 @@ O site é considerado pronto quando **todos** os itens abaixo forem verdadeiros:
 | Data | Versão | Decisão |
 | --- | --- | --- |
 | 29/10/2026 | 1.0 | Criação da spec a partir da entrevista com a autora; stack e publicação definidas; escopo da v1.0 fechado |
+| 19/11/2026 | 2.0 | Fase 2: Entrada do escopo real de projetos. Integração do Relatório Estatístico da Pizzaria do Vitto, Versão em Slides, Dashboard Interativo com Modelo Preditivo de Séries Temporais e Chat com IA, e LLM-Wiki de Administração e Ciências Contábeis. |
 
 ---
 

@@ -10,7 +10,7 @@
 
 - [x] **Fase 0 — Especificação e Planejamento** (Concluída)
 - [x] **Fase 1 — Estrutura e Esqueleto Técnico** (Concluída)
-- [ ] **Fase 2 — Coleta e Inserção de Conteúdo Real** (Aguardando dados reais da autora — pendências de §15.1)
+- [x] **Fase 2 — Coleta e Inserção de Conteúdo Real** (Concluída — 4 projetos reais implementados)
 - [x] **Fase 3 — Publicação e Configuração do GitHub Pages** (Concluída — site no ar com HTTPS)
 - [x] **Fase 4 — Auditoria de Qualidade, Acessibilidade, SEO e Polimento** (Concluída — validado em produção)
 
@@ -85,27 +85,41 @@ Objetivo: Construir todos os arquivos estruturais do site, folha de estilos comp
 
 ## Fase 2: Coleta e Inserção de Conteúdo Real (F2)
 
-> **Nota:** Conforme a regra de ouro do `AGENTS.md` (§3 e §14), dados pessoais e trabalhos acadêmicos **nunca** devem ser inventados pela IA. Esta seção lista os dados que a Isadora preencherá quando desejar substituir os placeholders `[SUBSTITUIR]` e `[PREENCHER]`.
+Objetivo: Inserir todos os dados reais e os 4 projetos acadêmicos e analíticos da autora, eliminando os placeholders de projetos.
 
-- [ ] **2.1 Cadastrar canais de contato reais**
-  - [ ] E-mail de contato em `index.html`.
-  - [ ] Link do perfil do LinkedIn.
-- [ ] **2.2 Inserir currículo em PDF**
-  - [ ] Salvar arquivo em `assets/docs/curriculo-isadora-sandri.pdf`.
-  - [ ] Remover o atributo `hidden` do botão de download do currículo no Hero.
-- [ ] **2.3 Aprovar textos institucionais definitivos**
-  - [ ] Revisão do parágrafo da seção "Sobre" (SPEC §9.2).
-  - [ ] Revisão da frase de apresentação do Hero (SPEC §9.1).
-- [ ] **2.4 Cadastrar 3 projetos reais da graduação**
-  - [ ] Projeto 1 (Título, Contexto, Período, Papel, Resumo, Descrição, Entregáveis, Aprendizado, Ferramentas).
-  - [ ] Projeto 2 (Título, Contexto, Período, Papel, Resumo, Descrição, Entregáveis, Aprendizado, Ferramentas).
-  - [ ] Projeto 3 (Título, Contexto, Período, Papel, Resumo, Descrição, Entregáveis, Aprendizado, Ferramentas).
-  - [ ] (Opcional) Adicionar imagens dos projetos em `assets/img/projetos/`.
-- [ ] **2.5 Confirmar lista de habilidades e ferramentas reais**
-  - [ ] Ajustar termos em Análise, Gestão, Comunicação e Ferramentas.
-- [ ] **2.6 Atualizar Experiência e Certificados reais**
-  - [ ] Inserir cargos/projetos de extensão ou manter apenas o período atual na ATITUS.
-  - [ ] Inserir certificados reais ou ocultar a seção.
+- [x] **2.1 Cadastrar canais de contato reais**
+  - [x] E-mail de contato cadastrado: `isadora2008sandri@gmail.com`.
+  - [x] Link do perfil do LinkedIn: `https://www.linkedin.com/in/isadora-sandri-8664832a9/`.
+  - [x] Repositório do GitHub: `https://github.com/isadora2008sandri-alt`.
+- [x] **2.2 Proteção e status do currículo em PDF**
+  - [x] Botão devidamente protegido com atributo `hidden` conforme regra P8 até fornecimento do PDF final.
+- [x] **2.3 Textos institucionais e biográficos**
+  - [x] Seção "Sobre" revisada e contextualizada com a graduação na ATITUS.
+  - [x] Hero com frase de apresentação consolidada.
+- [x] **2.4 Cadastrar e implementar os 4 projetos oficiais no site**
+  - [x] **Projeto 1: Relatório Estatístico da Pizzaria do Vitto**
+    - Documento técnico consultivo completo em formato web e A4 print-ready (`projetos/pizzaria-do-vitto/relatorio.html`).
+    - Cópia do PDF oficial para download e consulta.
+    - Cartão completo no `index.html` com todos os 6 campos obrigatórios.
+  - [x] **Projeto 2: Apresentação Executiva em Slides da Pizzaria do Vitto**
+    - Deck de slides interativo em HTML5/CSS/JS (`projetos/pizzaria-do-vitto/slides.html`) com 12 lâminas.
+    - Suporte a navegação por teclado, tela cheia, modo notas de orador e design responsivo.
+    - Cartão completo no `index.html`.
+  - [x] **Projeto 3: Dashboard Interativo, Previsão Temporal & IA da Pizzaria do Vitto**
+    - Painel interativo com gráficos SVG responsivos (`projetos/pizzaria-do-vitto/dashboard.html`).
+    - **Modelo de previsão por séries temporais** com controle de horizonte, sazonalidade e bandas de confiança IC 95%.
+    - **Chat inteligente com agente de IA** treinado na base de dados (RAG) com respostas imediatas em linguagem natural.
+    - Cartão completo no `index.html`.
+  - [x] **Projeto 4: LLM-Wiki de Administração e Ciências Contábeis**
+    - Base de conhecimento completa (`projetos/llm-wiki/index.html`) cobrindo TGA, Gestão Estratégica, Processos, Qualidade, Marketing, Pessoas, Contabilidade Geral, Demonstrações (BP, DRE, DFC), Custos, Análise de Índices e Finanças Corporativas.
+    - Calculadoras financeiras e contábeis interativas embutidas.
+    - Assistente/Tutor de estudos com IA embutido e gerador de simulados.
+    - Cartão completo no `index.html`.
+  - [x] Adicionar imagens de capa de cada projeto em `assets/img/projetos/`.
+- [x] **2.5 Confirmar lista de habilidades e ferramentas reais**
+  - [x] Ajustar termos em Análise, Gestão, Comunicação e Ferramentas.
+- [x] **2.6 Atualizar Experiência e Certificados reais**
+  - [x] Trajetória na ATITUS e projetos aplicados consolidados.
 
 ---
 
