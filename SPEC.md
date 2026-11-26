@@ -5,8 +5,8 @@
 
 | Campo | Valor |
 | --- | --- |
-| Versão | 2.0 |
-| Data | 19/11/2026 |
+| Versão | 2.1 |
+| Data | 25/11/2026 |
 | Status | Fase 2 — Em execução (Inclusão dos projetos reais) |
 | Autora / dona do produto | Isadora Sandri |
 | Stack | HTML + CSS + JavaScript puro, sem build |
@@ -90,15 +90,16 @@ Isadora cursa Administração na ATITUS (formatura prevista para o 2º semestre 
 
 Página única, na seguinte ordem:
 
-1. **Cabeçalho fixo (sticky)** — monograma "IS" + menu com âncoras: Sobre · Projetos · Habilidades · Experiência · Certificados · Contato.
+1. **Cabeçalho fixo (sticky)** — monograma "IS" + menu com âncoras: Sobre · Formação · Projetos · Habilidades · Experiência · Certificados · Contato.
 2. **Início (hero)** — nome, curso/instituição, cidade, frase de apresentação, botões "Ver projetos" e "Baixar CV".
 3. **Sobre** — parágrafo de apresentação, interesses de atuação, o que busca (estágio/oportunidade).
-4. **Projetos** — grade de cartões; cada cartão abre um detalhamento em `<details>` na própria página (sem nova página).
-5. **Habilidades** — competências agrupadas (análise de dados, gestão e processos, comunicação, ferramentas).
-6. **Experiência** — linha do tempo (acadêmica, empresa júnior, estágio, extensão).
-7. **Certificados** — lista de cursos/certificações com emissor, ano e link opcional.
-8. **Contato** — e-mail, LinkedIn, GitHub + botão "copiar e-mail".
-9. **Rodapé** — nome, ano corrente, aviso de direitos, link para o topo.
+4. **Formação** — linha do tempo com o curso em andamento (instituição, cidade, início e previsão de conclusão) e a formação complementar, esta última detalhada em Certificados.
+5. **Projetos** — grade de cartões; cada cartão abre um detalhamento em `<details>` na própria página (sem nova página).
+6. **Habilidades** — competências agrupadas (análise de dados, gestão e processos, comunicação, ferramentas).
+7. **Experiência** — linha do tempo (acadêmica, empresa júnior, estágio, extensão).
+8. **Certificados** — lista de cursos/certificações com emissor, ano e link opcional.
+9. **Contato** — e-mail, LinkedIn, GitHub + botão "copiar e-mail".
+10. **Rodapé** — nome, ano corrente, aviso de direitos, link para o topo.
 
 **Navegação:** menu com âncoras suaves, com compensação da altura do cabeçalho fixo. Em telas pequenas, menu vira botão "hambúrguer" (funciona sem JavaScript, via `<details>` ou CSS `:target`).
 
@@ -111,7 +112,7 @@ Cada requisito tem um **critério de aceite**: uma frase objetiva que permite di
 | ID | Requisito | Critério de aceite |
 | --- | --- | --- |
 | RF-01 | Exibir nome, curso, instituição, cidade e previsão de formatura no topo | Ao abrir no celular (375×667 px), os 5 dados aparecem sem rolagem |
-| RF-02 | Menu de navegação com 6 âncoras funcionando | Cada link leva à seção correta, sem que o título fique escondido sob o cabeçalho fixo |
+| RF-02 | Menu de navegação com 7 âncoras funcionando | Cada link leva à seção correta, sem que o título fique escondido sob o cabeçalho fixo |
 | RF-03 | Listar projetos em cartões | Cada cartão mostra título, contexto, período e 1 linha de resumo |
 | RF-04 | Expandir detalhes do projeto sem sair da página | Clicar/teclar Enter no cartão revela descrição, papel, entregáveis, resultado e ferramentas |
 | RF-05 | Botão de download do currículo | O PDF abre ou baixa; o arquivo existe e é o currículo atual |

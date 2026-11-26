@@ -175,3 +175,4 @@ Objetivo: Garantir cumprimento estrito de todos os itens da Definition of Done (
 | --- | --- | --- |
 | 29/10/2026 | Antigravity AI | Criação do `todo.md` cobrindo o ciclo completo do projeto conforme `SPEC.md` e `AGENTS.md`. |
 | 29/10/2026 | Antigravity AI | Conclusão das Fases 1, 3 e 4: esqueleto completo construído, repositório criado e site publicado no ar via GitHub Pages com HTTPS. |
+| 25/11/2026 | Agente de IA (OpenCode) | Criação da seção `#formacao` com dados reais já existentes no site (ATITUS, Passo Fundo/RS, 2026.2–2030.2 e a formação complementar em Ciência de Dados). `SPEC.md` atualizado para a versão 2.1 (§6 e RF-02, de 6 para 7 âncoras) antes da implementação. |
