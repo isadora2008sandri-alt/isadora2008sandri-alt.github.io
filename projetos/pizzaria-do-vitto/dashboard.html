@@ -273,27 +273,27 @@ body {
       <div class="card-kpi">
         <div class="card-kpi__rotulo">Pedidos Totais</div>
         <div class="card-kpi__valor">21.350</div>
-        <div class="card-kpi__sub">Média de 59,6 pedidos/dia</div>
+        <div class="card-kpi__sub">Média de 59,6 pedidos/dia com venda</div>
       </div>
       <div class="card-kpi">
         <div class="card-kpi__rotulo">Pizzas Vendidas</div>
         <div class="card-kpi__valor">49.573</div>
-        <div class="card-kpi__sub">2,28 pizzas por pedido emitido</div>
+        <div class="card-kpi__sub">2,32 pizzas por pedido</div>
       </div>
       <div class="card-kpi">
-        <div class="card-kpi__rotulo">Receita Acumulada</div>
-        <div class="card-kpi__valor">R$ 4,09 mi</div>
-        <div class="card-kpi__sub">R$ 11.422 / dia com venda</div>
+        <div class="card-kpi__rotulo">Dias com Venda</div>
+        <div class="card-kpi__valor">358</div>
+        <div class="card-kpi__sub">de 580 dias corridos (62%); 222 sem registro</div>
       </div>
       <div class="card-kpi">
-        <div class="card-kpi__rotulo">Tíquete Mediano</div>
-        <div class="card-kpi__valor">R$ 162,50</div>
-        <div class="card-kpi__sub">Média: R$ 191,54 (cauda longa)</div>
+        <div class="card-kpi__rotulo">Tamanho Dominante</div>
+        <div class="card-kpi__valor">Grande (G)</div>
+        <div class="card-kpi__sub">38,2% das pizzas · 45,9% da receita</div>
       </div>
       <div class="card-kpi">
         <div class="card-kpi__rotulo">Cardápio Ativo</div>
         <div class="card-kpi__valor">32 Sabores</div>
-        <div class="card-kpi__sub">22 sabores somam 80% receita</div>
+        <div class="card-kpi__sub">22 respondem por 81% da receita</div>
       </div>
     </section>
 
@@ -304,13 +304,13 @@ body {
         <div class="cartao-painel__cabecalho">
           <div>
             <h2 class="cartao-painel__tit">Concentração da Demanda por Horário</h2>
-            <p class="cartao-painel__sub">Janelas 11h–13h e 17h–19h concentram 62,5% do faturamento (pico às 12h)</p>
+            <p class="cartao-painel__sub">Janelas 11h–13h e 17h–19h concentram 60,7% dos pedidos (pico às 12h)</p>
           </div>
           <span style="font-size: 12px; color: var(--cor-primaria); font-weight: 700;">Ápice: 12:00</span>
         </div>
         <svg class="grafico-svg" viewBox="0 0 500 220" id="svg-horario" aria-label="Gráfico de pedidos por hora"></svg>
         <div class="grafico-legenda">
-          <span><span class="grafico-legenda-cor" style="background: var(--cor-primaria);"></span> Janelas de Alta Concentração (62,5% receita)</span>
+          <span><span class="grafico-legenda-cor" style="background: var(--cor-primaria);"></span> Janelas de Alta Concentração (60,7% dos pedidos)</span>
           <span><span class="grafico-legenda-cor" style="background: #D8CEC9;"></span> Horários Regulares</span>
         </div>
       </article>
@@ -358,7 +358,7 @@ body {
           <label for="sel-cenario">Cenário Gerencial</label>
           <select id="sel-cenario">
             <option value="inercial" selected>Inercial / Neutro (0% ajuste)</option>
-            <option value="upsell">Ações 1 & 2 Ativas (+4,5% receita)</option>
+            <option value="upsell">Ações 1 & 2 Ativas (+4,5% demanda)</option>
             <option value="otimista">Otimista / Expansão (+8% demanda)</option>
             <option value="conservador">Conservador (−5% flutuação)</option>
           </select>
@@ -419,7 +419,6 @@ body {
               <th>Dia da Semana</th>
               <th>Demanda Prevista</th>
               <th>Intervalo (Mín – Máx)</th>
-              <th>Receita Estimada (R$)</th>
             </tr>
           </thead>
           <tbody id="corpo-tabela-projecao"></tbody>
@@ -443,15 +442,15 @@ body {
         <div class="chat-conteiner">
           <div class="chat-mensagens" id="chat-mensagens">
             <div class="msg msg--ia">
-              Olá! Sou o <strong>Agente de IA da Pizzaria do Vitto</strong>. Analisei a base de 48.620 itens e 21.350 pedidos (jan/2025 a ago/2026). Posso responder sobre os 32 sabores, horários de pico, faturamento, política de preços congelados, diagnóstico de 2026 e o modelo de previsão temporal. Como posso ajudar?
+              Olá! Sou o <strong>Agente de IA da Pizzaria do Vitto</strong>. Analisei a base de 48.620 itens e 21.350 pedidos (jan/2025 a ago/2026). Posso responder sobre os 32 sabores, horários de pico, participação na receita, diagnóstico de 2026 e o modelo de previsão temporal. Como posso ajudar?
             </div>
           </div>
 
           <!-- Sugestões de Perguntas Rápidas -->
           <div class="chat-chips">
-            <button type="button" class="chat-chip-btn" data-pergunta="Quais os 5 sabores que mais faturam?">🍕 Top 5 sabores?</button>
+            <button type="button" class="chat-chip-btn" data-pergunta="Quais os sabores com maior participação na receita?">🍕 Top sabores?</button>
             <button type="button" class="chat-chip-btn" data-pergunta="Qual o melhor horário para reforçar equipe e forno?">⏰ Horário de pico?</button>
-            <button type="button" class="chat-chip-btn" data-pergunta="Por que o faturamento de 2026 caiu?">📉 Queda de 2026?</button>
+            <button type="button" class="chat-chip-btn" data-pergunta="Por que os pedidos de 2026 caíram?">📉 Queda de 2026?</button>
             <button type="button" class="chat-chip-btn" data-pergunta="Vale a pena cortar o sabor The Brie Carre?">❌ Cortar sabores?</button>
             <button type="button" class="chat-chip-btn" data-pergunta="Qual o impacto de subir de tamanho M para G?">📏 Degrau de tamanho?</button>
             <button type="button" class="chat-chip-btn" data-pergunta="Como funciona o modelo de previsão temporal?">📈 Modelo preditivo?</button>
@@ -469,8 +468,8 @@ body {
       <section class="cartao-painel">
         <div class="cartao-painel__cabecalho">
           <div>
-            <h2 class="cartao-painel__tit">Top 10 Sabores em Faturamento (Curva ABC)</h2>
-            <p class="cartao-painel__sub">Os 10 primeiros sabores concentram 44,5% da receita da empresa</p>
+            <h2 class="cartao-painel__tit">Top 10 Sabores por Participação na Receita (Curva ABC)</h2>
+            <p class="cartao-painel__sub">Os 10 primeiros concentram 44,5% da receita · 22 sabores chegam a 80%</p>
           </div>
           <span style="font-size: 12px; font-weight: 700; color: var(--cor-primaria);">32 Sabores Ativos</span>
         </div>
@@ -482,27 +481,27 @@ body {
                 <th>#</th>
                 <th>Sabor</th>
                 <th>Pedidos</th>
-                <th>Receita Total</th>
+                <th>Pizzas</th>
                 <th>% Part.</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td>1</td><td><strong>Frango Tailandesa</strong></td><td>2.225</td><td>R$ 217.171</td><td>5,3%</td></tr>
-              <tr><td>2</td><td>Barbecue com Frango</td><td>2.128</td><td>R$ 202.855</td><td>5,0%</td></tr>
-              <tr><td>3</td><td>Calabresa Especial</td><td>2.140</td><td>R$ 195.420</td><td>4,8%</td></tr>
-              <tr><td>4</td><td>Especial da Casa</td><td>2.329</td><td>R$ 190.903</td><td>4,7%</td></tr>
-              <tr><td>5</td><td>Quatro Queijos Nobres</td><td>2.090</td><td>R$ 184.210</td><td>4,5%</td></tr>
-              <tr><td>6</td><td>Pepperoni Clássico</td><td>2.015</td><td>R$ 178.640</td><td>4,4%</td></tr>
-              <tr><td>7</td><td>Marguerita Suprema</td><td>1.980</td><td>R$ 169.320</td><td>4,1%</td></tr>
-              <tr><td>8</td><td>Tropical</td><td>2.280</td><td>R$ 161.366</td><td>4,0%</td></tr>
-              <tr><td>9</td><td>Lombo Canadense</td><td>1.850</td><td>R$ 152.410</td><td>3,7%</td></tr>
-              <tr><td>10</td><td>Bacon Crispy</td><td>1.790</td><td>R$ 144.150</td><td>3,5%</td></tr>
+              <tr><td>1</td><td><strong>Frango Tailandesa</strong></td><td>2.225</td><td>2.371</td><td>5,3%</td></tr>
+              <tr><td>2</td><td>Frango com Barbecue</td><td>2.273</td><td>2.432</td><td>5,2%</td></tr>
+              <tr><td>3</td><td>Frango Califórnia</td><td>2.197</td><td>2.370</td><td>5,1%</td></tr>
+              <tr><td>4</td><td>Especial da Casa</td><td>2.329</td><td>2.453</td><td>4,7%</td></tr>
+              <tr><td>5</td><td>Italiana Picante</td><td>1.822</td><td>1.924</td><td>4,3%</td></tr>
+              <tr><td>6</td><td>Frango do Sul</td><td>1.825</td><td>1.917</td><td>4,2%</td></tr>
+              <tr><td>7</td><td>Suprema Italiana</td><td>1.791</td><td>1.884</td><td>4,1%</td></tr>
+              <tr><td>8</td><td>Tropical</td><td>2.280</td><td>2.422</td><td>4,0%</td></tr>
+              <tr><td>9</td><td>Quatro Queijos</td><td>1.809</td><td>1.902</td><td>4,0%</td></tr>
+              <tr><td>10</td><td>Siciliana</td><td>1.820</td><td>1.938</td><td>3,8%</td></tr>
             </tbody>
           </table>
         </div>
 
         <div style="background: var(--cor-card-destaque); border-left: 4px solid var(--cor-primaria); padding: 12px 16px; border-radius: 0 6px 6px 0; font-size: 13px;">
-          <strong>Insight Estratégico:</strong> A pizza <em>Especial da Casa</em> é a campeã absoluta em unidades vendidas (2.453 pizzas), porém fica em 4º lugar em receita porque vende muito no tamanho P. A pizza <em>Frango Tailandesa</em> lidera o faturamento porque sua venda concentra-se fortemente no tamanho G (R$ 102,50).
+          <strong>Insight Estratégico:</strong> A pizza <em>Especial da Casa</em> é a campeã em pizzas vendidas (2.453), mas fica apenas em 4º na participação da receita — 81% do seu volume sai em M (48%) e P (33%), com só 19% em G. A <em>Frango Tailandesa</em> lidera a receita porque 59,5% das suas pizzas são do tamanho G.
         </div>
       </section>
 
@@ -632,7 +631,6 @@ body {
 
       const DIAS_INDICE = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
       const ALPHA = 0.02;   // peso da observação mais recente; escolhido por busca em grade (menor erro em 1 passo)
-      const TICKET_MEDIO = 191.54;
 
       /**
        * Suavização exponencial simples: o nível é atualizado a cada observação.
@@ -780,7 +778,6 @@ body {
           const maxVal = Math.max(minVal, Math.round(f.max * multCenario));
 
           somaPedidosProj += valorEsperado;
-          const receitaEstimada = Math.round(valorEsperado * TICKET_MEDIO);
 
           dadosProjetados.push({
             diaIndex: h,
@@ -788,8 +785,7 @@ body {
             diaNome: diaSemana,
             prev: valorEsperado,
             min: minVal,
-            max: maxVal,
-            receita: receitaEstimada
+            max: maxVal
           });
 
           if (h < 14) { // Exibe os 14 primeiros na tabela
@@ -799,7 +795,6 @@ body {
                 <td>${diaSemana}</td>
                 <td><strong style="color: var(--cor-primaria);">${valorEsperado}</strong> pedidos</td>
                 <td>${minVal} – ${maxVal}</td>
-                <td>R$ ${receitaEstimada.toLocaleString('pt-BR')}</td>
               </tr>
             `);
           }
@@ -884,15 +879,15 @@ body {
       const baseConhecimento = [
         {
           termos: ['sabor', 'sabores', 'top', 'mais vendido', 'mais vendida', 'faturamento', 'ranking'],
-          resposta: "Pela análise da Curva ABC dos 32 sabores:<br>• <strong>Top 1 em faturamento:</strong> <em>Frango Tailandesa</em> com R$ 217.171 (5,3% da receita, 2.225 pedidos).<br>• <strong>Top 1 em unidades:</strong> <em>Especial da Casa</em> com 2.453 pizzas (mas 4ª em faturamento, pois vende muito em tamanho P).<br>• <strong>Menos vendido:</strong> <em>The Brie Carre</em> (480 pedidos, R$ 57.943).<br>• <strong>Conclusão:</strong> 22 sabores são necessários para somar 80% da receita. Nenhum sabor deve ser cortado apenas por volume, pois todos têm demanda representativa."
+          resposta: "Pela análise da Curva ABC dos 32 sabores:<br>• <strong>Maior participação na receita:</strong> <em>Frango Tailandesa</em> (5,3% da receita, 2.225 pedidos e 2.371 pizzas).<br>• <strong>Mais pizzas vendidas:</strong> <em>Especial da Casa</em>, com 2.453 pizzas — mas apenas a 4ª em participação na receita, porque 81% do volume sai em M e P.<br>• <strong>Menos pedidos:</strong> <em>The Brie Carre</em> (480 pedidos, 1,4% da receita).<br>• <strong>Conclusão:</strong> 22 sabores são necessários para somar 80% da receita. Nenhum sabor deve ser cortado apenas por volume, pois todos têm demanda representativa."
         },
         {
           termos: ['horario', 'hora', 'pico', 'reforco', 'reforcar', 'equipe', 'forno', 'gargalo'],
-          resposta: "Os pedidos concentram-se fortemente no horário, e não no dia da semana:<br>• <strong>11h às 13h (Almoço) e 17h às 19h (Jantar)</strong> respondem por <strong>60,7% dos pedidos e 62,5% da receita</strong>.<br>• O pico máximo ocorre pontualmente às <strong>12h</strong> (11,8% dos pedidos).<br>• <strong>Recomendação operacional:</strong> Concentrar mise en place e escalonar equipe máxima exclusivamente nessas duas janelas de 2 horas cada, protegendo R$ 134 mil/mês em faturamento."
+          resposta: "Os pedidos concentram-se no horário, e não no dia da semana:<br>• <strong>11h às 13h (Almoço) e 17h às 19h (Jantar)</strong> respondem por <strong>60,7% dos pedidos</strong>.<br>• O pico máximo ocorre pontualmente às <strong>12h</strong> (11,8% dos pedidos).<br>• <strong>Recomendação operacional:</strong> concentrar mise en place e escalar a equipe máxima nessas duas janelas de 2 horas cada, que é onde o forno e o atendimento ficam no limite."
         },
         {
           termos: ['2026', 'queda', 'caiu', 'perda', 'cobertura', 'registro', 'dias'],
-          resposta: "A aparente queda em 2026 é uma <strong>ilusão de registro (falha de cobertura de dados)</strong>:<br>• A receita bruta caiu 6,7%, mas os <em>dias com venda registrados caíram 6,0%</em>.<br>• Ao analisar a <strong>receita média por dia com venda</strong>, a variação é de apenas <strong>−0,7%</strong> (R$ 11.447 em 2025 vs R$ 11.364 em 2026).<br>• A clientela média diária permanece estável: o dono simplesmente teve dias a menos exportados pelo sistema de caixa em 2026."
+          resposta: "A aparente queda em 2026 é uma <strong>ilusão de registro (falha de cobertura de dados)</strong>:<br>• Comparando jan–jul de 2025 com jan–jul de 2026, os pedidos caíram 7,5% (8.014 para 7.413), mas os <em>dias com venda registrados caíram 6,0%</em> (134 para 126).<br>• Por dia com venda, a variação é de apenas <strong>−1,6%</strong> (59,8 em 2025 contra 58,8 em 2026).<br>• A operação diária permanece estável: o que mudou foi o número de dias exportados pelo sistema de caixa, não o movimento da pizzaria."
         },
         {
           termos: ['cortar', 'corte', 'eliminar', 'cardapio', 'cardápio', 'remover'],
@@ -900,7 +895,7 @@ body {
         },
         {
           termos: ['tamanho', 'tamanhos', 'degrau', 'upgrade', 'upsell', 'grande', 'médio', 'preco'],
-          resposta: "A estrutura de tamanhos revela uma regra rígida:<br>• O tamanho <strong>Grande (G) é a âncora da pizzaria</strong>: representa <strong>45,9% da receita total</strong> com 38,2% do volume.<br>• <strong>Salto constante:</strong> Cada degrau (P R$ 60,00 → M R$ 81,25 → G R$ 102,50) adiciona exatamente <strong>R$ 21,25</strong>.<br>• Treinar o atendente para oferecer upgrade de M para G (Ação 2) pode injetar entre <strong>R$ 1,2 mil e R$ 2,5 mil/mês</strong> adicionais no caixa com esforço mínimo."
+          resposta: "A estrutura de tamanhos revela uma regra clara:<br>• O tamanho <strong>Grande (G) é a âncora da pizzaria</strong>: representa <strong>45,9% da receita</strong> com 38,2% do volume.<br>• O <strong>GG é raro</strong> (1,2% das pizzas, 1,8% da receita) — qualquer conclusão sobre ele é frágil.<br>• O caminho para subir a receita sem vender mais pizzas é o <strong>upgrade de M para G</strong> no atendimento (Ação 2). O ganho projetado é uma <em>hipótese</em> dos cenários do simulador, não um resultado observado."
         },
         {
           termos: ['previsao', 'previsão', 'modelo', 'holt', 'temporal', 'futuro', 'projecao'],
@@ -908,7 +903,7 @@ body {
         },
         {
           termos: ['acoes', 'ações', 'recomendacao', 'recomendacoes', 'recomendação', 'plano'],
-          resposta: "As <strong>5 Ações Prioritárias Recomendadas</strong> são:<br>1. <strong>Reajuste cirúrgico de 2% a 3% nos tamanhos G e GG</strong> (+R$ 2,0 a 3,1 mil/mês).<br>2. <strong>Upsell ativo no atendimento de M para G</strong> (+R$ 1,2 a 2,5 mil/mês).<br>3. <strong>Combo com 2 sabores líderes</strong> (+R$ 2,8 a 4,6 mil/mês).<br>4. <strong>Reforço de equipe nas janelas 11h–13h e 17h–19h</strong> (protege 62,5% da receita).<br>5. <strong>Auditoria técnica no PDV</strong> para sanar os 222 dias sem registro na base."
+          resposta: "As <strong>5 Ações Prioritárias Recomendadas</strong> são:<br>1. <strong>Reajuste cirúrgico de 2% a 3% nos tamanhos G e GG</strong>, que respondem por 47,7% da receita.<br>2. <strong>Upsell ativo no atendimento de M para G</strong>.<br>3. <strong>Combo com 2 sabores líderes</strong> (Frango Tailandesa e Frango com Barbecue).<br>4. <strong>Reforço de equipe nas janelas 11h–13h e 17h–19h</strong>, que concentram 60,7% dos pedidos.<br>5. <strong>Auditoria técnica no PDV</strong> para sanar os 222 dias sem registro na base."
         }
       ];
 
@@ -924,7 +919,7 @@ body {
         }
 
         if (!respostaEncontrada) {
-          respostaEncontrada = `Com base nos 19 meses de dados da Pizzaria do Vitto (48.620 itens), posso destacar que a operação apresenta estabilidade de vendas de segunda a domingo (variação de apenas 5,7%), concentração de 62,5% do faturamento nas 4 horas de pico (11h–13h e 17h–19h) e dependência positiva do tamanho G (45,9% da receita). Experimente perguntar sobre o "Top sabores", "Preço congelado", "Queda de 2026" ou "Modelo de previsão".`;
+          respostaEncontrada = `Com base nos 19 meses de dados da Pizzaria do Vitto (48.620 itens), posso destacar que a operação apresenta estabilidade de vendas de segunda a domingo (variação de apenas 5,7%), concentração de 60,7% dos pedidos nas 4 horas de pico (11h–13h e 17h–19h) e 45,9% da receita no tamanho G. Experimente perguntar sobre o "Top sabores", "Tamanhos", "Queda de 2026" ou "Modelo de previsão".`;
         }
 
         // Adiciona mensagem da IA

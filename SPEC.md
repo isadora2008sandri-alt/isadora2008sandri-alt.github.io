@@ -5,7 +5,7 @@
 
 | Campo | Valor |
 | --- | --- |
-| Versão | 2.2 |
+| Versão | 2.3 |
 | Data | 25/11/2026 |
 | Status | Fase 2 — Em execução (Inclusão dos projetos reais) |
 | Autora / dona do produto | Isadora Sandri |
@@ -66,7 +66,7 @@ Isadora cursa Administração na ATITUS (formatura prevista para o 2º semestre 
 - Substituição dos placeholders por **4 projetos reais e completos** da autora:
   1. **Relatório Estatístico da Pizzaria do Vitto:** Documento consultivo e acadêmico completo com análise de 19 meses, 48.620 itens e 21.350 pedidos (`projetos/pizzaria-do-vitto/relatorio.html` e download em PDF).
   2. **Versão em Slides da Pizzaria do Vitto:** Apresentação executiva em 12 slides com roteiro para banca, métricas e gráficos (`projetos/pizzaria-do-vitto/slides.html`).
-  3. **Dashboard Analítico da Pizzaria do Vitto:** Painel interativo com visualizações em SVG, **modelo de previsão por série temporal ajustado por dia da semana** (com controle de horizonte, faixas de incerteza calculadas dos resíduos e métricas de erro medidas por backtest) e **chat conversacional com agente de IA especialista** sobre a base de dados (`projetos/pizzaria-do-vitto/dashboard.html`).
+  3. **Dashboard Analítico da Pizzaria do Vitto:** Painel interativo com visualizações em SVG, **modelo de previsão por série temporal ajustado por dia da semana** (com controle de horizonte, faixas de incerteza calculadas dos resíduos e métricas de erro medidas por backtest) e **chat conversacional com agente de IA especialista** sobre a base de dados (`projetos/pizzaria-do-vitto/dashboard.html`). **Versão pública sem valores monetários** (RNF-11): pedidos, pizzas, percentuais e tabelas de participação, sem receita, preço ou tíquete.
   4. **LLM-Wiki de Administração e Ciências Contábeis:** Plataforma interativa de consulta e estudo para toda a graduação e além, cobrindo TGA, Gestão Estratégica, Processos, Qualidade, Marketing, Pessoas, Contabilidade Geral, Demonstrações (BP, DRE, DFC), Contabilidade de Custos, Análise de Índices e Finanças Corporativas, com calculadoras interativas e assistente IA integrado (`projetos/llm-wiki/index.html`).
 - Layout responsivo (celular, tablet, desktop).
 - Modo claro e modo escuro automático.
@@ -138,6 +138,7 @@ Cada requisito tem um **critério de aceite**: uma frase objetiva que permite di
 | RNF-08 | Manutenibilidade | Todo o conteúdo editável está em `index.html`, em blocos comentados e identificados |
 | RNF-09 | Privacidade | Nenhum cookie, rastreador ou requisição a domínios de terceiros |
 | RNF-10 | Idioma do código e da documentação | Português do Brasil para textos, comentários e mensagens de commit |
+| RNF-11 | Confidencialidade dos dados do negócio | Nenhum **valor monetário absoluto** do negócio (receita, preço unitário, tíquete) aparece nas páginas publicadas. Contagens, médias e percentuais são permitidos. Meta verificável: busca por `R$` e por `R$ ` nas páginas do projeto retorna zero ocorrências de valor |
 
 ---
 
@@ -245,8 +246,8 @@ Todo projeto, sem exceção, exibe estes campos:
 - **Contexto:** Business Intelligence & Inteligência Artificial Aplicada
 - **Período:** `2026.2`
 - **Papel:** Modelagem preditiva de séries temporais, desenvolvimento de dashboard e agente de IA
-- **Resumo:** Painel dinâmico com modelo de previsão temporal (faixas de incerteza calculadas do próprio modelo) e assistente de IA para consulta analítica em tempo real.
-- **Descrição:** Plataforma interativa de visualização de dados com gráficos responsivos em SVG puro, integrando um modelo de suavização exponencial por dia da semana, ajustado sobre os 358 dias com venda registrados, com horizontes customizáveis. Conta com chat inteligente alimentado por base de conhecimento analítica (RAG) capaz de responder perguntas sobre a operação da pizzaria.
+- **Resumo:** Painel dinâmico com modelo de previsão temporal (faixas de incerteza calculadas do próprio modelo) e assistente de IA para consulta analítica em tempo real. Sem valores monetários na versão pública (RNF-11).
+- **Descrição:** Plataforma interativa de visualização de dados com gráficos responsivos em SVG puro, integrando um modelo de suavização exponencial por dia da semana, ajustado sobre os 358 dias com venda registrados, com horizontes customizáveis. Conta com chat inteligente alimentado por base de conhecimento analítica (RAG) capaz de responder perguntas sobre a operação da pizzaria. A publicação mostra pedidos, pizzas, médias e percentuais; receita, preço e tíquete ficam restritos ao ambiente privado, como já ocorre no portal de análise.
 - **Entregáveis:** Dashboard interativo com gráficos SVG, Modelo de Previsão por Séries Temporais com métricas de erro (MAPE/RMSE), Chat inteligente com agente analítico de IA.
 - **Resultado / aprendizado:** Engenharia de dados, aplicação prática de métodos de séries temporais e integração de assistentes de IA para tomada de decisão gerencial.
 - **Ferramentas:** Vanilla JavaScript, SVG interativo, Séries Temporais (suavização exponencial), RAG/NLP.
@@ -383,6 +384,7 @@ Itens abaixo foram **assumidos como padrão** e podem ser alterados a qualquer m
 - [x] Experiência acadêmica e projetos
 - [ ] Certificados adicionais (mantém-se exemplo de referência ou itens já cursados)
 - [x] Aprovação dos textos institucionais
+- [ ] **Valores monetários em `relatorio.html` e `slides.html`** — as duas páginas ainda exibem receita acumulada (R$ 4.089.300,25), receita por dia, tíquete e preços por tamanho, contrariando o RNF-11. O dashboard já foi corrigido; falta decidir se as duas páginas seguem o mesmo caminho. Enquanto a decisão não vem, esta pendência fica registrada e o RNF-11 é considerado **parcialmente atendido**
 
 ---
 
@@ -454,6 +456,7 @@ O site é considerado pronto quando **todos** os itens abaixo forem verdadeiros:
 | 19/11/2026 | 2.0 | Fase 2: Entrada do escopo real de projetos. Integração do Relatório Estatístico da Pizzaria do Vitto, Versão em Slides, Dashboard Interativo com Modelo Preditivo de Séries Temporais e Chat com IA, e LLM-Wiki de Administração e Ciências Contábeis. |
 | 25/11/2026 | 2.1 | Arquitetura de informação (§6) e RF-02: inclusão da seção **Formação** na página inicial, passando o menu de 6 para 7 âncoras. |
 | 25/11/2026 | 2.2 | Correção de veracidade no dashboard (§5.1 e §10.1, Projeto 3): o painel descrevia "Holt-Winters com sazonalidade semanal" e exibia MAPE 4,72% e R² 0,912 fixos no HTML, sem modelo ajustado nem série real. O motor foi reescrito sobre a série real de 358 dias com venda: um modelo de suavização exponencial por dia da semana, com MAPE/RMSE/R² calculados em tempo de execução e faixas de incerteza vindas dos resíduos. Tendência e componente sazonal foram testados e descartados por piorarem o erro fora da amostra. |
+| 25/11/2026 | 2.3 | Novo RNF-11 (confidencialidade): a versão publicada não exibe valores monetários absolutos do negócio. Alinhamento com a decisão já vigente no portal de análise (D-031), que suprime receita e preços. Retirados do dashboard os cartões de receita e tíquete, a coluna de receita da projeção, a coluna de receita da Curva ABC e todas as cifras das respostas do chat. Permanecem contagens, médias e percentuais, que já eram a base do portal público. |
 
 ---
 
